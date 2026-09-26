@@ -25,3 +25,65 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: raid-erasure
+      description: 请帮我查找关于RAID（独立冗余磁盘阵列）或EC（纠删码）的相关论文
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: redundant disk array
+          keyword_cn: 冗余磁盘阵列
+          query: redundant disk array RAID storage architecture and performance
+        - keyword: erasure coding
+          keyword_cn: 纠删码
+          query: erasure coding techniques for data storage and recovery
+        - keyword: disk array
+          keyword_cn: 磁盘阵列
+          query: disk array configurations and RAID levels
+        - keyword: storage reliability
+          keyword_cn: 存储可靠性
+          query: storage reliability and availability in distributed systems
+        - keyword: data reconstruction
+          keyword_cn: 数据重建
+          query: data reconstruction and recovery in erasure-coded storage
+        - keyword: storage efficiency
+          keyword_cn: 存储效率
+          query: storage efficiency and overhead in erasure coding versus replication
+      intent_queries:
+        - query: How do RAID and erasure coding compare for storage fault tolerance and reliability?
+          query_cn: RAID和纠删码在存储容错和可靠性方面如何比较？
+          enabled: true
+          source: manual
+          note: ''
+        - query: What are the trade offs between replication and erasure coding in distributed storage systems?
+          query_cn: 在分布式存储系统中，复制和纠删码之间的权衡是什么？
+          enabled: true
+          source: manual
+          note: ''
+        - query: How to design and implement erasure coded storage systems for high availability and efficiency?
+          query_cn: 如何设计和实现高可用性和高效率的纠删码存储系统？
+          enabled: true
+          source: manual
+          note: ''
+        - query: What are the key techniques and challenges in RAID based storage architectures?
+          query_cn: 基于RAID的存储架构的关键技术和挑战是什么？
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-09-26T13:32:18.284Z'
+source_backends:
+  arxiv:
+    papers_table: arxiv_papers
+    use_vector_rpc: true
+    vector_rpc: match_arxiv_papers
+    vector_rpc_exact: match_arxiv_papers_exact
+    use_bm25_rpc: true
+    bm25_rpc: match_arxiv_papers_bm25
+    sync_table: arxiv_sync_status
+    sync_success_value: success
+    schema: public
+    kind: supabase
+    enabled: true
+    url: https://lyucdwgefyfbmaiopjbk.supabase.co
+    anon_key: sb_publishable_lX-oi64Uxyd7SIVv3_w2Uw_MTOojeKq
