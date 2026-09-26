@@ -1,0 +1,39 @@
+{
+  "label": "2026-08-28 ~ 2026-09-26",
+  "date": "2026-08-28 ~ 2026-09-26",
+  "generated_at": "2026-09-26T13:47:07",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "20260828-20260926/2609.06372v1-optimal-access-cooperative-msr-codes-parity-check-matrix-construction-and-a-unified-transformation",
+      "section": "deep",
+      "title_en": "Optimal-Access Cooperative MSR Codes: Parity-Check Matrix Construction And a Unified Transformation",
+      "authors": "Yaqian Zhang, Jingke Xu, Ya-Feng Liu",
+      "date": "2026-09-06",
+      "pdf": "https://arxiv.org/pdf/2609.06372v1",
+      "score": "9.0",
+      "evidence": "面向节点修复的协作MSR存储编码",
+      "tldr": "协同MSR码可在保持MDS最小存储的同时，以最优带宽协同修复任意h≥2个节点，但现有最优访问构造的子分组化ℓ过大。本文提出两类构造：直接显式设计奇偶校验矩阵，以及从任意[n+d-k,d] MDS标量码出发的统一变换。所得(n,k)最优访问协同MSR码将ℓ降至δ^m，δ=d-k+h，m=C(n,h)-⌊n/δ⌋(C(δ,h)-1)。相比最优已知ℓ=δ^{C(n,h)}，子分组化降低为原来的1/δ^{⌊n/δ⌋(C(δ,h)-1)}，且旧结构成为特例。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "Cooperative MSR codes are a kind of storage codes which enable optimal-bandwidth repair of any $h\\geq2$ node erasures in a cooperative way, while retaining the minimum storage as an $[n,k]$ MDS code. Each code coordinate (node) is assumed to store an array of $\\ell$ symbols, where $\\ell$ is termed as sub-packetization. To address the disk IO (input/output) capability, a cooperative MSR code is said to have optimal-access property, if during node repair, the amount of data accessed at each helper node meets a lower bound on this quantity.   In this paper, we focus on reducing the sub-packetization level of optimal-access cooperative MSR codes. We propose new constructions of optimal-access cooperative MSR codes through two methods. At first, we propose a direct explicit construction by designing its parity-check matrix. Such parity-check matrix is built by repeatedly employing two crucial parity-check matrices as building blocks. Secondly, we propose a generic transformation framework. Starting from an arbitrary $[n+d-k,d]$ MDS scalar code, one can derive a final cooperative MSR code by systematically applying two basic transformations. Both approaches yield $(n,k,\\ell=δ^m)$ optimal-access cooperative MSR codes with $δ=d-k+h$ and $m=\\binom{n}{h}-\\lfloor\\frac{n}δ\\rfloor(\\binomδ{h}-1)$. Compared with the state of the art (with $\\ell=δ^{\\binom{n}{h}}$), the derived codes can reduce the sub-packetization $\\ell$ by a fraction of $1/δ^{\\lfloor\\frac{n}δ\\rfloor(\\binomδ{h}-1)}$, where $δ=d-k+h$. Moreover, we also show that some previous code structures of optimal-access cooperative MSR codes and optimal-access MSR codes with $h=1$ are included as special cases of our transformation construction. At last, we note that all of the constructions are built over a finite field of linear size $\\geq n+d-k$.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "20260828-20260926/2609.01474v1-binary-multiple-node-erasure-correcting-codes-over-complete-graphs-constructions-q-ary-metric-balls-and-duality",
+      "section": "quick",
+      "title_en": "Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality",
+      "authors": "Aryeh Lev Zabokritskiy",
+      "date": "2026-09-01",
+      "pdf": "https://arxiv.org/pdf/2609.01474v1",
+      "score": "7.0",
+      "evidence": "面向存储恢复的多节点擦除纠正二元码",
+      "tldr": "本文研究完全图上的二元线性码，坐标对应普通边与自环，节点删除会抹去失效顶点关联的所有坐标。为纠正三节点删除，作者让循环校验斜率随素数图长变化，并用行列式检验证明三种固定斜率之一在无穷多素数长度下无条件可行。进一步在2为奇素数模原根时构造多斜率码，可纠正任意ρ节点删除，并推导节点度量球体积、渐近与各类界，最后给出团删除度量下的重量枚举与节点-团对偶。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "We study linear codes whose coordinates are the ordinary edges and self-loops of complete undirected graphs; a node erasure removes all coordinates incident with a failed vertex. The construction results are binary. For triple-node erasures, we extend the published cyclic construction by allowing a suitable cyclic check slope to depend on the prime graph length. An explicit determinant test proves that one of three fixed slope choices works at infinitely many prime lengths, unconditionally, and gives redundancy $3n-2$, one bit above the graph Singleton bound. We also give Singleton-optimal triple-node codes at $n=6,8,10,12$, together with a general ordinary-edge framework that isolates the remaining loop-completion problem. When $2$ is primitive modulo an odd prime $n$, a binary multi-slope construction corrects every $ρ$-node erasure for $2\\leqρ<n$, with redundancy $ρn-(ρ-1)$ in the range $2\\leqρ\\leq(n+1)/2$. Returning to arbitrary prime powers, we derive exact generating transforms and inclusion--exclusion formulas for node-metric ball volumes, fixed-radius asymptotics, and packing, existence, and covering bounds. Finally, for the complementary clique-erasure metric, we obtain an exact weight enumerator and a Singleton-optimal node--clique duality.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

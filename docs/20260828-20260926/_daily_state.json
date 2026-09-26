@@ -1,0 +1,41 @@
+{
+  "date": "20260828-20260926",
+  "date_label": "2026-08-28 ~ 2026-09-26",
+  "generated_at": "2026-09-26 13:47:06 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.06372v1",
+      "route": "20260828-20260926/2609.06372v1-optimal-access-cooperative-msr-codes-parity-check-matrix-construction-and-a-unified-transformation",
+      "title": "Optimal-Access Cooperative MSR Codes: Parity-Check Matrix Construction And a Unified Transformation",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "面向节点修复的协作MSR存储编码",
+      "first_seen_at": "2026-09-26 13:47:06 UTC",
+      "updated_at": "2026-09-26 13:47:06 UTC"
+    },
+    {
+      "paper_id": "2609.01474v1",
+      "route": "20260828-20260926/2609.01474v1-binary-multiple-node-erasure-correcting-codes-over-complete-graphs-constructions-q-ary-metric-balls-and-duality",
+      "title": "Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "面向存储恢复的多节点擦除纠正二元码",
+      "first_seen_at": "2026-09-26 13:47:06 UTC",
+      "updated_at": "2026-09-26 13:47:06 UTC"
+    }
+  ]
+}

@@ -1,0 +1,3500 @@
+Title: Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality
+
+URL Source: https://arxiv.org/pdf/2609.01474v1
+
+Published Time: Wed, 02 Sep 2026 01:49:01 GMT
+
+Number of Pages: 52
+
+Markdown Content:
+# Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality 
+
+## Aryeh Lev Zabokritskiy (Yohananov) 1,2* 
+
+1Department of Computer Science, Tel-Hai University of Kiryat Shmona in the Galilee, Kiryat Shmona, Israel. 
+
+2MIGAL–Galilee Research Institute, Kiryat Shmona, Israel. Corresponding author(s). E-mail(s): yuhanalev@telhai.ac.il; 
+
+Abstract 
+
+We study linear codes whose coordinates are the ordinary edges and self-loops of complete undirected graphs; a node erasure removes all coordinates incident with a failed vertex. The construction results are binary. For triple-node erasures, we extend the published cyclic construction by allowing a suitable cyclic check slope to depend on the prime graph length. An explicit determinant test proves that one of three fixed slope choices works at infinitely many prime lengths, unconditionally, and gives redundancy 3n − 2, one bit above the graph Singleton bound. We also give Singleton-optimal triple-node codes at n = 6 , 8, 10 , 12 ,together with a general ordinary-edge framework that isolates the remaining loop-completion problem. When 2 is primitive modulo an odd prime n, a binary multi-slope construction corrects every ρ-node erasure for 2 ≤ ρ < n , with redundancy ρn − (ρ − 1) in the range 2 ≤ ρ ≤ (n + 1) /2. Returning to arbitrary prime powers, we derive exact generating transforms and inclusion– exclusion formulas for node-metric ball volumes, fixed-radius asymptotics, and packing, existence, and covering bounds. Finally, for the complementary clique-erasure metric, we obtain an exact weight enumerator and a Singleton-optimal node–clique duality. 
+
+Keywords: Graph codes, node erasures, binary constructions, metric balls, covering bounds, duality 
+
+1arXiv:2609.01474v1 [cs.IT] 1 Sep 2026 1 Introduction 
+
+Codes over graphs store symbols on the edges of a complete graph equipped with one self-loop at each vertex, rather than on a linearly ordered sequence. In the node-erasure model, failure of a vertex erases every edge incident with it, including its self-loop. The resulting distance between two graph words is the minimum number of vertex neighborhoods whose modification transforms one word into the other, equivalently the vertex-cover number of their support difference. This model was introduced in [1]; explicit optimal binary codes for two failures and a nearly optimal construction for three failures were developed in [2]. Related graph-based coding models include codes over trees under the tree-edit metric [3] and storage codes on coset graphs [4]. The original graph-erasure work [1] also gives Singleton-optimal ρ-node-erasure codes for 1 ≤ ρ < n over fields of size q ≥ n − 1; the binary, small-alphabet regime is the harder setting addressed here. The paper studies one organizing question from three sides: what structure is imposed by the coordinates erased by a fixed set of failed vertices? In the construction part, this becomes a local column-independence problem for a parity-check matrix. In the metric part, the same failed-star coordinate sets become a subspace arrangement whose union is a node-metric ball. Taking their complementary clique coordinate sets then leads to the duality problem. The construction core—the cyclic, multi-slope, and optimal-completion sections together with their algebraic proofs—is binary. Only after that core do we return to arbitrary prime powers for the enumerators, ball volumes, and general coding bounds. The metric has recently reappeared in the study of asymptotically good error-correcting graph codes. Kopparty, Potukuchi, and Sha [5] proved, by a random-linear argument, the optimal nonconstructive asymptotic tradeoff R = (1 − δ)2 − o(1), where 
+
+R is the code rate and δ is the relative node distance, and developed symmetric tensor, concatenated, and dual-BCH-type constructions. Their binary simple-graph model omits self-loops and their principal regime has distance growing linearly with 
+
+n. The present paper instead focuses on the low-redundancy regime of a fixed number of failures, retains the loop coordinates, and studies the exact finite geometry of the metric balls. Chen, Cheraghchi, and Shagrithaya [6] have subsequently developed strongly explicit asymptotic erasure codes on non-bipartite graphs, equivalently symmet-ric zero-diagonal matrices. Their concatenation-based construction attains rate at least (1 − √δ)4 − o(1) for sufficiently large block length, with strong explicit-ness and quasi-linear encoding and erasure decoding. Together, these two recent directions show renewed interest in graph-supported codes, while leaving the exact small-number-of-failures questions considered here largely open. There is also a precise connection with the cover metric for crisscross array errors. In a general matrix that metric permits separate row and column covers. A node failure in a symmetric matrix couples row i to column i and counts the pair once, so the present metric is a diagonally coupled symmetric cover metric. Recent work on multi-cover codes develops Singleton bounds, duality, and constructions for lists of matrices [7]. The coupled symmetric geometry studied here has different ball intersections and a different complementary duality. 2For ρ = 3, the construction of [2] has redundancy 3 n−2, whereas the graph Single-ton bound is 3 n−3. Schmidt’s binary symmetric rank-metric construction, formulated through symmetric bilinear and quadratic forms [8, 9], has redundancy 3 n in the same comparison. Thus the missing-bit problem is genuinely graph-specific: the rank-metric construction excludes every nonzero symmetric difference of rank at most six, while a triple-node code only has to exclude the subfamily supported on three coordinate stars. The published triple-node construction uses the fixed cyclic slope 2 and assumes that 2 is primitive modulo the prime length. Infinitude of the admissible lengths under this fixed-slope hypothesis would follow from the fixed-base g = 2 case of Artin’s con-jecture. We separate the local cyclic-minor condition from the primitive-root condition and allow the slope to be chosen from {2, −3, −15 }. This also gives concrete lengths not covered by the slope-two construction: for example, 2 has order 8 modulo 17, whereas 
+
+−3 has order 16. A prime-subgroup arc lemma, combined with Heath-Brown’s three-integer primitive-root theorem, gives an unconditional infinite set of admissible prime lengths. The resulting codes still have redundancy 3 n − 2, so this argument does not produce an infinite Singleton-optimal family. On the other hand, exact loop comple-tions at n = 6 , 8, 10 , 12 attain the Singleton redundancy 3 n − 3. Thus the extra bit is not inherent in the model; what remains open is an infinite optimal family. 
+
+## 1.1 Contributions 
+
+1. Cyclic constructions. For a prime n ≥ 5, we extend the published slope-two triple-node code to every cyclic slope represented by a nonzero residue class λ̸ ≡ 1(mod n). When λ is primitive modulo n, every erased triple is correctable if and only if explicit local determinants are nonzero; a vanishing local determinant gives nullity at least the multiplicative order of 2 modulo n, minus one. The slopes 2, −3, −15 satisfy the arc condition at every prime length greater than five, and Heath-Brown’s theorem guarantees infinitely many prime lengths at which at least one is primitive. The resulting binary codes have redundancy 3 n − 2, one bit above the graph Singleton bound and two bits below the Schmidt benchmark. When 2 is primitive modulo an odd prime n, for each 2 ≤ ρ < n we construct a binary code correcting every ρ-node erasure. For 2 ≤ ρ ≤ (n + 1) /2, its exact redundancy is ρn − (ρ − 1). At ρ = 2 and 3, this construction specializes, respectively, to the published double- and triple-node codes of [2]. 2. Singleton-optimal triple-node codes and a completion framework. For n ∈{6, 8, 10 , 12 }, we construct explicit binary triple-node codes with the Singleton redundancy 3 n − 3, showing that the extra bit in the cyclic construction is not inherent. More generally, by realizing classical Delsarte–Goethals Frobenius layers as columns indexed by the ordinary edges of an affine frame [8, 10], we obtain a uniform skeleton that attains, for every 2 ≤ ρ ≤ n, the maximum local rank 
+
+ρ(n − 1) −
+
+ρ
+
+2
+
+
+
+.
+
+3This is the first stage of a construction in the original looped model. For 3 ≤ ρ ≤ n,Singleton-optimal completion reduces to finding a subspace of dimension ρ(ρ−3) /2, disjoint from every local edge space, such that in the resulting common quotient the ρ loop images form a basis for every failed ρ-set. Exact Frobenius-equivariant completions at ρ = 3 give the four codes above. An elementary vertex-shortening argument shows that an infinite optimal four-erasure family would yield an optimal triple-erasure family at the immediately smaller lengths. 3. Node-metric balls, bounds, and duality. For a prime power q and an integer 0 ≤ t ≤
+
+n, every radius-t node ball in the looped q-ary graph space has the same volume. We derive an exact loop-conditioning transform for the node-weight enumerator, an exact Venn-profile inclusion–exclusion formula for this common volume, and second-order Bonferroni bounds. For fixed q and t, as n → ∞ , this volume is 
+
+nt
+
+
+
+q tn −(t
+
+> 2
+
+)  1 + Oq,t (nq −n) .
+
+The same leading asymptotic holds for the number of words of node weight exactly 
+
+t. The resulting packing, Gilbert, random-linear existence, and covering bounds include a random-linear redundancy at most ρ log q n + Oq,ρ (1) above Singleton for fixed ρ. For the complementary clique-erasure metric, we obtain an exact weight enumerator and formal exponential generating function and show, by standard erasure-pattern duality, that a Singleton-optimal ρ-node code is dual to a Singleton-optimal ( n − ρ)-clique-erasure code. The published optimal double-node codes therefore yield an infinite family of optimal binary ( n − 2)-clique-erasure codes by duality. The arithmetic hypotheses of the two cyclic results are different. For the fixed slope 2, and hence for the general multi-slope construction, infinitude of admissible prime lengths is still predicted by Artin’s conjecture but is not known uncondition-ally. For three erasures, however, allowing a length-dependent choice from the fixed set {2, −3, −15 } lets us invoke Heath-Brown’s theorem and proves infinitude uncon-ditionally. The theorem does not identify which of the three slopes is primitive for infinitely many primes, and it does not prove this for each slope; nor does it extend the unconditional infinitude claim to ρ > 3. The remainder of the paper is organized as follows. Section 2 fixes the looped graph model, the node metric, and the local rank criterion for correcting node erasures. Section 3 specializes to the binary field and develops the arbitrary-slope triple-node construction and its multi-slope generalization. Section 4, also over the binary field, constructs the uniform Moore edge skeleton, reduces optimal loop completion to a common-quotient problem, and gives the Singleton-optimal codes at n = 6 , 8, 10 , 12. Section 5 returns to arbitrary prime powers and derives the node-weight enumerators and the exact and asymptotic ball-volume formulas, and Section 6 turns these vol-umes into packing, existence, and covering bounds. Section 7 treats the complementary clique metric, its exact enumerator, and the node–clique duality, while Section 8 dis-cusses the remaining construction and enumeration problems. A reproducibility note records the exact-arithmetic verification archive. The appendices give the full proofs 4of the two cyclic criteria, the one-bit extension criterion and its finite obstructions, and the dual-weight calculation ruling out a univariate MacWilliams transform. 
+
+# 2 Definitions and Preliminaries 
+
+For a positive integer n, let [n] ≜ {0, 1, . . . , n − 1}, Vn ≜ {v0, v 1, . . . , v n−1}.
+
+Let 
+
+En ≜ {⟨ vi, v j ⟩ : 0 ≤ i ≤ j < n }
+
+be the set of all self-loops and ordinary unordered edges of the complete graph on Vn,and put 
+
+N ≜ |En| =
+
+n + 1 2
+
+
+
+.
+
+Throughout, q is a prime power. The space of q-ary graph words is 
+
+Gq (n) ≜ FEn 
+
+> q
+
+.
+
+For a graph word G ∈ G q (n), let ei,j = ej,i ∈ Fq denote the label on ⟨vi, v j ⟩. Thus G
+
+can equivalently be displayed as the symmetric labeling matrix 
+
+AG ≜ (ei,j )i,j ∈[n].
+
+This is the labeling-matrix notation of [2], but the labeling function itself will not be needed here. Define supp( G) ≜ {⟨ vi, v j ⟩ ∈ En : ei,j ̸ = 0 }.
+
+This set is the coordinate support of G. The associated support graph is the looped undirected graph  Vn, supp( G).
+
+Thus its vertex set is always all of Vn, including isolated vertices, and its edges are exactly the coordinates carrying nonzero labels. Whenever we speak of a vertex cover of a graph word, we mean a vertex cover of this support graph. 
+
+Definition 1 (Node weight and distance) A vertex cover of G is an index set S ⊆ [n] such that {vi : i ∈ S} meets every edge of its support graph; if the loop at vi is nonzero, then 
+
+i ∈ S. The node weight is wt N(G) ≜ min {| S| : S is a vertex cover of G}.
+
+The node distance is 
+
+dN(G, G ′) ≜ wt N(G − G′).
+
+The function dN is a translation-invariant metric [1]. For a code C ⊆ Gq (n), write dN(C) for its minimum distance. Throughout, the minimum distance of a code containing at most one word is taken to be + ∞.5For S ⊆ [n], define its star-coordinate set and induced clique-coordinate set by St( S) ≜ {⟨ vi, v j ⟩ ∈ En : {i, j } ∩ S̸ = ∅}
+
+and Cl( S) ≜ {⟨ vi, v j ⟩ ∈ En : i, j ∈ S},
+
+respectively. Loops are included in both definitions. The star coordinates describe node failures; the complementary clique coordinates will be used in Section 7. To match the notation of the preceding graph-code papers, for i ∈ [n] write 
+
+Ni ≜ St( {i}).
+
+Thus St( S) = [
+
+> i∈S
+
+Ni,
+
+and the erasure pattern generated by each failed vertex includes its loop coordinate. The node metric is also the combinatorial metric induced by the coordinate cover 
+
+{Ni : i ∈ [n]} in the terminology of [11]. Let 
+
+VS ≜ {G ∈ G q (n) : supp( G) ⊆ St( S)}.
+
+Then dim Fq VS = | St( S)| = |S|n −
+
+|S|
+
+2
+
+
+
+.
+
+The distance characterization is [1, Thm. 6]. We restate it in the present coordinate notation, together with its equivalent star-subspace form. 
+
+Lemma 2 (Distance and node erasures) Let 0 ≤ ρ ≤ n be an integer. A linear code C ⊆ G q (n)
+
+corrects every set of at most ρ node erasures if and only if 
+
+dN(C) ≥ ρ + 1 .
+
+Equivalently, 
+
+C ∩ V S = {0} for every S ∈ [n]
+
+ρ
+
+!
+
+.
+
+The preceding condition has a direct parity-check formulation. We state it explicitly because the columns are indexed by graph coordinates, including the loops. 
+
+Definition 3 (Parity-check matrix) Let C ⊆ G q (n) be a linear graph code. A parity-check matrix for C is a matrix 
+
+H = ( he)e∈En ∈ Fs×Nq
+
+such that C = ker H. Thus each ordinary edge and each loop indexes one column of H. If the rows of H are linearly independent, then s = N − dim C. For X ⊆ En, write H|X for the submatrix formed by the columns indexed by X.
+
+6Lemma 4 (Erased-column criterion) Let H be a parity-check matrix for a linear graph code 
+
+C, and let X ⊆ En be any set of erased coordinates. The erasure of X is uniquely correctable if and only if the columns of H|X are linearly independent. In particular, the node-erasure pattern generated by S ⊆ [n] is uniquely correctable if and only if the columns of H|St( S) are linearly independent. Consequently, C corrects every set of at most ρ node erasures if and only if this holds for every S ∈  [n]
+
+> ρ
+
+.Proof Let x = ( xe)e∈X be a labeling of the erased coordinates, and extend it by zero on all surviving coordinates. The resulting graph word belongs to C = ker H exactly when H|X x =0. Hence a nonzero erased difference is invisible to all checks exactly when the displayed submatrix has a nonzero kernel, equivalently, when its columns are linearly dependent. □
+
+For an integer 0 ≤ ρ ≤ n, if a linear code C ⊆ G q (n) corrects every set of at most ρ node erasures, then puncturing to the surviving looped clique gives the graph Singleton bound dim C ≤ 
+
+n − ρ + 1 2
+
+
+
+.
+
+Indeed, if two codewords have the same restriction to that surviving clique, then their difference is supported on the stars of the failed vertices. Unique correction forces that difference to be zero, so the puncturing map is injective and its target has the displayed number of coordinates. Equivalently, define the redundancy of a code C by 
+
+r(C) ≜ N − dim C.
+
+Define the graph Singleton redundancy by 
+
+rSing (n, ρ ) ≜ ρn −
+
+ρ
+
+2
+
+
+
+.
+
+The graph Singleton bound is 
+
+r(C) ≥ rSing (n, ρ ). (1) A code correcting every set of at most ρ node erasures and meeting (1) with equality is called optimal. The following useful closure property is the graph-coordinate specialization of the usual shortening, or contraction, argument for a represented matroid. 
+
+Proposition 5 (Vertex descent for optimal codes) If there is a Singleton-optimal linear ρ-node-erasure code on n vertices, where 2 ≤ ρ ≤ n, then there is a Singleton-optimal (ρ −
+
+1) -node-erasure code on n − 1 vertices over the same field. Proof Let H be a full-row-rank parity-check matrix for the original code, fix a vertex v, and let Lv be the span of the n columns on its loop and incident ordinary edges. Those columns 
+
+7are independent by Lemma 4, since they are contained in the erased-column set of any ρ-set containing v. Let 
+
+π : im H −→ im H/L v
+
+be the quotient map. Delete the columns incident with v, including its loop. Choose any basis of the quotient space im H/L v , express each remaining vector π(he) in that basis, and form the ordinary matrix 
+
+eH ≜  π(he) 
+
+> ea coordinate on the remaining vertices
+
+.
+
+Here the notation in the display means the coordinate column of π(he) in the chosen quotient basis; changing that basis only applies an invertible row operation. For every ( ρ − 1)-set S of remaining vertices, independence of the erased columns of eH is equivalent to independence of the original columns erased by S ∪ { v}. Hence the descended code eC ≜ ker eH corrects ρ − 1node erasures. The quotient dimension is 
+
+rSing (n, ρ ) − n = rSing (n − 1, ρ − 1) ,
+
+so the descended code is optimal. □
+
+# 3 Cyclic Slope Constructions 
+
+This section and Section 4 specialize the q-ary model of Section 2 to the binary field. We return to arbitrary prime powers in Section 5. The coding question throughout this section is the erased-column criterion in Lemma 4: for every failed vertex set, the parity-check columns on all erased coordi-nates must be independent. For three failures we retain the neighborhood and diagonal checks of the published code and vary only the cyclic slope checks. We will convert full rank on a failed triple into the nonvanishing of explicit determinants, and then recog-nize those determinants as the minors of a cyclic projective orbit. For more failures, additional Frobenius slopes remove the successive local ambiguities left by the same neighborhood and diagonal checks. Thus the sets defined next are introduced to solve a single erased-column rank problem, first for triples and then for general ρ.We first retain the notation of [2]. Let n be an odd prime. For congruence notation, write Zn ≜ Z/n Z, with unit group Z× 
+
+> n
+
+, and identify [ n] with its canonical residue representatives in Zn. For u ∈ Z× 
+
+> n
+
+, write ord n(u) for its multiplicative order modulo 
+
+n. For h, m ∈ [n], define 
+
+Sh ≜ {⟨ vh, v ℓ⟩ ∈ En : ℓ ∈ [n] \ { h}} , (2) 
+
+Dm ≜ {⟨ vu, v v ⟩ ∈ En : u + v ≡ m (mod n)}. (3) For λ ∈ Z× 
+
+> n
+
+\ { 1} and s ∈ [n], put 
+
+Ts(λ) ≜
+
+(
+
+⟨vu, v v ⟩ :0 ≤ u < v < n, u + λv ≡ s (mod n) or 
+
+v + λu ≡ s (mod n)
+
+)
+
+. (4) The order u < v only selects a canonical description of each undirected edge; both displayed orientations are part of the check family. Thus Sh and every Ts(λ) contain only ordinary edges, whereas each Dm contains the unique loop indexed by 2 −1m
+
+8(mod n). In particular, Ts(2) is exactly the slope-two set Ts in the published triple-node construction. 
+
+## 3.1 A primitive-slope triple-node construction 
+
+For a prime n ≥ 5 and λ ∈ Z× 
+
+> n
+
+\ { 1}, let C3(λ) ⊆ G 2(n) be the code of graph words whose labels satisfy 
+
+X 
+
+> ⟨vi,v j⟩∈ Sh
+
+ei,j = 0 (h ∈ [n]) , (5) 
+
+X 
+
+> ⟨vi,v j⟩∈ Dm
+
+ei,j = 0 (m ∈ [n]) , (6) 
+
+X 
+
+> ⟨vi,v j⟩∈ Ts(λ)
+
+ei,j = 0 (s ∈ [n]) . (7) Let 
+
+Hn,λ ∈ F3n×N
+
+> 2
+
+be the parity-check matrix with columns indexed by En and with rows equal to the incidence vectors of the 3 n checks in (5)–(7). Thus C3(λ) = ker Hn,λ . In particular, set 
+
+C3 ≜ C3(2) . (8) This is exactly the construction of [2]. We now ask when these checks recover a fixed erased triple. For c ∈ Z× 
+
+> n
+
+and d ∈ Zn,the affine permutation 
+
+φc,d : Zn −→ Zn, φc,d (j) ≜ cj + d, 
+
+induces a permutation of graph coordinates and sends the three check families to 
+
+Sh 7 → Sch +d, Dm 7 → Dcm +2 d, Ts(λ) 7 → Tcs +(1+ λ)d(λ).
+
+It therefore preserves recoverability. We may normalize the failed-index set to 
+
+I ≜ {0, a, b }, a, b ∈ Z× 
+
+> n
+
+, a̸ = b. 
+
+By Lemma 4, this triple is recoverable exactly when Hn,λ |St( I) has full column rank. We next translate this local rank question into one determinant at each nonzero cyclic frequency. The neighborhood and diagonal checks first eliminate all but one residual slope obstruction. Evaluating its cyclic syndrome at a nonzero frequency k
+
+produces the three auxiliary columns defined below, one for each failed-vertex index; the obstruction vanishes uniquely at that frequency exactly when their determinant is nonzero. Appendix A proves that these reductions are reversible, so imposing the determinant condition at every nonzero frequency is equivalent to the full-column-rank condition above. 9To define these frequency columns, let eK be a splitting field of xn − 1 over F2, and fix a primitive n-th root ζ ∈ eK. For k ∈ Z× 
+
+> n
+
+and j ∈ Zn, define 
+
+pk(j) ≜  1, ζ kj , ζ kλj T ∈ eK3.
+
+For the normalized failed set I = {0, a, b }, assemble the three vectors into 
+
+Mk(a, b ) ≜  pk(0) pk(a) pk(b) ∈ eK3×3,
+
+and define the local determinant 
+
+Dk(a, b ) ≜ det Mk(a, b ).
+
+The columns of Mk(a, b ) are the auxiliary frequency columns just described; they are not columns of Hn,λ . More precisely, the appendix shows that the remaining slope multiplier is Dk(a, b ) up to a nonzero factor and constructs a nonzero local kernel word when one determinant vanishes. Hence the promised equivalence is the following criterion.                             
+
+> Lemma 6 (Local determinant criterion) Let n≥5be prime, let λbe primitive modulo n, and let a, b ∈Z×
+> nbe distinct. The erased vertices v0, v a, v bare uniquely recoverable if and only if
+> Dk(a, b )̸= 0 for every k∈Z×
+> n.
+> Equivalently, the submatrix of Hn,λ formed by the columns in St( {0, a, b })has full column rank. If one of the determinants vanishes, the nullity of this submatrix is at least ord n(2) −1.
+
+Primitivity is essential in this criterion. It makes the only σλ-fixed residual class a constant, so the determinant test eliminates every remaining ordinary-edge pattern rather than only its frequency components. If one determinant vanishes, one simple component of the reduced cyclic algebra supplies a kernel space of dimension at least ord n(2) − 1; this degree depends on the factorization over F2, not on the number of vanishing determinants. The determinant condition has a compact geometric formulation. The projective plane PG(2 , eK) is the set of one-dimensional subspaces of eK3; a point is represented by a nonzero triple, up to multiplication by a nonzero scalar. For every λ ∈ Zn,repeatedly applying ( X, Y, Z ) 7 → (X, ζY, ζ λZ) to (1 , 1, 1) gives the cyclic orbit Γn,λ ≜ {(1 , ζ j , ζ λj ) : j ∈ Zn} ⊆ PG(2 , eK). (9) We call this set an n-arc if no three of its points are collinear. In matrix language, every 3-by-3 minor of the displayed orbit columns is then nonzero. The determinant 
+
+Dk(a, b ) is precisely the minor on the three columns indexed by 0 , ka, kb . Lemma 6 therefore gives the following coding characterization.               
+
+> Theorem 7 (Primitive-slope characterization) Let n≥5be prime and let λbe primitive modulo n. Then C3(λ)corrects every three-node erasure if and only if Γn,λ is an n-arc.
+
+10 Proof The point set Γ n,λ is an n-arc exactly when Dk(a, b )̸ = 0 for all distinct a, b ∈ Z× 
+
+> n
+
+and all k ∈ Z× 
+
+> n
+
+. Apply Lemma 6 to every erased triple after an affine relabeling. □
+
+For orientation, we now identify the graph object and algebraic parameter used in the proof. Let X = ( eu,v ) ∈ C 3(λ) satisfy supp( X) ⊆ St( I) for I = {0, a, b }. Define its ordinary-edge label matrix 
+
+B = ( Buv )u,v ∈Zn ∈ Fn×n 
+
+> 2
+
+, Buu = 0 , Buv = Bvu = eu,v (u̸ = v),
+
+so B records the labels of the original graph word on ordinary edges; it is not a separate support graph. The neighborhood checks make every row sum of B zero. Let 
+
+Kn ≜
+
+
+
+Zn,
+
+Zn
+
+2
+
+ 
+
+be the loopless complete graph on the same vertex set, and let Z(Kn) ⊆ F(n
+
+> 2
+
+) 
+
+> 2
+
+be its binary cycle space: the ordinary-edge patterns having even degree at every vertex. Thus B lies in Z(Kn). The proof temporarily packages the cyclic syndromes in 
+
+Rn ≜ F2[x]/(1 + x + · · · + xn−1)where zj is the residue class of xj . Unlike the full group algebra Rn = F2[x]/(xn − 1) used in the 2020 construction, Rn denotes throughout this paper its nontrivial reduced factor. The algebra automorphism σλ : Rn → Rn is defined by σλ(zj ) = zλj . The cycle-space coordinate is the following linear map. For any F2-vector space V , write V2 
+
+> F2
+
+V for the quotient of V ⊗F2 V by the subspace generated by {v ⊗ v : v ∈ V }, and write u ∧ v for the image of u ⊗ v. Now define Ω : Z(Kn) −→ 
+
+> 2
+
+^
+
+> F2
+
+Rn, Ω( B) ≜ X
+
+> 0≤u<v<n
+
+Buv zu ∧ zv .
+
+This is a lossless change of coordinates, not a relaxation of the graph problem: Appendix A proves that Ω is an isomorphism, so Ω( B) = 0 exactly when every ordinary-edge label is zero. Put 
+
+δ1 ≜ 1 + za, δ2 ≜ 1 + zb.
+
+Both elements are units of Rn. The support and neighborhood conditions give Ω( B) = δ1 ∧ β1 + δ2 ∧ β2
+
+for some β1, β 2 ∈ Rn. The diagonal checks allow these representatives to be chosen so that 
+
+δ1β1 + δ2β2 = 0 .
+
+11 Consequently, there is y ∈ Rn with 
+
+β1 = δ2y, β2 = δ1y. 
+
+The resulting linear map 
+
+y 7 −→ δ1 ∧ (δ2y) + δ2 ∧ (δ1y) = Ω( B)from Rn to V2 
+
+> F2
+
+Rn has kernel exactly F2. Thus the residual ordinary-edge pattern is represented without loss by the coset y + F2 ∈ Rn/F2.Since δ2 is a unit, define γ ≜ δ1δ−12 . The slope checks become 
+
+δ2σλ(δ2) γ + σλ(γ)  y + σλ(y) = 0 . (10) Evaluation at x = ζk identifies Dk(a, b ) with the numerator of the middle factor. If all determinants are nonzero, that factor is a unit, and primitivity leaves only y ∈ F2.Hence the coset is zero and the isomorphism gives B = 0; the diagonal checks then force the three loop symbols to vanish, so X = 0. If one determinant vanishes, the proof reverses these reductions and constructs nonzero locally supported codewords; their dimension is at least ord n(2) − 1. Appendix A gives both directions in full. 
+
+Proposition 8 (Rank of the primitive-slope checks) Let n ≥ 5 be prime and let λ be primitive modulo n. Then 
+
+rank Hn,λ = 3 n − 2. (11) 
+
+Thus the code redundancy is 
+
+r(C3(λ)) = rank Hn,λ = 3 n − 2.
+
+The matrix has 3 n displayed check rows; Appendix B shows that the sum of all neighborhood rows and the sum of all slope rows are its only two independent row dependencies. The local criterion is proved in Appendix A, where (A6) identifies Dk(a, b ) with the factor in (10). Proposition 8 is proved in Appendix B. The local proof is formulated in the reduced algebra F2[x]/(1 + x + · · · + xn−1), which may be a product of fields. This generality is essential at new lengths such as n = 17. 
+
+Remark 9 (Decoding and the role of the new proof) Since C3(2) = C3 literally, the O(n2)sparse linear-system decoder of [2, Sec. VI] applies unchanged at slope 2. The same procedure applies to every slope covered by Theorem 7: restricting the syndrome equations to a failed triple gives 3 n − 3 unknown labels, only O(n) nonzero matrix entries, and a unique solution by the theorem. Thus the existing decoder again uses O(n2) binary operations. Appendix A instead supplies a structural proof of uniqueness. It replaces the slope-two coefficient analysis by a uniform cycle-space and exterior-square argument that isolates the arc and primitivity conditions, thereby allowing the slope to vary. 
+
+12 We next give three slopes for which the arc hypothesis is automatic. We first record the elementary coordinate involution that will transfer two of them. 
+
+Lemma 10 (Exponent involution) For every λ ∈ Zn, the point sets Γn,λ and Γn, 1−λ are projectively equivalent. Proof Interchanging the first two coordinates of (1 , z, z λ), scaling by z−1, and writing w =
+
+z−1 gives (1 , z, z λ) 7 −→ (z, 1, z λ) ∼ (1 , z −1, z λ−1) = (1 , w, w 1−λ).
+
+As z runs through the cyclic subgroup, so does w. Hence Γ n,λ and Γ n, 1−λ are projectively equivalent. □
+
+Lemma 11 (Prime-subgroup Frobenius arcs) Let k itself be a power of two, and let n be an odd prime. If 
+
+n ∤ 2k − 1,
+
+then Γn, 2k is an n-arc. Proof Write μn ≜ ⟨ζ⟩ and d ≜ ord n(2), so F2(μn) = F2d . If three orbit points were collinear, after normalizing one parameter to 1 there would be distinct x, y ∈ μn \ { 1} such that (1 + x)(1 + y2k
+
+) + (1 + y)(1 + x2k
+
+) = 0 .
+
+Consequently 
+
+η ≜ 1 + x
+
+1 + y satisfies η2k −1 = 1 ,
+
+and hence 
+
+η ∈ F2k ∩ F2d = F2gcd( d,k ) .
+
+If d is odd, then gcd( d, k ) = 1, so η = 1 and x = y, a contradiction. If d is even, put Q ≜ 2d/ 2.Since Q ≡ − 1 (mod n), raising 1 + x = η(1 + y) to the Q-th power and comparing with the original equality gives yx = ηQ−1.
+
+The left side lies in μn, while the order of the right side divides 2 k − 1. The hypothesis makes the intersection of these two cyclic groups trivial, again forcing x = y. □
+
+Corollary 12 (Three fixed arc-safe slopes) For every prime n > 5, each member of 
+
+{2, −3, −15 }
+
+gives an n-arc. Proof Apply Lemma 11 with k = 1 , 2, 4. The three Frobenius exponents are 2 , 4, 16, and the corresponding integers 2 k − 1 are 1 , 3, 15, none divisible by a prime greater than five. Lemma 10 transfers the conclusions for 4 and 16 to 1 − 4 = −3 and 1 − 16 = −15. □
+
+13 Theorem 13 (Unconditional infinite triple-node family) The set 
+
+P ≜
+
+
+
+n > 5 : n is prime and at least one 
+
+λ ∈ { 2, −3, −15 } is primitive modulo n
+
+
+
+is infinite. For each n ∈ P , choose such a primitive λn. Then C3(λn) corrects three node erasures and 
+
+r(C3(λn)) = 3 n − 2, dim C3(λn) = (n − 1)( n − 4) 2 . (12) 
+
+Proof Heath-Brown’s three-integer theorem [12, Thm. 1] applies to nonzero multiplicatively independent integers g1, g 2, g 3 when none of 
+
+g1, g 2, g 3, −3g1g2, −3g1g3, −3g2g3, g 1g2g3
+
+is an integer square. Take (g1, g 2, g 3) = (2 , −3, −15) .
+
+Multiplicative independence follows successively from the valuations at 2 , 5, 3. The seven required integers are 2, −3, −15 , 18 , 90 , −135 , 90 ,
+
+where 90 occurs twice because two of the seven expressions have the same value in this specialization; none is a square. Heath-Brown’s theorem therefore proves that, for infinitely many primes, at least one of the three selected integers is a primitive root. Corollary 12 and Theorem 7 give correction, while Proposition 8 gives rank 3 n − 2. Subtracting this rank from  n+1 2
+
+ gives the dimension in (12). □
+
+The new family has the same redundancy and erasure capability as the 2020 con-struction. Its contribution is arithmetic: after allowing the slope to be selected from three fixed integers, it proves infinitely many admissible prime lengths uncondition-ally. At each such length its redundancy is one above the graph Singleton value 3 n − 3, and two below the Schmidt benchmark value 3 n. For example, ord 17 (2) = 8 , ord 17 (−3) = 16 ,
+
+so n = 17 is covered by the new slope −3, but not by the published fixed-slope hypothesis. 
+
+## 3.2 The multi-slope construction 
+
+Throughout this subsection, let n be an odd prime for which 2 is primitive modulo n.For each 2 ≤ ρ < n , this hypothesis ensures that 2 k̸ ≡ 1 (mod n) for every 1 ≤ k ≤
+
+ρ − 2 < n − 1. Define, now at its first use, 
+
+T (k) 
+
+> s
+
+≜ Ts(2 k), s ∈ Zn, 1 ≤ k ≤ ρ − 2. (13) The following definition includes exactly these additional slope families. After stat-ing the code and its theorem, we identify the precise residual edge object on which they act. 14 Definition 14 (Multi-slope code) For 2 ≤ ρ < n , the binary code CMS  
+
+> ρ
+
+⊆ G 2(n) consists of all graph words whose labels satisfy 
+
+X 
+
+> ⟨vi,v j⟩∈ Sh
+
+ei,j = 0 (h ∈ [n]) , (14) 
+
+X 
+
+> ⟨vi,v j⟩∈ Dm
+
+ei,j = 0 (m ∈ [n]) , (15) 
+
+X  
+
+> ⟨vi,v j⟩∈ T(k)
+> s
+
+ei,j = 0 (s ∈ [n], 1 ≤ k ≤ ρ − 2) . (16) 
+
+For a failed set of ρ vertices, the neighborhood and diagonal checks reduce the ordinary-edge ambiguity to an exterior coordinate with ρ − 1 field parameters. The 
+
+ρ − 2 displayed slope families supply the successive Frobenius relations needed to force that coordinate to zero. The next theorem states the resulting correction claim; the paragraph after it identifies the parameters and the appendix gives the reversible calculation. Let HMS  
+
+> ρ
+
+∈ Fρn ×N 
+
+> 2
+
+be the matrix whose columns are indexed by En and whose rows, in the order displayed above, are the incidence vectors of the checks in (14)–(16). Thus 
+
+CMS  
+
+> ρ
+
+= ker HMS  
+
+> ρ
+
+.
+
+The matrix has ρn listed rows, although some of them are dependent; the rank assertion below determines the resulting redundancy. At ρ = 3, this definition gives 
+
+CMS 3 = C3(2) = C3.
+
+Theorem 15 (Multi-slope correction) Suppose that n is an odd prime and 2 is primitive modulo n. For every 2 ≤ ρ < n , the code CMS  
+
+> ρ
+
+corrects every set of at most ρ node erasures. If 
+
+2 ≤ ρ ≤ n + 1 2 ,
+
+then 
+
+r(CMS  
+
+> ρ
+
+) = ρn − (ρ − 1) . (17) 
+
+We now connect the theorem to its algebraic proof. Let X = ( eu,v ) ∈ C MS  
+
+> ρ
+
+be supported on the stars of the failed vertex-index set 
+
+A ≜ {a0, . . . , a s} ⊆ Zn, |A| = ρ, s ≜ ρ − 1,
+
+where the displayed indices are distinct, and let 
+
+B = ( Buv )u,v ∈Zn ∈ Fn×n 
+
+> 2
+
+, Buu = 0 , Buv = Bvu = eu,v (u̸ = v),
+
+be the symmetric labeling matrix of the ordinary-edge part of X. Thus B = 0 means that all ordinary-edge labels of the codeword vanish. In 
+
+K ≜ F2[x]/(1 + x + · · · + xn−1) ∼= F2n−1 ,
+
+15 the primitive-root hypothesis makes the cyclotomic polynomial irreducible. Write zj
+
+for the residue class of xj in K, and set 
+
+δi ≜ zai + za0 , 1 ≤ i ≤ s. 
+
+The neighborhood checks make the ordinary-edge support graph of B Eulerian, so 
+
+B ∈ Z (Kn) in the loopless cycle-space notation introduced above. Define the linear coordinate map Ω : Z(Kn) −→ 
+
+> 2
+
+^
+
+> F2
+
+K, Ω( B) ≜ X
+
+> 0≤u<v<n
+
+Buv zu ∧ zv .
+
+For every field L of characteristic two and every integer k ≥ 1, the expression (a, b ) 7 −→ ab 2k
+
++ a2k
+
+b
+
+is alternating and F2-bilinear. It therefore induces a unique F2-linear map Φk,L :
+
+> 2
+
+^
+
+> F2
+
+L −→ L, Φk,L (a ∧ b) ≜ ab 2k
+
++ a2k
+
+b. 
+
+This map records the nontrivial Frobenius blocks of the parity-check columns. Here it will be used with L = K. The cycle-space argument in Appendix A, applied here with Rn = K, proves that the preceding map Ω is an isomorphism. Assign to the ordinary-edge matrix the exterior coordinate 
+
+w ≜ Ω( B) ∈
+
+> 2
+
+^
+
+> F2
+
+K. 
+
+Because every nonzero ordinary-edge label meets A, there exist β1, . . . , β s ∈ K such that 
+
+w =
+
+> s
+
+X
+
+> i=1
+
+δi ∧ βi.
+
+The diagonal checks allow the βi’s to be chosen so that 
+
+> s
+
+X
+
+> i=1
+
+δiβi = 0 ,
+
+while the k-th slope family gives 
+
+> s
+
+X
+
+> i=1
+
+
+
+δiβ2k 
+
+> i
+
++ δ2k 
+
+> i
+
+βi
+
+
+
+= 0 , 1 ≤ k ≤ s − 1.
+
+16 Lemma 35 proves that these equations force w = 0. The same cycle-space isomorphism is injective, so w = 0 gives B = 0, and the diagonal checks force all loop symbols of 
+
+X to vanish. Thus X = 0, which is exactly the local condition for correction. After closing that subproblem, the appendix uses a separate Fourier decomposition to count row dependencies and obtain (17). 
+
+Corollary 16 (Redundancy comparison) Suppose that n is an odd prime, 2 is primitive modulo n, and 
+
+2 ≤ ρ ≤ n + 1 2 .
+
+Then 
+
+r(CMS  
+
+> ρ
+
+) − rSing (n, ρ ) = ρ − 12
+
+!
+
+.
+
+The Schmidt benchmark has redundancy 
+
+rSchmidt (n, ρ ) ≜ ρn, 
+
+so the multi-slope construction saves ρ − 1 binary checks. Proof Under the labeling-matrix identification G 7 → AG from Section 2, a graph word sup-ported on the union of ρ coordinate stars is a symmetric matrix. After ordering the failed vertices first, it has block form 
+
+Aff Bfh 
+
+BT 
+
+> fh
+
+0
+
+
+
+, Aff ∈ Fρ×ρ 
+
+> 2
+
+, Bfh ∈ Fρ×(n−ρ)2 ,
+
+where Aff contains labels between two failed vertices and Bfh contains labels between a failed and a healthy vertex. The zero block contains the healthy–healthy coordinates, which are outside the erasure support. The full matrix therefore has rank at most 2 ρ. Thus a symmetric-bilinear-form code of rank distance 2 ρ + 1 corrects the node erasures, although it solves the stronger problem of excluding every nonzero symmetric difference of rank at most 2 ρ. For odd 
+
+n, the even-characteristic construction of [8], together with the quadratic-form formulation in [9], has dimension 
+
+kSchmidt = n(n − 2ρ + 1) 2for 2 ≤ ρ < (n + 1) /2, and hence redundancy ρn . At ρ = ( n + 1) /2, the same benchmark is simply the zero code of redundancy N = ρn . Subtraction gives the two asserted gaps. □
+
+For ρ = 2, the code is the published optimal double-node code of [2], with redun-dancy 2 n − 1. For ρ = 3, it is C3, with redundancy 3 n − 2, one bit above the Singleton value 3 n − 3. Although the correction assertion remains valid for ( n + 1) /2 < ρ < n ,no competitive redundancy claim is made there. In that range the selected powers of two can contain both a slope 2 k and its inverse 2 n−1−k. Their Fourier supports over-lap, so additional row dependencies may occur and the displayed rank formula is no longer asserted. 17 4 A Uniform Frobenius–Moore Edge Skeleton and Finite Triple Completions 
+
+All constructions in this section are binary and remain in the original looped space 
+
+G2(n). Fix an integer 2 ≤ ρ ≤ n and a failed vertex-index set Q ∈  [n]
+
+> ρ
+
+. By Lemma 4, a full-row-rank parity-check matrix of a Singleton-optimal code has 
+
+rSing (n, ρ ) = ρn −
+
+ρ
+
+2
+
+
+
+rows, and all columns indexed by St( Q) must be independent. Exactly ρ of these erased columns are loops; the remaining 
+
+ρ(n − 1) −
+
+ρ
+
+2
+
+
+
+are ordinary edges meeting Q. Our construction follows this count. We first set the loop columns aside and build one ordinary-edge skeleton that has full local rank for every Q. We then return to the complete coding problem: a common quotient reduces the check space to the Singleton dimension without destroying those edge ranks, and the ρ loop columns must fill the ρ remaining directions. Theorem 17 solves the first stage, Proposition 19 gives the exact completion criterion, and Proposition 20 supplies optimal triple-node codes at four finite lengths. After relabeling the vertices by an affine frame below, we reuse Q for the corresponding ρ-subset of field labels. We now construct the ordinary-edge part of the desired parity-check matrix. The term Moore refers here to the consecutive Frobenius powers in the column formula below. The Frobenius alternating-form layers used below are classical. Over finite fields they are the trace-form layers of the Delsarte–Goethals construction [10, Thm. 9]; in the notation closest to ours, see [8, Eq. (29) and Thm. 14]. Gow and Quinlan give the related Galois-theoretic decomposition and rank formulation for odd extensions [13, Thms. 2 and 6], with an even-degree analogue in [13, Thm. 7]. Our task is different but built from those layers: we realize their evaluations as columns indexed by the ordinary edges of an affine frame and prove the exact simultaneous local-rank condition required by node erasures. The loop coordinates are then handled by the completion criterion later in this section. Put 
+
+m ≜ n − 1, F ≜ F2m ,
+
+and choose an affine frame 
+
+A ≜ {a0, a 1, . . . , a m} ⊂ F. 
+
+Thus, from any fixed frame point, the m differences to the other frame points form an 
+
+F2-basis of F . We use these points as algebraic labels for the vertices of the original graph, identifying 
+
+vi ←→ ai, 0 ≤ i ≤ m. 
+
+18 Accordingly, the ordinary edge ⟨vi, v j ⟩ is denoted by {ai, a j }, and a subset of A denotes the corresponding vertex set. This is only a relabeling of the original graph coordinates; the field structure will be used to assign a check column to each ordinary edge. Fix an ordered F2-basis of F . Expanding each field element in this basis and concatenating the resulting blocks identifies 
+
+F ρ ∼= Fρm  
+
+> 2
+
+.
+
+Thus an element of F ρ below represents one binary parity-check column of length ρm ,written compactly as ρ consecutive m-bit blocks. For every ordinary edge {a, b } ∈  A
+
+> 2
+
+,assign the single column 
+
+h(ρ) 
+
+> a,b
+
+≜
+
+
+
+a + ba2b + ab 2
+
+...
+
+a2ρ−1
+
+b + ab 2ρ−1
+
+ ∈ F ρ ∼= Fρm  
+
+> 2
+
+. (18) The formula is symmetric in a and b, so it is well defined for an unordered edge. Assemble these columns into the single global ordinary-edge matrix 
+
+H(ρ)edge ≜  h(ρ)
+
+> a,b
+
+
+
+> {a,b }∈
+
+(A 
+
+> 2
+
+) ∈ Fρm ×(n
+
+> 2
+
+) 
+
+> 2
+
+.
+
+This is the ordinary-edge portion from which the full parity-check matrix will be obtained. Its columns will later be projected to a quotient of the check space, when needed, and one loop column for every vertex will be added. For Q ∈  A
+
+> ρ
+
+, define the ordinary-edge part of the erased star by St edge (Q) ≜
+
+
+
+{a, b } ∈ 
+
+A
+
+2
+
+
+
+: {a, b } ∩ Q̸ = ∅
+
+
+
+.
+
+The corresponding erased-edge block is 
+
+H(ρ)edge St edge (Q)
+
+,
+
+and it contains 
+
+| St edge (Q)| = ρ(n − 1) −
+
+ρ
+
+2
+
+
+
+= ρm −
+
+ρ
+
+2
+
+
+
+columns. The purpose of the algebraic assignment (18) is to give this block full column rank simultaneously for every failed set Q.19 For a fixed vertex label a, write x = a + b for the direction from a to the other endpoint b. Since b = a + x, substituting in (18) gives the binary linear map 
+
+L(ρ) 
+
+> a
+
+: F −→ F ρ, x 7 −→ 
+
+
+
+xa2x + ax 2
+
+...
+
+a2ρ−1
+
+x + ax 2ρ−1
+
+ . (19) Define 
+
+U (ρ) 
+
+> a
+
+≜ im L(ρ) 
+
+> a
+
+≤ F ρ.
+
+Each ordinary-edge column of H(ρ)edge incident with a is the image of the corresponding basis direction x = a + b. Its first block is x, so L(ρ) 
+
+> a
+
+is injective. Since these n − 1directions form a basis of F , the incident columns form a basis of U (ρ) 
+
+> a
+
+. In the local rank proof, the first block a + b of a putative edge-column relation forces the selected edges to form an Eulerian graph; the remaining Frobenius blocks then eliminate that graph. 
+
+Theorem 17 (Uniform Moore edge-skeleton theorem) For every 2 ≤ ρ ≤ n and every 
+
+ρ-subset Q ⊆ A , the erased-edge block has full column rank: 
+
+rank F2
+
+
+
+H(ρ)edge St edge (Q)
+
+
+
+= | St edge (Q)| = ρm − ρ
+
+2
+
+!
+
+.
+
+Equivalently, 
+
+dim F2
+
+X
+
+> a∈Q
+
+U (ρ) 
+
+> a
+
+= ρm − ρ
+
+2
+
+!
+
+= ρn − ρ + 1 2
+
+!
+
+.
+
+We now make a temporary algebraic detour to prove this edge-rank statement. Fix 
+
+Q ∈  A
+
+> ρ
+
+, and suppose that a binary relation among the columns of its erased-edge block is X
+
+> {a,b }∈ St edge (Q)
+
+ca,b h(ρ) 
+
+> a,b
+
+= 0 , ca,b ∈ F2. (20) The coefficient ca,b therefore records whether the column belonging to the erased ordinary edge {a, b } participates in the proposed relation. Define the corresponding relation graph 
+
+Gc ≜ (A, E c), Ec ≜ {{ a, b } ∈ St edge (Q) : ca,b = 1 }.
+
+Thus the vertices of Gc are all n field labels in A, including any isolated labels, and its edges encode the nonzero coefficients in (20). It is an auxiliary graph for a possible column relation, not a graph word of the code. The first block of the columns makes 
+
+Gc Eulerian. We need a lossless linear coordinate for this Eulerian relation graph and a way to express every remaining Frobenius block through that same coordinate. The exterior square supplies both. We now define it and prove the descent lemma that will 20 force the coordinate to vanish; immediately afterward we return to the edge columns and conclude that every coefficient in the proposed relation is zero. We will use the following concrete coordinate description of the exterior square defined in Section 3. If e1, . . . , e m is a basis of an F2-vector space V and u = P 
+
+> i
+
+uiei,
+
+v = P 
+
+> i
+
+viei, then 
+
+u ∧ v = X
+
+> i<j
+
+(uivj + uj vi)ei ∧ ej .
+
+Thus the wedge records all binary 2-by-2 minors of the pair ( u, v ). It is bilinear and alternating; in characteristic two, 
+
+u ∧ u = 0 , u ∧ v = v ∧ u, 
+
+and u∧v = 0 exactly when u and v are F2-linearly dependent. For subspaces U, W ≤ V ,write 
+
+U ∧ W ≜ span F2 {u ∧ w : u ∈ U, w ∈ W }.
+
+Whenever an F2-algebra occurs inside a wedge, it is viewed only as a vector space over 
+
+F2; the wedge is not the multiplication of that algebra. Here is the precise interface with the edge-rank problem. After translating one failed label to 0, choose a basis of the span of the other failed labels. The Eulerian relation graph will be encoded by one exterior element written using that basis and an equal number of field parameters. Vanishing of the remaining Frobenius blocks gives exactly the hypotheses of the next lemma. Its conclusion says that this exterior encoding is zero; after the lemma we construct the encoding explicitly and use its injectivity to return to the graph and annihilate the original column relation. Over finite fields, the vanishing mechanism in the next lemma closely parallels the restriction property just cited. We retain a direct exterior-square proof because the formulation holds over every field of characteristic two and returns exactly the exterior relation needed for the erased-edge columns. 
+
+Lemma 18 (Shifted Frobenius descent) Let F be a field of characteristic two, and let s ≥ 1 be an integer. Suppose that ξ1, . . . , ξ s ∈ F are linearly independent over F2 and that η1, . . . , η s ∈
+
+F satisfy 
+
+Ek ≜
+
+> s
+
+X
+
+> i=1
+
+
+
+ξiη2k 
+
+> i
+
++ ξ2k 
+
+> i
+
+ηi
+
+
+
+= 0 , 1 ≤ k ≤ s. 
+
+Then sX
+
+> i=1
+
+ξi ∧ ηi = 0 in 
+
+> 2
+
+^
+
+> F2
+
+F. 
+
+Proof We induct on s. For s = 1, scale to ξ1 = 1. The equation E1 = 0 gives η21 + η1 = 0, so 
+
+η1 ∈ F2 and ξ1 ∧ η1 = 0. For the induction step, multiplying all ξi, η i by ξ−1 
+
+> s
+
+multiplies each Ek by a nonzero scalar and induces an invertible binary map on the exterior square. We may therefore assume 
+
+ξs = 1. For i < s , put 
+
+Ai ≜ ξ2 
+
+> i
+
++ ξi, Bi ≜ η2 
+
+> i
+
++ ηi.
+
+21 The Ai’s are linearly independent: a binary relation among them says that x2 + x = 0 for a binary combination x of the ξi’s with i < s . The alternatives x = 0 , 1 contradict the independence of ξ1, . . . , ξ s−1, 1, unless the relation is trivial. Set E0 ≜ 0. Direct expansion gives, for 1 ≤ k < s ,
+
+X
+
+> i<s
+
+
+
+AiB2k 
+
+> i
+
++ A2k 
+
+> i
+
+Bi
+
+
+
+= Ek+1 + Ek + E2 
+
+> k
+
++ E2 
+
+> k−1
+
+= 0 .
+
+The induction hypothesis implies X
+
+> i<s
+
+Ai ∧ Bi = 0 .
+
+Extend the Ai’s to a binary basis of F . Comparing exterior coefficients first shows that every 
+
+Bi lies in their span and then that there is a matrix 
+
+C = ( cij )1≤i,j<s ∈ F(s−1) ×(s−1) 2 ,
+
+symmetric off the diagonal, such that 
+
+Bi = X
+
+> j<s
+
+cij Aj .
+
+Since the kernel of x 7 → x2 + x is F2,
+
+ηi = X
+
+> j<s
+
+cij ξj + εi, εi ∈ F2.
+
+In E1 = 0, the off-diagonal terms involving C cancel in symmetric pairs and the diagonal terms vanish. Hence 
+
+η2 
+
+> s
+
++ ηs = X
+
+> i<s
+
+εi(ξ2 
+
+> i
+
++ ξi),
+
+and therefore 
+
+ηs = X
+
+> i<s
+
+εiξi + εs (εs ∈ F2).
+
+Substitution now gives sX
+
+> i=1
+
+ξi ∧ ηi = 0 : the terms involving C cancel by symmetry, and the terms involving the εi’s cancel against 1 ∧ ηs. □
+
+Proof of Theorem 17 Choose q0 ∈ Q and translate every field label by the affine permutation 
+
+τq0 : F −→ F, τq0 (a) ≜ a + q0.
+
+This sends q0 to 0. Write a column of F ρ in block form as (x, y 1, . . . , y ρ−1).
+
+For a general translation τt(a) = a + t, the column formula (18) changes by the invertible shear x 7 −→ x, yk 7 −→ yk + t2k
+
+x + tx 2k
+
+, 1 ≤ k ≤ ρ − 1,
+
+to all columns, so it preserves ranks. Apply this with t = q0. The translated affine frame has 0 as one point, and its other m points form an F2-basis of F ; label them e1, . . . , e m. The translation merely relabels (20), its failed set, and its relation graph. For readability, retain 
+
+22 the notation A, Q, c a,b , G c, and Ec for the translated objects. The first coordinate of the relation is X
+
+> a∈A
+
+deg Gc (a) a = 0 ,
+
+where degrees are taken modulo two. The basis property forces every nonzero vertex to have even degree, and the handshake identity gives the same conclusion at 0. Thus Gc lies in the binary cycle space of the complete graph. Let KA ≜ (A,  A
+
+> 2
+
+) be the complete graph on the field-labeled vertex set, and let Z(KA) ⊆
+
+F(A 
+
+> 2
+
+) 
+
+> 2
+
+be its binary cycle space. For a cycle-space graph G = ( A, E (G)), define Ω : Z(KA) −→ 
+
+> 2
+
+^
+
+> F2
+
+F, Ω( G) ≜ X
+
+> {a,b }∈ E(G)
+
+a ∧ b. 
+
+This map is an isomorphism: the cycles on {0, e i, e j } form a basis and map to the basis elements ei ∧ ej . Put 
+
+U ≜ span F2 (Q \ { 0}), dim U = ρ − 1.
+
+Every edge of Gc meets Q, so Ω( Gc) ∈ U ∧ F . Write Ω( Gc) = 
+
+> ρ−1
+
+X
+
+> i=1
+
+ui ∧ bi
+
+for a basis u1, . . . , u ρ−1 of U and suitable b1, . . . , b ρ−1 ∈ F . The remaining coordinates are linked to this same exterior class by the maps Φ k,F defined in the multi-slope section, now applied to F . Here 1 ≤ k ≤ ρ − 1. Indeed, the sum of the k-th Frobenius blocks in the proposed column relation is exactly Φ k,F (Ω( Gc)). Thus their vanishing says 
+
+> ρ−1
+
+X
+
+> i=1
+
+
+
+uib2k 
+
+> i
+
++ u2k 
+
+> i
+
+bi
+
+
+
+= 0 , 1 ≤ k ≤ ρ − 1.
+
+Lemma 18 gives Ω( Gc) = 0. Since Ω is injective on the cycle space, every coefficient ca,b 
+
+is zero. Hence the proposed relation is trivial, and the displayed rank equals the number of incident ordinary edges. □
+
+We have returned to the coding problem with the first stage complete: for every failed Q, the ordinary-edge columns span a space of dimension ρm −  ρ
+
+> 2
+
+, exactly their number. It remains to place this skeleton in a check space of Singleton dimension and to restore the loop columns. Since 
+
+rSing (n, ρ ) = ρm −
+
+ ρ
+
+2
+
+
+
+− ρ
+
+
+
+,
+
+the ambient space F ρ must lose  ρ
+
+> 2
+
+ − ρ binary dimensions. For 3 ≤ ρ ≤ n, set 
+
+gρ ≜
+
+ρ
+
+2
+
+
+
+− ρ = ρ(ρ − 3) 2 ,
+
+and, for Q ∈  A
+
+> ρ
+
+, put 
+
+EQ ≜ X
+
+> a∈Q
+
+U (ρ) 
+
+> a
+
+≤ F ρ.
+
+23 Equivalently, EQ is the column space of H(ρ)edge |St edge (Q). Thus the remaining tasks are exact: find one gρ-dimensional quotient kernel that misses every EQ, and then choose fixed loop columns that complete each surviving edge space. The next proposition characterizes precisely when both tasks have succeeded. 
+
+Proposition 19 (Common-quotient and loop-completion criterion) Let 3 ≤ ρ ≤ n. Let 
+
+Z ≤ F ρ have dimension gρ and satisfy 
+
+Z ∩ EQ = {0} for every Q ∈ A
+
+ρ
+
+!
+
+.
+
+Let 
+
+πZ : F ρ −→ F ρ/Z 
+
+be the quotient map. For each a ∈ A , choose ℓa ∈ F ρ as the parity-check column assigned to the self-loop at the vertex labeled a. Under the vertex relabeling Vn ↔ A , define the binary linear parity-check map 
+
+HZ,ℓ : G2(n) −→ F ρ/Z 
+
+by assigning πZ (h(ρ)
+
+> a,b
+
+) to the ordinary edge {a, b } and πZ (ℓa) to the loop at a, and set 
+
+CZ,ℓ ≜ ker HZ,ℓ .
+
+Then CZ,ℓ is a Singleton-optimal binary ρ-node-erasure-correcting code if and only if, for every Q, the ρ loop images indexed by Q form a basis of 
+
+F ρ/Z 
+
+(EQ + Z)/Z .
+
+Proof The projected check space has dimension 
+
+ρm − gρ = ρn − ρ
+
+2
+
+!
+
+,
+
+the Singleton redundancy. Theorem 17 gives independent edge columns spanning EQ. Because the kernel of πZ |EQ is Z ∩ EQ = {0}, this projection preserves their full rank for every Q. Its codimension in the projected check space is exactly ρ, so the erased columns are independent precisely under the stated loop-basis condition. □
+
+For ρ = 3, one has g3 = 0. Thus the ambient binary dimension of F 3 is already the Singleton dimension 3 m = 3 n − 3, so no common quotient is required. For every failed triple, the edge skeleton has rank 3 m − 3; its three loop columns must therefore form a basis of the remaining three-dimensional quotient. This is exactly the missing-bit completion problem. We now suppress the superscript (3), writing ha,b and Ua.The loop ℓa is tested only for failed triples Q containing a, and then Ua ⊆ EQ.Adding an element of Ua to ℓa therefore does not change its quotient class. Since the first coordinate of the map defining Ua is x, we may normalize the first coordinate of every loop to zero. For the finite completion search, we now specialize the arbitrary affine frame used above to the orbit of a normal element θ ∈ F , whose Frobenius conjugates form a basis, namely the frame 
+
+A ≜ {0, θ, θ 2, θ 22
+
+, . . . , θ 2m−1
+
+}.
+
+24 Table 1 Exact loop-completion certificates in polynomial form. 
+
+m pm(T ) θ y z (ϵ, δ )5 T 5 + T 2 + 1 α + 1 α4 + α2 + α + 1 α4 + α2 + α + 1 (1 , 0) 7 T 7 + T + 1 α3 + 1 α5 + α2 + α α5 + 1 (1 , 1) 9 T 9 + T + 1 α5 + α4 + 1 α7 + α4 + α3 + α2 + 1 α6 + α5 + α3 (1 , 1) 11 T 11 + T 2 + 1 α7 + α4 + α3 + 1 α8 + α5 + α3 α9 + α8 + α5 + α3 + 1 (1 , 1) 
+
+The Frobenius symmetry below determines all n − 1 nonzero-frame loop columns from only two field elements, while the loop at zero requires two additional bits. Thus choose 
+
+y, z ∈ F and ϵ, δ ∈ F2, and use 
+
+ℓ0 ≜ (0 , ϵ, δ ), (21) 
+
+ℓθ2i ≜ (0 , y 2i
+
+, z 2i
+
+), 0 ≤ i < m. (22) 
+
+Proposition 20 (Exact finite completions) For each 
+
+m ∈ { 5, 7, 9, 11 }, n = m + 1 ∈ { 6, 8, 10 , 12 },
+
+there exist a normal element θ ∈ F , field elements y, z ∈ F , and bits ϵ, δ ∈ F2 for which the loop assignment (21) –(22) completes the edge skeleton. Consequently, there are binary optimal triple-node-erasure-correcting codes of redundancy 3n − 3 at these four lengths. 
+
+One reproducible set of polynomial-basis certificates is shown in Table 1. In each row, let pm(T ) ∈ F2[T ] be the polynomial displayed in the second column, take 
+
+F = F2[T ]/(pm(T )) and let α be the residue class of T . The entries θ, y, z are written in the polynomial basis 1 , α, . . . , α m−1, and ( ϵ, δ ) is binary. Thus a row is compact input data for the displayed construction, rather than a hand-checkable universal rank proof: the exact-arithmetic verifier reconstructs every failed triple from that input and checks the required rank condition. 
+
+Proof For each row of Table 1, exhaustive exact division by every monic binary polynomial of degree between 1 and ⌊m/ 2⌋ finds no divisor of the displayed degree-m modulus; hence it is irreducible. Binary row reduction verifies that 
+
+θ, θ 2, . . . , θ 2m−1
+
+is an F2-basis of F . Hence the displayed labels form the required affine frame. For every 
+
+Q ∈  A
+
+> 3
+
+, the exact verification constructs the 3 m − 3 non-loop columns incident with Q
+
+and the three corresponding loop columns from (21)–(22). Binary row reduction gives rank 3m − 3 before the loops are adjoined and rank 3 m afterward. This is checked for all 
+
+63
+
+!
+
++ 83
+
+!
+
++ 10 3
+
+!
+
++ 12 3
+
+!
+
+= 416 failed triples. Thus every erased triple indexes 3 m independent columns in a check space of dimension 3 m = 3 n − 3. The resulting code corrects every triple and meets the graph Singleton bound. The archived verification package [14] records all 416 exact rank checks. □
+
+25 Remark 21 The four completions establish Singleton optimality at n = 6 , 8, 10 , 12. The uni-form edge skeleton and the exact three-dimensional completion criterion apply beyond these four instances. Finding a uniform solution of that criterion is the remaining optimal-triple problem. 
+
+We finally summarize the division between the classical algebraic input and the graph-code contribution. The alternating Frobenius layers in (18) come from the estab-lished theory of alternating rank-metric spaces [8, 10, 13]. For ρ = 2, the spaces 
+
+{U (2)  
+
+> a
+
+: a ∈ A} are also related to the Gold APN/dimensional-dual-hyperoval spaces associated with x 7 → x3 [15], and the same dimension pattern occurs in the uncom-pressed quadratic-algebra star model of Kantor and Shult [16, Lem. 6.10]. Thus neither the Frobenius layers nor their finite-field restriction mechanism is claimed as new here. Theorem 17 contributes their explicit realization as ordinary-edge columns indexed by an affine frame, the simultaneous full-rank conclusion for every failed vertex set, and the reduction of the remaining looped graph-code problem to Proposition 19. 
+
+# 5 Node-Weight Enumerators 
+
+We now return to the q-ary model of Section 2, where q is an arbitrary prime power. The coding question in the remainder of the paper is how large a code of a prescribed node distance can be. Packing, existence, and covering arguments all require ambient radius-t ball volumes, or equivalently the ambient distribution of node weights. We develop two complementary counting routes. Conditioning on the nonzero loops expresses the ambient node-weight enumerator through a simple-graph kernel. Viewing a ball as the union of the failed-star coordinate subspaces instead gives a direct inclusion–exclusion formula and effective fixed-order estimates. These volumes become code bounds in Section 6. Define the radius-t ball around zero by 
+
+Bt ≜ {G ∈ G q (n) : wt N(G) ≤ t}, 0 ≤ t ≤ n, 
+
+and put B−1 ≜ ∅. Translation invariance implies that every radius-t ball is a translate of this one and has the same cardinality. For a code C ⊆ G q (n), define its node-weight distribution and weight enumerator by 
+
+AN
+
+> w
+
+(C) ≜ |{ G ∈ C : wt N(G) = w}| , (23) 
+
+W N 
+
+> C
+
+(z) ≜
+
+> n
+
+X
+
+> w=0
+
+AN
+
+> w
+
+(C)zw. (24) For the entire ambient space, abbreviate 
+
+AN
+
+> w
+
+(n, q ) ≜ AN
+
+> w
+
+(Gq (n)) , W N 
+
+> n,q
+
+(z) ≜ W N 
+
+> Gq(n)
+
+(z).
+
+26 Because the metric is translation invariant, the ordered-pair distance distribution is especially simple: 
+
+|{ (G, G ′) ∈ G q (n)2 : dN(G, G ′) = w}| = qN AN
+
+> w
+
+(n, q ). (25) This is the graph-metric analogue of a fixed-distance pair enumerator. 
+
+## 5.1 A loop-conditioning generating transform 
+
+The reduction below is purely enumerative. The ambient graph-word space and the node metric remain those of looped graph words throughout; no loop coordinate is deleted or punctured. We condition on the set of vertices carrying nonzero loops. After those forced cover vertices and all coordinates incident with them have been counted, the only residual object is the simple non-loop support graph on the remaining ver-tices. Its vertex-cover enumerator is used solely as an auxiliary counting kernel for the original looped model. For a labeled simple graph J on vertex set [ m], let E(J) denote its edge set and let τ (J) denote its vertex-cover number. Write 
+
+Km ≜  [m],
+
+[m]2
+
+
+
+for the loopless complete graph on this vertex set. Let 
+
+s(q) 
+
+> m,t
+
+≜ X 
+
+> J⊆Km
+> τ(J)= t
+
+(q − 1) |E(J)|, (26) where the sum is over all such labeled support graphs. We define s(q) 
+
+> m,t
+
+≜ 0 when t < 0or t > m . Define 
+
+Sm,q (z) ≜
+
+> m
+
+X
+
+> t=0
+
+s(q)
+
+> m,t
+
+zt, S0,q (z) ≜ 1.
+
+Theorem 22 (Loop-conditioning transform) Let AN
+
+> w,ℓ
+
+(n, q ) count the q-ary looped graph words of node weight w having exactly ℓ nonzero loops. Then 
+
+AN
+
+> w,ℓ
+
+(n, q ) = nℓ
+
+!
+
+(q − 1) ℓq ℓn −(ℓ+1 2 )s(q)
+
+> n−ℓ,w −ℓ
+
+. (27) 
+
+Define the corresponding bivariate node-weight enumerator by 
+
+W N 
+
+> n,q
+
+(u, z ) ≜
+
+> n
+
+X
+
+> w=0
+> n
+
+X
+
+> ℓ=0
+
+AN
+
+> w,ℓ
+
+(n, q )uℓzw. (28) 
+
+Consequently, the bivariate polynomial that also records the number of nonzero loops is 
+
+W N 
+
+> n,q
+
+(u, z ) = 
+
+> n
+
+X
+
+> ℓ=0
+
+nℓ
+
+!
+
+(q − 1) ℓq ℓn −(ℓ+1 2 )(uz )ℓSn−ℓ,q (z). (29) 
+
+27 In particular, 
+
+W N 
+
+> n,q
+
+(z) = W N 
+
+> n,q
+
+(1 , z ).
+
+Proof Let L be the set of vertices carrying nonzero loops, with |L| = ℓ. Every vertex cover contains L. Once those vertices are chosen, every non-loop edge incident with L is already covered and its label is arbitrary. The only remaining contribution to the node weight is the vertex-cover number of the simple support graph induced on [ n] \ L. There are 
+
+ℓ(n − ℓ) + ℓ
+
+2
+
+!
+
+= ℓn − ℓ + 1 2
+
+!
+
+non-loop coordinates incident with L. Choosing L, assigning its nonzero loop labels, assigning these arbitrary incident labels, and then choosing the residual graph gives (27). Summing over w and ℓ gives (29). □
+
+The transform is a unique decomposition rather than inclusion–exclusion. For example, 
+
+AN0 (n, q ) = 1 , AN 
+
+> n
+
+(n, q ) = ( q − 1) nq(n
+
+> 2
+
+).
+
+The residual polynomial Sm,q is the genuine hard core of the enumeration problem: it counts simple graphs by vertex-cover number, or equivalently by independence number. 
+
+## 5.2 Balls as a subspace arrangement 
+
+The loop-conditioning transform reduces the enumerator to the vertex-cover distri-bution of simple graphs, which remains difficult to compute in full. For ball volumes there is a second representation tied directly to node erasures: a word has node weight at most t exactly when its support lies in the coordinate subspace erased by some t-set of vertices. This turns the ball into the following finite union of linear subspaces. Recall that VS is the subspace of graph words supported on the erased star coordinates St( S). Since every cover of size at most t extends to a t-set, 
+
+Bt = [
+
+> S∈
+
+([n] 
+
+> t
+
+)
+
+VS . (30) The fixed-weight classes and balls determine each other by finite difference. In generating-function form, 
+
+W N 
+
+> n,q
+
+(z) = (1 − z)
+
+> n−1
+
+X
+
+> t=0
+
+|B t|zt + qN zn. (31) Indeed, AN 
+
+> t
+
+(n, q ) = |B t| − |B t−1| and |B n| = qN . Thus every exact ball formula below immediately gives an exact analogue of the classical coefficients Aw.Inclusion–exclusion for (30) requires the dimension of every intersection T 
+
+> i
+
+VSi .That dimension depends only on which of the cover sets contain each vertex, so the 28 entire intersection can be encoded by a Venn profile rather than by the labeled sets themselves. For an ordered j-tuple of t-sets S1, . . . , S j , put 
+
+Ij ≜ {1, . . . , j },
+
+and give each vertex index r ∈ [n] the membership signature 
+
+σ(r) ≜ {i ∈ Ij : r ∈ Si}.
+
+For T ⊆ Ij , let 
+
+mT ≜ |{ r ∈ [n] : σ(r) = T }| .
+
+The vector m = ( mT )T ⊆Ij is the Venn profile of the ordered family. 
+
+Lemma 23 (Venn-profile intersection dimension) For a family with profile m,
+
+dim 
+
+
+
+> j
+
+\
+
+> i=1
+
+VSi
+
+ = rj (m) ≜ 12
+
+X
+
+> A,B ⊆Ij
+> A∪B=Ij
+
+mAmB + mIj
+
+ . (32) 
+
+Proof A loop coordinate at v belongs to every St( Si) exactly when σ(v) = Ij . A non-loop coordinate ⟨u, v ⟩ belongs to every star set exactly when 
+
+σ(u) ∪ σ(v) = Ij .
+
+The sum in (32) counts ordered pairs satisfying this condition. Every off-diagonal pair occurs together with its reversal. The only diagonal pairs are the mIj vertices with full signature; each corresponds to an allowed loop. Thus the displayed numerator is even: subtracting these diagonal terms, divide the remaining ordered pairs by two, and then add the mIj loops back. This gives exactly the formula in (32). □
+
+Let Pn,t,j be the set of all nonnegative integer vectors m = ( mT )T ⊆Ij satisfying 
+
+X 
+
+> T⊆Ij
+
+mT = n, (33) 
+
+X 
+
+> T∋i
+
+mT = t (i ∈ Ij ), (34) and, for every distinct i, h ∈ Ij ,
+
+X  
+
+> T⊆Ij
+> |{ i,h }∩ T|=1
+
+mT > 0. (35) Condition (35) says that the j cover sets are pairwise distinct. 29 Theorem 24 (Exact Venn-profile formula) For 0 ≤ t ≤ n,
+
+|B t| =(nt )X
+
+> j=1
+
+(−1) j+1 
+
+j!
+
+X
+
+> m∈Pn,t,j
+
+n!
+
+Q  
+
+> T⊆Ij
+
+mT ! q rj (m). (36) 
+
+Proof Apply inclusion–exclusion to (30). Replace every unordered j-element subfamily by its 
+
+j! orderings. For a fixed Venn profile, the number of assignments of the n labeled vertices to the 2 j signatures is the multinomial coefficient 
+
+n!
+
+Q 
+
+> T
+
+mT ! .
+
+Equations (33)–(34) enforce the vertex and row sizes, while (35) removes repeated cover sets. Hence each unordered subfamily appears under exactly its j! orderings and is counted once after the factor 1 /j !. Lemma 23 gives the size of each intersection. □
+
+Formula (36) is exact, but its full upper limit remains large. Its algorithmic value is that every fixed inclusion–exclusion order j uses only 2 j profile variables and no longer enumerates families of labeled cover sets. It is therefore a finite-dimensional profile reduction for each fixed inclusion–exclusion order j.
+
+## 5.3 Second-order formula and asymptotics 
+
+The exact profile sum is finite but unwieldy at high inclusion–exclusion order. The packing and existence results below need tractable estimates, and for fixed-radius asymptotics the first two orders already determine the leading term. We therefore compute pair intersections explicitly and apply the second Bonferroni inequality. If S, T ∈  [n]
+
+> t
+
+ and |S ∩ T | = u, then dim( VS ∩ V T ) = un −
+
+u
+
+2
+
+
+
++ ( t − u)2. (37) The last term counts the edges between S \ T and T \ S. It is essential: these cross edges meet both covers even though neither endpoint lies in their intersection. Here M1 will be the sum of the sizes of the individual star subspaces, whereas M2
+
+will be the sum of all pair-intersection sizes. Define 
+
+M1(n, t, q ) ≜
+
+nt
+
+
+
+q tn −(t
+
+> 2
+
+), (38) 
+
+M2(n, t, q ) ≜ 12
+
+nt
+
+ t−1X
+
+> u=max {0,2t−n}
+
+ tu
+
+ n − tt − u
+
+
+
+· q un −(u
+
+> 2
+
+)+( t−u)2
+
+. (39) 
+
+Theorem 25 (Pair-intersection bounds and fixed-radius asymptotics) For every n, prime power q, and 0 ≤ t ≤ n,
+
+M1(n, t, q ) − M2(n, t, q ) ≤ |B t| ≤ M1(n, t, q ). (40) 
+
+30 Moreover, for fixed q and t, as n → ∞ ,
+
+|B t| = nt
+
+!
+
+q tn −(t
+
+> 2
+
+) 
+
+1 + Oq,t (nq −n)
+
+
+
+, (41) log q |B t| = tn − t
+
+2
+
+!
+
++ log q
+
+nt
+
+!
+
++ o(1) . (42) 
+
+The same leading asymptotic holds for AN 
+
+> t
+
+(n, q ).Proof The upper bound is the union bound in (30); the lower bound is the second Bonferroni inequality. Equation (37) and the number 12
+
+nt
+
+!
+
+tu
+
+!
+
+n − tt − u
+
+!
+
+of unordered pairs with intersection u give (39). The asymptotic assertion is immediate when 
+
+t = 0, so assume t ≥ 1. Writing s ≜ t − u, division by M1 gives 
+
+M2
+
+M1
+
+= 12
+
+> min {t,n −t}
+
+X
+
+> s=1
+
+ts
+
+!
+
+n − ts
+
+!
+
+q−s(n−t)+ (s
+
+> 2
+
+). (43) For fixed q, t , the s = 1 term is Oq,t (nq −n), and the remaining terms are smaller. This proves (41) and (42): indeed, (40) gives 0 ≤ M1 − |B t| ≤ M2, so the relative error is at most M2/M 1.Finally, 
+
+AN 
+
+> t
+
+(n, q ) = |B t| − |B t−1|,
+
+and the second term is exponentially smaller for fixed t. □
+
+Corollary 26 (Radius one) For every n and prime power q,
+
+|B 1| = 1 + n(qn − 1) − n
+
+2
+
+!
+
+(q − 1) , (44) 
+
+AN1 (n, q ) = n(qn − 1) − n
+
+2
+
+!
+
+(q − 1) . (45) 
+
+Proof There are n one-star subspaces, each of size qn. A graph covered by two distinct singletons is supported on their common edge; a nonzero single-edge graph is counted twice, while the zero graph is counted in every star. Separating these two cases gives (44). □
+
+For the smallest overlap-sensitive case, 
+
+n = 4 , t = 2 , q = 2 ,
+
+the first union sum is 768, the pair-intersection sum is 432, and direct enumeration gives 
+
+|B 2| = 479 .
+
+31 Table 2 Binary ambient node-weight distributions and cumulative ball volumes, verified by exhaustive enumeration.                                                       
+
+> n AN0(n, 2) , . . . , A N
+> n(n, 2)  |B 0|, . . . , |B n|
+> 1 1 ,11,22 1 ,5,21,6,83 1 ,18 ,37 ,81,19 ,56 ,64 4 1 ,54 ,424 ,481 ,64 1,55 ,479 ,960 ,1,024 5 1 ,145 ,3,610 ,16 ,387 ,11 ,601 ,1,024 1,146 ,3,756 ,20 ,143 ,31 ,744 ,32 ,768 6 1 ,363 ,25 ,130 ,382 ,157 ,1,124 ,572 ,532 ,161 ,32 ,768 1 ,364 ,25 ,494 ,407 ,651 ,1,532 ,223 ,2,064 ,384 ,2,097 ,152
+
+Thus the valid second-order lower bound is 336. Full inclusion–exclusion gives 768 − 432 + 192 − 60 + 12 − 1 = 479 .
+
+The same archive [14] reproduces the complete table and this inclusion–exclusion calculation using exact arithmetic. 
+
+# 6 Bounds from Ball Volumes 
+
+Let AN 
+
+> q
+
+(n, d ) denote the largest cardinality of a not necessarily linear code in the graph-word space Gq (n) having minimum node distance at least d, and let 
+
+t ≜
+
+ d − 12
+
+
+
+.
+
+Because the node metric is translation invariant, the standard sphere-packing and maximal-code arguments apply verbatim. Substituting the node-ball volumes com-puted above gives the following specialization; distance regularity is not required. 
+
+Theorem 27 (Packing and Gilbert bounds) For every n, prime power q, and 1 ≤ d ≤ n + 1 ,
+
+qN
+
+|B d−1| ≤ AN 
+
+> q
+
+(n, d ) ≤ qN
+
+|B t| . (46) 
+
+Consequently, if ρ = d − 1, then 
+
+AN 
+
+> q
+
+(n, ρ + 1) ≥ qN −ρn +(ρ
+
+> 2
+
+)
+
+ nρ
+
+ . (47) 
+
+The upper bound comes from disjoint radius-t balls, and the lower bound from the radius-( d − 1) balls around a maximal distance-d code. The last display also uses 
+
+|B ρ| ≤ 
+
+nρ
+
+
+
+qρn −(ρ
+
+> 2
+
+),
+
+because every word of node weight at most ρ lies in a ρ-star coordinate subspace. Loeliger’s averaging lemma applies to an arbitrary additive error set [17, Lem. 2 and Thm. 1]. Since every node ball about zero is invariant under multiplication by F× 
+
+> q
+
+,32 averaging projective error lines gives a slightly sharper finite-length specialization. Its binary simple-graph counterpart is the argument of [5, Prop. 5]. Recording the exact ball size isolates the fixed-distance loss: only the logarithm of the number of possible failed-node sets beyond the graph Singleton bound. For 0 ≤ s ≤ n, put Λs ≜ |B s| − 1
+
+q − 1 ;this is the number of projective lines represented by the nonzero words in the scalar-invariant ball Bs. Because the ball is closed under nonzero scalar multiplication, a linear code contains a nonzero forbidden word if and only if it contains the unique projective line represented by that word. Passing to lines therefore neither loses nor duplicates a forbidden event. 
+
+Theorem 28 (Projective ball-volume linear bound) For every n, prime power q, and 1 ≤
+
+d ≤ n + 1 , there is a linear code C ⊆ G q (n) of node distance at least d. For d = 1 , it may have redundancy zero. For d ≥ 2, its redundancy may be chosen to satisfy 
+
+r(C) ≤ min 
+
+n
+
+r ∈ { 1, . . . , N } : Λ d−1(qN −r − 1) < q N − 1
+
+o
+
+≤ min N, max 1, log q Λd−1
+
+ .
+
+(48) 
+
+In particular, for fixed ρ = d − 1 ≥ 1,
+
+r(C) ≤ min 
+
+(
+
+N, max 
+
+(
+
+1,
+
+&
+
+log q
+
+"
+
+nρ
+
+!
+
+qρn −(ρ
+
+> 2
+
+) − 1
+
+q − 1
+
+#')) 
+
+, (49) 
+
+r(C) ≤ rSing (n, ρ ) + ρ log q n + Oq,ρ (1) . (50) 
+
+Proof The assertion for d = 1 is immediate. Let d ≥ 2, fix 1 ≤ r ≤ N , and choose uniformly an ( N − r)-dimensional subspace C of Gq (n). The nonzero words in Bd−1 split into Λ d−1
+
+projective lines. Each fixed line is contained in C with probability 
+
+qN −r − 1
+
+qN − 1 .
+
+The expected number of bad lines in C is therefore less than one under the first condition in (48), so some C contains none. For 
+
+r = max 1, log q Λd−1
+
+ < N, 
+
+this expectation is at most 
+
+qr (qN −r − 1) 
+
+qN − 1 = qN − qr
+
+qN − 1 < 1; if this choice is at least N , take the zero code instead. Finally, the union of the ρ-star subspaces gives Λρ ≤ nρ
+
+!
+
+qρn −(ρ
+
+> 2
+
+) − 1
+
+q − 1 .
+
+This proves the explicit bound, and the fixed-ρ estimate of the binomial coefficient gives the asymptotic form. □
+
+33 The projective refinement can be strict. For example, when q = 3, n = 2, and 
+
+d = 2, one has |B 1| = 15 and Λ 1 = 7, so (48) gives redundancy at most 2, whereas the unprojectivized bound ⌈log 3 |B 1|⌉ gives 3. Let KN 
+
+> q
+
+(n, R ) be the minimum number of centers whose node balls of radius R
+
+cover Gq (n). The classical fractional-cover and greedy set-cover bounds [18, 19] give a companion pair of covering bounds. 
+
+Proposition 29 (Covering bounds) For every n, prime power q, and 0 ≤ R ≤ n, put 
+
+b ≜ |B R| and Hb ≜ Pbj=1 1/j . Then 
+
+qN
+
+b ≤ KN 
+
+> q
+
+(n, R ) ≤ Hb
+
+qN
+
+b ≤ qN
+
+b
+
+ 1 + ln b. (51) 
+
+Proof Put v ≜ qN and b ≜ |B R|. In the incidence hypergraph of translated balls, every block contains b words and every word lies in b blocks. Uniform weights 1 /b on the blocks and on the points show, by the primal and dual fractional-cover programs, that the fractional cover number is exactly v/b . Chv´ atal’s greedy set-cover bound is at most Hb times the fractional optimum, proving the harmonic upper bound; Hb ≤ 1 + ln b gives the last inequality. The counting lower bound is v/b . □
+
+Theorem 25 turns (46)–(51) into explicit asymptotic bounds. The logarithmic term log q
+
+nt
+
+
+
+has a clear geometric meaning: it is the cost of selecting which one among the many maximal coordinate subspaces contains the error. This term is invisible in the dimen-sion of a single star union and is exactly the phenomenon that makes the metric ball substantially different from a Hamming ball. 
+
+# 7 The Complementary Clique Metric 
+
+The coordinate complement of a union of failed-node stars is an induced clique. This elementary observation leads to a second metric whose balls are substantially easier to enumerate and whose optimal codes are dual to optimal node-erasure codes. The full-rank condition on the complementary surviving clique was already used in [1] to derive bounds on optimal node-erasure codes. Here we treat the complementary coordinate set as an erasure metric in its own right, compute its weight distribution and ball volumes, and state the optimal-code equivalence explicitly as a duality theorem. For T ⊆ [n], recall the induced coordinate set Cl( T ) from Section 2. For e ∈ En,write xe for the coordinate of x ∈ G q (n) indexed by e. Define the vertex support and clique weight by vsupp( x) ≜ {i ∈ [n] : x⟨vi,v j ⟩̸ = 0 for some j ∈ [n]}, (52) wt cl (x) ≜ min {| T | : supp( x) ⊆ Cl( T )} = | vsupp( x)|. (53) 34 A nonzero loop activates one vertex and a nonzero ordinary edge activates both end-points. Thus wt cl is not the vertex-cover number. For example, one ordinary edge has node weight one but clique weight two. 
+
+Proposition 30 Let 0 ≤ μ ≤ n be an integer. The function 
+
+dcl : Gq (n) × G q (n) −→ { 0, 1, . . . , n }, dcl (x, y ) ≜ wt cl (x − y)
+
+is a translation-invariant metric. A code corrects every erasure of an induced clique on at most μ vertices if and only if its minimum clique distance is at least μ + 1 .Proof The only nontrivial metric axiom follows from vsupp( x + y) ⊆ vsupp( x) ∪ vsupp( y).
+
+The erasure assertion is the standard support criterion for a known coordinate-erasure pattern. □
+
+For an integer 0 ≤ μ ≤ n, if a linear code D ≤ G q (n) corrects every erasure of an induced clique on μ vertices, then its redundancy satisfies the clique Singleton bound 
+
+r(D) ≥ | Cl( T )| =
+
+μ + 1 2
+
+
+
+, |T | = μ. (54) Indeed, apply Lemma 4 to the coordinate-erasure set X = Cl( T ): its parity-check columns must be linearly independent. A code attaining equality in (54) is called Singleton-optimal for μ-clique erasures. 
+
+## 7.1 Exact enumerator and generating function 
+
+For 0 ≤ t ≤ n, define 
+
+W cl  
+
+> n,q
+
+(z) ≜ X 
+
+> x∈G q(n)
+
+zwt cl (x), Bcl  
+
+> t
+
+≜ {x ∈ G q (n) : wt cl (x) ≤ t}.
+
+For ordinary binary loopless graphs, counting labeled graphs with no isolated ver-tices by inclusion–exclusion is classical; see [20] for a refined enumeration by edge number. The expression below is the corresponding q-ary looped specialization. For every integer m ≥ 0, let νm(q) be the number of q-ary looped graphs on a fixed set of m vertices whose vertex support is the entire set; equivalently, no vertex is isolated from all nonzero ordinary edges and loops. Inclusion–exclusion over the vertices absent from the support gives 
+
+νm(q) = 
+
+> m
+
+X
+
+> j=0
+
+(−1) j
+
+mj
+
+
+
+q(m−j+1 2 ). (55) Indeed, after j specified vertices are absent, the remaining looped complete graph has 
+
+m − j vertices and  m−j
+
+> 2
+
+ + ( m − j) =  m−j+1 2
+
+ free coordinates. This count includes its loops; inclusion–exclusion enforces that no remaining vertex is isolated. 35 Theorem 31 (Clique-weight enumerator) For 0 ≤ t ≤ n, the ambient clique-weight polynomial and ball volume are 
+
+W cl  
+
+> n,q
+
+(z) = 
+
+> n
+
+X
+
+> m=0
+
+nm
+
+!
+
+νm(q)zm, (56) 
+
+|B cl  
+
+> t
+
+| =
+
+> t
+
+X
+
+> m=0
+
+nm
+
+!
+
+νm(q). (57) 
+
+For a formal indeterminate x, their exponential generating function is the formal identity 
+
+X
+
+> n≥0
+
+W cl  
+
+> n,q
+
+(z) xn
+
+n! = e(1 −z)x X
+
+> m≥0
+
+q(m+1 2 ) ( zx )m
+
+m! . (58) 
+
+Proof Choose the m active vertices and then count graphs with precisely that vertex support using (55). Summing up to t proves (57). For (58), substitute (55), set r ≜ m − j, and apply the exponential formula: 
+
+X
+
+> n≥0
+
+W cl  
+
+> n,q
+
+(z) xn
+
+n! = ex X
+
+> m≥0
+
+νm(q) (zx )m
+
+m!= exe−zx X
+
+> r≥0
+
+q(r+1 2 ) ( zx )r
+
+r! .
+
+For q > 1, the last series has zero analytic radius; the asserted identity is therefore an identity of formal power series. □
+
+## 7.2 Optimal node–clique duality 
+
+For S ⊆ [n], the star and complementary clique coordinate sets form the disjoint partition St( S) ˙ ∪ Cl([ n] \ S) = En. (59) The dual below is taken with respect to the edge-coordinate inner product 
+
+⟨· , ·⟩ E : Gq (n) × G q (n) −→ Fq , ⟨x, y ⟩E ≜ X
+
+> e∈En
+
+xeye.
+
+For a linear code C ≤ G q (n), define 
+
+C⊥ ≜ {y ∈ G q (n) : ⟨x, y ⟩E = 0 for every x ∈ C} .
+
+This convention matters in characteristic two: the Frobenius inner product of full symmetric matrices counts every off-diagonal coordinate twice and is not the relevant pairing. The information-set duality used below is standard; in an erasure-pattern formu-lation it appears, for example, in [21, Lem. 9]. The graph-specific ingredient is the star–clique partition (59). 36 Theorem 32 (Node–clique duality) Let ρ and μ be nonnegative integers with ρ + μ = n,and let C ≤ G q (n) have dimension 
+
+dim C = μ + 1 2
+
+!
+
+.
+
+Then C is Singleton-optimal for correcting every ρ-node erasure if and only if C⊥ is Singleton-optimal for correcting every erasure of an induced μ-vertex clique. Proof Fix S ⊆ [n] with |S| = ρ, and put T ≜ [n] \ S. Choose a full-row-rank generator matrix 
+
+GC ∈ F(μ+1 2 )×Nq for C, with columns indexed by En. The code C corrects the coordinates St( S) precisely when the projection 
+
+πCl( T ) : C −→ FCl( T )
+
+> q
+
+is injective: its kernel consists exactly of the codewords supported on St( S). Its domain and codomain both have dimension  μ+1 2
+
+, so this is equivalent to the projection being an isomorphism. Equivalently, the columns of GC indexed by Cl( T ) are linearly independent. The matrix GC is a parity-check matrix for C⊥; hence this is exactly the criterion that C⊥
+
+correct the erasure of Cl( T ). Its redundancy is 
+
+N − dim C⊥ = dim C = | Cl( T )|,
+
+so the clique-erasure code is Singleton-optimal. The converse is symmetric. □
+
+Corollary 33 The duals of the optimal double-node-erasure codes of [1] form an uncondi-tional infinite family of optimal binary (n − 2) -clique-erasure codes, of dimension 2n − 1,at every odd prime length covered by that construction. The duals of the optimal triple-node completions in Section 4 give optimal (n − 3) -clique-erasure codes at n = 6 , 8, 10 , 12 .Remark 34 The dimension hypothesis in Theorem 32 is essential. The zero code corrects every coordinate erasure, whereas its dual is the ambient space and corrects no nonempty erasure. The theorem is a direct dual reformulation of the full-rank clique-minor criterion in [1, Lem. 17]. The graph-specific metric formulation, its ball enumerator, and the code-family applications above are the contributions here. 
+
+# 8 Discussion and Open Problems 
+
+The central Singleton-optimal constructive problem remains to find an infinite family with redundancy 3 n − 3. The remaining results separate three regimes that had previously been entangled. First, the multi-slope family is uniform in the number of failed nodes and improves the Schmidt benchmark throughout the range 2 ≤ ρ ≤ (n + 1) /2 of Theorem 15. Its redundancy gap ρ − 12
+
+
+
+37 is independent of n, but grows quadratically with the number of failures. Within the multi-slope parity-check template, closing that gap would require additional dependen-cies coupling different slope families, rather than merely adding another independent family of n cyclic checks. Second, the Moore theorem shows uniformly for every 2 ≤ ρ ≤ n that the Moore edge skeleton has maximum local rank on every failed set. For 3 ≤ ρ ≤ n, completing this skeleton requires a common quotient of dimension ρ(ρ − 3) /2, followed by a ρ-loop completion. At ρ = 3 the common quotient is trivial. For each failed triple, the local edge space then has codimension three in the check space, and the three corresponding loop images must form a basis of that quotient. The exact completions at n = 6 , 8, 10 , 12 demonstrate that the obstruction in the published cyclic parity-check matrix is not an obstruction to optimal triple-node codes themselves. An algebraic completion valid for infinitely many m would settle the central Singleton-optimal constructive question. The case ρ = 4 does not by itself bypass that question: Proposition 5 turns any optimal four-failure family into an optimal triple-failure family. Nevertheless, when 
+
+m = n − 1 is even, maximal alternating rank-metric spaces of Delsarte–Goethals type suggest a possible route to an alternative optimal-dimensional four-star edge quotient [8, 10]. Its unresolved step is again a simultaneous loop completion, so bilinear forms become useful here as a structural reduction rather than as a finished construction. Third, the metric-ball calculation explains why dimension-only arguments miss a polynomial factor. A radius-t ball is not one coordinate subspace but a highly over-lapping arrangement of  nt
+
+ maximal subspaces. The Venn-profile formula records all overlaps exactly, while the pair formula already determines the fixed-radius asymptotics. This opens several concrete enumerative questions: a recurrence for the simple-graph polynomials Sm,q (z), efficient computation of the profile sum for growing 
+
+t, and a multivariate transform fine enough to recover a dual weight distribution. The recent asymptotic work of Kopparty, Potukuchi, and Sha [5] confirms that the vertex-cover metric is no longer an isolated storage model. Their constant-relative-distance regime and the present fixed-distance regime are complementary. Finding explicit families that interpolate between them is a natural longer-term problem. 
+
+# Computational Reproducibility 
+
+All computer-assisted verifications reported in this paper were carried out using exact arithmetic. The complete versioned verification package, including source code, cer-tificate data, execution instructions, recorded outputs, and cryptographic checksums for every reported finite check, is publicly archived in Zenodo [14]. 
+
+# Appendix A Proof of the Local Determinant Criterion 
+
+We prove the equivalence in Lemma 6 by tracking the kernel of the parity-check matrix on one failed triple. The original coding target is exact: a word supported on St( {0, a, b }) must be zero precisely when all the determinants Dk(a, b ) are nonzero. 38 The proof temporarily changes language in four steps. The reduced cyclic algebra Rn
+
+packages the syndrome equations; the neighborhood checks leave an Eulerian ordinary-edge matrix, which will be given a lossless cycle-space coordinate below; the diagonal checks reduce that coordinate to one coset y + F2; and the slope checks yield the factorization (10), whose middle factor is tested by Dk(a, b ). We then return to the graph: a unit middle factor forces the edge pattern and all loops to vanish, whereas a zero determinant lets us reverse the reductions and construct a nonzero locally supported codeword. 
+
+Proof of Lemma 6 Let n ≥ 5 be prime and let λ be primitive modulo n. For convenience, write 
+
+Mn(x) ≜ 1 + x + · · · + xn−1.
+
+Recall from Section 3 that Rn = F2[x]/(Mn(x)), that zj denotes the residue class of xj ,and that σλ(zj ) = zλj . This is the nontrivial Chinese-remainder component of the full cyclic group algebra: 
+
+F2[x]/(xn − 1) ∼= F2 × Rn.
+
+In the notation of [2], the full group-algebra ring is Rn; here Rn denotes its nontrivial Chinese-remainder component. The omitted F2 component is exactly evaluation at x = 1. Thus, in each use below, vanishing in Rn together with the separately checked value at x = 1 is equivalent to vanishing of the original syndrome polynomial in the full group algebra. The algebra Rn is reduced because n is odd, although it need not be a field. The map 
+
+ϑ :
+
+c ∈ Fn 
+
+> 2
+
+: X
+
+> j
+
+cj = 0 
+
+ −→ Rn, ϑ(c) ≜ X
+
+> j
+
+cj zj , (A1) is an isomorphism: the only binary relation among the zj ’s is P 
+
+> j
+
+zj = 0, and that relation has odd weight. Suppose that X = ( eu,v ) ∈ C 3(λ) is supported on the edges meeting a failed triple. As established in Section 3, affine relabeling preserves all three check families, so we may take 
+
+I = {0, a, b }, a, b ∈ Z× 
+
+> n
+
+, a̸ = b. 
+
+Recall that 
+
+δ1 = 1 + za, δ2 = 1 + zb.
+
+Both δi are units of Rn: a common root of 1 + xa and Mn would be a nontrivial n-th root whose a-th power is one. Let B be the ordinary-edge label matrix of X introduced in Section 3. The neighborhood checks make B ∈ Z (Kn). Recall also the cycle-space coordinate Ω : Z(Kn) −→ 
+
+> 2
+
+^
+
+> F2
+
+Rn.
+
+This map is an isomorphism: the standard triangle basis of Z(Kn) maps to the exterior basis formed from 1 + zi, 1 ≤ i < n . For a healthy vertex h, the neighborhood check gives 
+
+B0h + Bah + Bbh = 0, so the three edges from h to I contribute a combination of δ1 ∧ zh
+
+and δ2 ∧ zh; the edges internal to I have the same form. Consequently the Eulerian patterns supported on the stars of I map exactly to span {δ1, δ 2} ∧ Rn. Hence there are β1, β 2 ∈ Rn
+
+such that 
+
+W ≜ Ω( B) = δ1 ∧ β1 + δ2 ∧ β2. (A2) We next impose the diagonal checks. Their coding role is to use the three loop variables to normalize the two edge parameters so that δ1β1 + δ2β2 = 0; the following calculation 
+
+39 establishes that relation explicitly. Let ec denote the coordinate unit vector at c, set u1 ≜
+
+ea + e0 and u2 ≜ eb + e0, and let wi be the even coordinate representative of βi under ϑ.For even vectors u, v ∈ Fn 
+
+> 2
+
+, define the loopless symmetric labeling matrix 
+
+C(u, v ) = ( C(u, v )rs )r,s ∈Zn ∈ Fn×n
+
+> 2
+
+by 
+
+C(u, v )rr ≜ 0, C(u, v )rs = C(u, v )sr ≜ ur vs + usvr (r̸ = s).
+
+Its vertex set is Zn, and its entries are ordinary-edge labels. Then C(u, v ) is Eulerian and Ω( C(u, v )) = ϑ(u) ∧ ϑ(v). The injectivity of Ω therefore gives 
+
+B = C(u1, w1) + C(u2, w2).
+
+Set 
+
+dc ≜
+
+> 2
+
+X
+
+> i=1
+
+ui(c)wi(c) (c ∈ I), μ ≜ δ1β1 + δ2β2.
+
+A direct expansion, using only multiplication in the ring Rn, gives 
+
+μ = X
+
+> r<s
+
+Brs zr+s + X
+
+> c∈I
+
+dcz2 
+
+> c
+
+. (A3) Let ℓc ≜ ec,c be the loop symbol at c, and define 
+
+PD (x) ≜ X
+
+> r<s
+
+Brs xr+s + X
+
+> c∈I
+
+ℓcx2c.
+
+We regard PD (x) as an element of F2[x]/(xn − 1). After reducing exponents modulo n, the coefficient of xm is exactly the check indexed by Dm. Hence PD (x) vanishes in that group algebra, and its image vanishes in Rn. Thus 
+
+μ = X
+
+> c∈I
+
+(dc + ℓc)z2 
+
+> c
+
+.
+
+Evaluating that original syndrome polynomial at x = 1 gives 
+
+X
+
+> c∈I
+
+(dc + ℓc) = 0 .
+
+Indeed, the total number of non-loop terms in each C(ui, wi), modulo two, is P 
+
+> c
+
+ui(c)wi(c), because both coordinate vectors are even. Writing ε1 ≜ da + ℓa and ε2 ≜ db + ℓb, we obtain 
+
+μ = ε1δ21 + ε2δ22 .
+
+Replacing βi by βi + εiδi leaves W unchanged and therefore lets us assume 
+
+δ1β1 + δ2β2 = 0 . (A4) The slope checks are encoded by the polynomial 
+
+Pλ(x) ≜ X
+
+> u<v
+
+Buv 
+
+
+
+xu+λv + xv+λu 
+
+(mod xn − 1) .
+
+After reducing exponents modulo n, its coefficient at xs is exactly the check indexed by Ts(λ), while its image in Rn is obtained by applying the slope-syndrome map Ψλ :
+
+> 2
+
+^
+
+> F2
+
+Rn −→ Rn, Ψλ(c ∧ d) ≜ cσ λ(d) + σλ(c)d. 
+
+This is the unique F2-linear map induced by the displayed alternating bilinear expression. Consequently the vanishing of all checks in (7) gives 
+
+δ1σλ(β1) + σλ(δ1)β1 + δ2σλ(β2) + σλ(δ2)β2 = 0 . (A5) 
+
+40 Since the δi’s are units, (A4) has the form 
+
+β1 = δ2y, β2 = δ1y
+
+for some y ∈ Rn. With γ ≜ δ1/δ 2, substitution in (A5) yields (10). At this point the neighborhood and diagonal checks have left only the coset y + F2, and the slope checks have reduced local recoverability to one question: must y lie in F2, so that 
+
+W = 0 and hence B = 0? It remains to interpret the middle factor. For each k ∈ Z× 
+
+> n
+
+, evaluate at the nontrivial 
+
+n-th root x = ζk. The numerator is 
+
+Dk(a, b ) = det 
+
+
+
+1 1 11 ζka ζkb 
+
+1 ζkλa ζkλb 
+
+
+
+= (1 + ζka )(1 + ζkλb ) + (1 + ζkb )(1 + ζkλa ). (A6) Equivalently,  γ + σλ(γ) 
+
+> x=ζk
+
+= Dk(a, b )(1 + ζkb )(1 + ζkλb ) .
+
+The three columns are the points of (9) indexed by 0 , ka, kb . If Dk(a, b )̸ = 0 for every k̸ = 0, then γ + σλ(γ) is nonzero in every simple component of the reduced algebra Rn, and hence is a unit. Equation (10) therefore gives 
+
+σλ(y) = y. 
+
+If λ is primitive modulo n, multiplication by λ has the two exponent orbits {0} and 
+
+Zn \ { 0}. Let y ∈ Rn satisfy σλ(y) = y, and let q ∈ Fn 
+
+> 2
+
+be the unique even-weight coordinate representative of this y under ϑ. The injectivity in (A1) forces q itself to be fixed by the exponent permutation. Here an exponent orbit is the set reached by repeatedly multiplying an exponent by λ, so q is constant on each of these two orbits. Evenness forces its coordinate at 0 to vanish. The two possibilities map to 0 and to P  
+
+> j̸=0
+
+zj = z0 = 1, respectively. Hence 
+
+Rσλ 
+
+> n
+
+= F2. (A7) Thus y ∈ F2, and (A2) gives W = 0. The injectivity of Ω implies B = 0. Finally, every loop occurs in exactly one diagonal check, so all loop symbols vanish. This proves the forward implication. For the converse, we reverse the preceding reductions. A zero determinant will supply a nonconstant y satisfying the slope factorization; from it we reconstruct a nonzero exterior class, an Eulerian ordinary-edge pattern, and loop labels that pass every check. Suppose that 
+
+Dk0 (a, b ) = 0 for some k0 ∈ Z× 
+
+> n
+
+. Put 
+
+h ≜ γ + σλ(γ),
+
+Define the F2-linear map 
+
+Lλ : Rn −→ Rn, Lλ(y) ≜ y + σλ(y).
+
+The factor δ2σλ(δ2) is a unit, so (A6) shows that h vanishes in at least one simple component of Rn. Thus 
+
+J ≜ Ann Rn (h) ≜ {r ∈ Rn : rh = 0 }
+
+is a nonzero ideal. Let d2 ≜ ord n(2). Every irreducible factor of Mn(x) has degree d2, so Rn
+
+is a product of fields of degree d2 over F2. Since n ≥ 5, we have d2 ≥ 3, and dim F2 J ≥ d2.
+
+41 By (A7), ker Lλ = Rσλ 
+
+> n
+
+= F2. Hence im Lλ has codimension one in Rn, and dim F2
+
+ J ∩ im Lλ
+
+ ≥ d2 − 1 > 0.
+
+Choose 0̸ = t ∈ J ∩ im Lλ
+
+and y ∈ Rn such that Lλ(y) = t. Then y / ∈ F2 and hL λ(y) = 0. Set 
+
+β1 ≜ δ2y, β2 ≜ δ1y, Wy ≜ δ1 ∧ β1 + δ2 ∧ β2.
+
+We claim that Wy̸ = 0. More generally, ker  y 7 −→ Wy
+
+ = F2. (A8) The inclusion from right to left is immediate. Conversely, suppose Wy = 0. The elements 
+
+δ1, δ 2 are linearly independent over F2, by the injectivity of ϑ on the corresponding even coordinate vectors. Hence there are p, q, s ∈ F2 such that 
+
+β1 = pδ 1 + qδ 2, β2 = qδ 1 + sδ 2.
+
+Dividing the first equality by δ2 gives y = pγ + q, and the second then gives pγ 2 = s. If p = 1, then γ2 ∈ F2. Since γ is a unit and Rn is reduced, this forces γ = 1, contrary to δ1̸ = δ2.Therefore p = 0 and y = q ∈ F2, proving (A8). Our choice of y consequently gives Wy̸ = 0. Let wi be the even coordinate representative of βi, and put 
+
+By ≜ C(u1, w1) + C(u2, w2),dc ≜
+
+> 2
+
+X
+
+> i=1
+
+ui(c)wi(c) (c ∈ I).
+
+Then Ω( By ) = Wy , so By is a nonzero Eulerian pattern supported on the ordinary edges meeting I. Assign the loop ℓc ≜ dc for c ∈ I. Since 
+
+δ1β1 + δ2β2 = 0 ,
+
+the expansion in (A3) gives 
+
+X
+
+> p<q
+
+(By )pq zp+q + X
+
+> c∈I
+
+dcz2 
+
+> c
+
+= 0 in Rn.
+
+At x = 1, the same diagonal-syndrome polynomial vanishes because 
+
+X
+
+> p<q
+
+(By )pq = X
+
+> c∈I
+
+dc.
+
+The Chinese-remainder decomposition therefore shows that all diagonal checks vanish. The identity hL λ(y) = 0 and (10) make the slope syndrome vanish in Rn. Its value at 
+
+x = 1 is zero because every ordinary edge contributes in both orientations. Thus all slope checks vanish as well, while the neighborhood checks vanish because By is Eulerian. The graph word with loopless part By and the chosen loops is therefore nonzero and supported on St( I), so the erased triple is not uniquely recoverable. Finally, Lλ(y) determines the coset y + F2, and (A8) shows that distinct elements of 
+
+J ∩im Lλ give distinct cosets and therefore distinct nonzero exterior classes Wy , hence distinct local codewords. After fixing a linear section of Lλ on its image, this codeword construction is linear and injective on J ∩ im Lλ. Hence the local nullity is at least d2 − 1, completing the proof. □
+
+42 Appendix B Rank of the Primitive-Slope Check Matrix 
+
+Proof of Proposition 8 Use the splitting field eK and primitive n-th root ζ ∈ eK fixed before Lemma 6. Consider a binary dependence among the 3 n check rows: 
+
+X
+
+> u∈Zn
+
+α(u)Su + X
+
+> m∈Zn
+
+d(m)Dm + X
+
+> s∈Zn
+
+τ (s)Ts(λ) = 0 ,
+
+where Su, Dm, Ts(λ) ∈ FEn 
+
+> 2
+
+are the incidence row vectors of the corresponding checks and 
+
+α, d, τ : Zn → F2 are their coefficient functions. The unique occurrence of each loop forces 
+
+d(m) = 0 for every m. On a non-loop edge {u, v }, the remaining dependence is 
+
+α(u) + α(v) + τ (u + λv ) + τ (v + λu ) = 0 . (B9) The same equation holds formally for u = v, because each term then occurs twice. For a function f : Zn → F2, define 
+
+bf (c) ≜ X
+
+> j∈Zn
+
+f (j)ζcj .
+
+For a function F of two indices, write 
+
+bF (c, d ) ≜ X
+
+> u,v ∈Zn
+
+F (u, v )ζcu +dv .
+
+Since n is odd, n·1 eK = 1 eK̸ = 0, and xn −1 is separable. Thus the Fourier matrix is invertible; in particular, vanishing of all nonzero Fourier coefficients is equivalent to f being constant. Multiply (B9) by ζcu +dv and sum over u, v . Taking ( c, d ) = ( c, 0) with c̸ = 0 gives bα(c) = 0. Taking ( c, d ) = ( c, λc ) then gives bτ (c) = 0: the neighborhood terms have neither frequency zero, and a second slope term could survive only if λ2 = 1. That cannot happen for a primitive 
+
+λ when n ≥ 5. Hence α and τ are constant. Conversely, the sum of all neighborhood rows and the sum of all slope rows are two independent dependencies. These are the only dependencies, so the row rank is 3 n − 2, as claimed. □
+
+# Appendix C Proof of the Multi-Slope Theorem 
+
+We prove the two assertions of Theorem 15 separately. For correction, the setup follow-ing the theorem organizes a codeword supported on ρ failed stars around an exterior element w. The remaining algebraic task is to show that the product and Frobenius– Moore equations displayed there force w = 0. We prove this implication first, then return to the codeword to verify its hypotheses and eliminate the loops. The rank assertion is handled last by a separate Fourier count of the row dependencies. The same classical alternating-form mechanism underlies the next lemma. Its additional product equation is the affine form needed by the multi-slope graph-code argument, so we give the exact direct proof used below. 
+
+Lemma 35 (Frobenius descent) Let F be a field of characteristic two, and let s ≥ 1 be an integer. Let ξ1, . . . , ξ s ∈ F be linearly independent over F2, and suppose that η1, . . . , η s ∈ F
+
+satisfy 
+
+> s
+
+X
+
+> i=1
+
+ξiηi = 0 , (C10) 
+
+43 sX
+
+> i=1
+
+
+
+ξiη2k 
+
+> i
+
++ ξ2k 
+
+> i
+
+ηi
+
+
+
+= 0 , 1 ≤ k ≤ s − 1. (C11) 
+
+Then sX
+
+> i=1
+
+ξi ∧ ηi = 0 in 
+
+> 2
+
+^
+
+> F2
+
+F. (C12) 
+
+Proof We induct on s. The case s = 1 follows from ξ1η1 = 0. For s ≥ 2, put c ≜ ξ−1 
+
+> s
+
+and replace every pair ( ξi, η i) by ( cξ i, cη i). The product equation is multiplied by c2, and its k-th Frobenius–Moore equation by c1+2 k
+
+. On the exterior square this replacement applies the invertible map induced by multiplication by c on both factors. Thus all relevant vanishing conditions are preserved, and we may assume ξs = 1. Equation (C10) gives 
+
+ηs = X
+
+> i<s
+
+ξiηi.
+
+Put Lk(x) ≜ x2k
+
++ x. Substitution in (C11) gives 
+
+X
+
+> i<s
+
+Lk(ξi)Lk(ηi) = 0 , 1 ≤ k ≤ s − 1. (C13) Let 
+
+Ai ≜ L1(ξi), Bi ≜ L1(ηi).
+
+The Ai’s are independent. Indeed, a binary relation among them says that x2 + x = 0 for a binary combination x of the ξi’s. Thus x ∈ F2, and either value contradicts the independence of ξ1, . . . , ξ s−1, 1 unless the relation is trivial. For d ≥ 1, define 
+
+R0 ≜ X
+
+> i<s
+
+AiBi,Rd ≜ X
+
+> i<s
+
+
+
+AiB2d 
+
+> i
+
++ A2d 
+
+> i
+
+Bi
+
+
+
+.
+
+The telescoping identity 
+
+Lk(x) = 
+
+> k−1
+
+X
+
+> r=0
+
+L1(x)2r
+
+turns (C13) into 
+
+> k−1
+
+X
+
+> r=0
+
+R2r 
+
+> 0
+
++
+
+> k−1
+
+X
+
+> d=1
+> k−1−d
+
+X
+
+> r=0
+
+R2r 
+
+> d
+
+= 0 . (C14) For k = 1, (C14) gives R0 = 0. Inductively, once R0, . . . , R k−2 vanish, the equation for k
+
+leaves only Rk−1 = 0. Thus 
+
+R0 = R1 = · · · = Rs−2 = 0 .
+
+The induction hypothesis applied to the s − 1 pairs ( Ai, B i) now gives 
+
+X
+
+> i<s
+
+Ai ∧ Bi = 0 .
+
+44 Extend the independent list A1, . . . , A s−1 to a basis of F . Comparing the coefficients of 
+
+Ai ∧ e, as e ranges over the complementary basis vectors, shows that every Bi lies in span F2 {A1, . . . , A s−1}. Hence there is a matrix 
+
+C = ( cij )1≤i,j<s ∈ F(s−1) ×(s−1) 2
+
+such that 
+
+Bi = X
+
+> j<s
+
+cij Aj .
+
+Comparing exterior coefficients shows that cij = cji for i̸ = j. Moreover, 0 = R0 = X
+
+> i,j<s
+
+cij AiAj = X
+
+> i<s
+
+cii A2 
+
+> i
+
+.
+
+Squaring is an injective F2-linear map on F , so the A2 
+
+> i
+
+’s are independent and cii = 0. Consequently 
+
+ηi = X
+
+> j<s
+
+cij ξj + εi (εi ∈ F2),
+
+and the formula for ηs, together with the symmetry and zero diagonal of C, gives 
+
+ηs = X
+
+> i<s
+
+εiξi.
+
+Therefore sX
+
+> i=1
+
+ξi ∧ ηi = X
+
+> i,j<s
+
+cij ξi ∧ ξj + X
+
+> i<s
+
+εiξi ∧ 1+ 1 ∧ X
+
+> i<s
+
+εiξi = 0 .
+
+The first sum cancels by symmetry and the last two cancel in characteristic two. □
+
+Proof of the correction assertion in Theorem 15 We now return from Frobenius descent to the erased graph word and verify that its neighborhood, slope, and diagonal syndromes provide exactly the lemma’s hypotheses. Fix a codeword X and a failed set A as in the proof setup following Theorem 15, and retain the notation 
+
+s, K, z j , B, Ω, δ i, w 
+
+introduced there. A pattern supported on fewer than ρ failed stars may be regarded as one supported on a set of size ρ.Under the present primitive-root hypothesis, the reduced algebra Rn used in Appendix A is the field K. Let α be the residue class of x in K, so that zj = αj . The cycle-space map used here is therefore the specialization of the isomorphism proved in that appendix. Moreover, 
+
+δ1, . . . , δ s are linearly independent: a relation among them would give a binary relation among the zj ’s supported on the proper subset A, whereas the only relation on all n indices is the all-one relation recorded after (A1). The neighborhood check at every healthy vertex h says 
+
+> s
+
+X
+
+> i=0
+
+Baih = 0 ,
+
+so its contribution to Ω( B) is sX
+
+> i=1
+
+Baihδi ∧ zh.
+
+45 The internal edges of A also contribute to span F2 {δ1, . . . , δ s} ∧ K. Hence there exist 
+
+β1, . . . , β s ∈ K such that 
+
+w =
+
+> s
+
+X
+
+> i=1
+
+δi ∧ βi. (C15) Use the alternating map Φ k,K defined in the multi-slope discussion, with its ambient field specialized to K. The syndrome polynomial of the 2 k-slope family is 
+
+Pk(x) ≜ X
+
+> u<v
+
+Buv 
+
+
+
+xu+2 k v + xv+2 k u
+
+(mod xn − 1) .
+
+For a non-loop edge the two exponents are distinct: equality would give (1 − 2k)( u − v) = 0 modulo n, whereas u̸ = v and 1 ≤ k ≤ ρ − 2 < n − 1, while 2 has order n − 1. Thus, for every 
+
+t ∈ Zn, the coefficient of xt is exactly the check indexed by T (k) 
+
+> t
+
+in (16). All its coefficients vanish by (16); evaluating at α therefore gives Φk,K (w) = 0 , 1 ≤ k ≤ s − 1.
+
+By (C15), sX
+
+> i=1
+
+
+
+δiβ2k 
+
+> i
+
++ δ2k 
+
+> i
+
+βi
+
+
+
+= 0 , 1 ≤ k ≤ s − 1. (C16) It remains to obtain the product equation required by Lemma 35. Let ec denote the standard coordinate vector at c, and set 
+
+ui ≜ eai + ea0 ,
+
+and let wi be the unique even-weight binary vector satisfying ϑ(wi) = βi. For even vectors 
+
+u, v , use the loopless symmetric labeling matrix C(u, v ) defined in Appendix A. It is Eulerian and Ω( C(u, v )) = ϑ(u) ∧ ϑ(v).
+
+The injectivity of Ω therefore yields 
+
+B =
+
+> s
+
+X
+
+> i=1
+
+C(ui, wi). (C17) For a ∈ A, set 
+
+qa ≜
+
+> s
+
+X
+
+> i=1
+
+ui(a)wi(a), μ ≜
+
+> s
+
+X
+
+> i=1
+
+δiβi.
+
+Expanding the field products in μ and using (C17) gives 
+
+μ = X
+
+> p<q
+
+Bpq zpzq + X
+
+> a∈A
+
+qaz2
+
+> a
+
+. (C18) For a ∈ A, let ℓa ≜ ea,a be the loop label of the codeword at a. The diagonal checks say 
+
+X
+
+> p<q
+
+Bpq xp+q + X
+
+> a∈A
+
+ℓax2a = 0 in F2[x]/(xn − 1) .
+
+Evaluation at α, followed by (C18), gives 
+
+μ = X
+
+> a∈A
+
+(qa + ℓa)z2
+
+> a
+
+.
+
+Evaluation at x = 1 supplies the additional relation 
+
+X
+
+> a∈A
+
+(qa + ℓa) = 0 .
+
+46 Indeed, for even ui, wi,
+
+X
+
+> p<q
+
+(ui(p)wi(q) + ui(q)wi(p)) = X
+
+> p
+
+ui(p)wi(p).
+
+Writing εa ≜ qa + ℓa, we have 
+
+εa0 =
+
+> s
+
+X
+
+> i=1
+
+εai
+
+and therefore 
+
+μ =
+
+> s
+
+X
+
+> i=1
+
+εai δ2 
+
+> i
+
+.
+
+Replace 
+
+β′ 
+
+> i
+
+≜ βi + εai δi.
+
+This does not change w, because δi ∧ δi = 0, or any equation in (C16), because the two additional Frobenius terms are equal and cancel in characteristic two. Moreover, P 
+
+> i
+
+δiβ′ 
+
+> i
+
+=
+
+μ + P 
+
+> i
+
+εai δ2 
+
+> i
+
+= 0, so it ensures sX
+
+> i=1
+
+δiβ′ 
+
+> i
+
+= 0 .
+
+Lemma 35, with ξi = δi and ηi = β′
+
+> i
+
+, now gives w = 0. The injectivity of Ω implies B = 0. Finally, each remaining loop occurs in exactly one diagonal check D2a, and multiplication by two permutes Zn; hence all loops vanish. □
+
+Proof of the rank assertion in Theorem 15 Correction is now proved. It remains only to count the independent check rows; this is a distinct problem, for which Fourier coordinates make every possible row dependence explicit. Put 
+
+L ≜ ρ − 2, h ≜ n − 12 .
+
+Use the parity-check matrix HMS  
+
+> ρ
+
+defined in the body; it has ρn rows. Consider a binary dependence among them. Define coefficient functions 
+
+a : Zn −→ F2, d : Zn −→ F2, ck : Zn −→ F2 (1 ≤ k ≤ L),
+
+where a(u), d(m), and ck(t) are respectively the coefficients of the rows Su, Dm, and T (k) 
+
+> t
+
+.Every loop occurs in one diagonal row and in no other row, so 
+
+d(m) = 0 (m ∈ Zn).
+
+On a non-loop edge {u, v }, the dependence condition becomes 
+
+a(u) + a(v) + 
+
+> L
+
+X
+
+> k=1
+
+ ck(u + 2 kv) + ck(v + 2 ku) = 0 . (C19) The same identity also holds formally when u = v, since every summand then occurs twice. Use the Fourier-transform convention of Appendix B, with the primitive root there replaced by the element α ∈ K fixed in the correction proof. For a statement P , let ι(P ) ∈ F2
+
+equal 1 when P is true and 0 otherwise. For r, t ∈ Zn, the two-dimensional Fourier transform of (C19) is 0 = ι(t = 0) ba(r) + ι(r = 0) ba(t)
+
+47 +
+
+> L
+
+X
+
+> k=1
+
+
+
+ι(t = 2 kr)bck(r) + ι(r = 2 kt)bck(t)
+
+
+
+. (C20) For example, X
+
+> u,v ∈Zn
+
+ck(u + 2 kv)αru +tv = ι(t = 2 kr)bck(r).
+
+Here the usual factor n equals one in the characteristic-two field because n is odd. The transform is invertible by the argument in Appendix B. Taking r̸ = 0 , t = 0 in (C20) shows that ba(r) = 0 for every nonzero r, so a is constant. Next, fix k ≤ L and take r̸ = 0 , t = 2 kr. The exponent inverse to 2 k is 2 n−1−k. In the stated range, 1 ≤ k ≤ L ≤ h − 1, n − 1 − k ≥ h + 1 > L. 
+
+Thus no inverse slope occurs in our list; the self-inverse slope 2 h = −1 is absent as well. The sole surviving term in (C20) is bck(r): another slope could contribute only through the equal or inverse exponent, which the preceding range excludes. It must vanish. Hence every ck is constant. Every row dependence is therefore specified by one constant for the neighborhood family and one for each of the L higher-slope families. Conversely, each such constant family is a dependence, since every non-loop edge occurs twice in the sum of all rows of that family. The row dependency space has dimension 1 + L = ρ − 1,
+
+and hence rank HMS  
+
+> ρ
+
+= ρn − (ρ − 1) .
+
+Subtracting the Singleton redundancy in (1) gives 
+
+ρn − (ρ − 1) − ρn − ρ
+
+2
+
+!! 
+
+= ρ − 12
+
+!
+
+.
+
+□
+
+# Appendix D A One-Bit Extension Criterion and Finite Obstructions 
+
+This appendix records a limitation of one particular improvement route. It does not rule out a different optimal construction; indeed, Proposition 20 supplies such constructions at four lengths. In particular, the obstruction concerns the published slope-two check space and is not an obstruction theorem for all of the primitive slopes in Theorem 13. Assume that n ≥ 5 is prime and that 2 is primitive modulo n, and set 
+
+r0 ≜ 3n − 2.
+
+Let 
+
+H0 ∈ Fr0×N
+
+> 2
+
+be a full-row-rank parity-check matrix for the published triple-node code C3 = C3(2) from (8), with columns indexed by En, and put C0 ≜ ker H0. Here a one-dimensional extension means a supercode 
+
+C0 ⊆ C ′, dim C′ = dim C0 + 1 ,
+
+48 that still corrects every triple of failed vertices. Equivalently, its parity-check space is a codimension-one subspace of the row space of H0. For every failed triple A ∈  [n]3
+
+,define 
+
+H0,A ≜ H0|St( A).
+
+This submatrix has r0 − 1 columns and rank r0 − 1. Let 
+
+νA ∈ Fr0 
+
+> 2
+
+\ { 0}
+
+be its unique left-null vector; equivalently, 
+
+νT
+
+> A
+
+H0,A = 0 .
+
+For z, x ∈ Fr0 
+
+> 2
+
+, write 
+
+z · x ≜
+
+> r0
+
+X
+
+> i=1
+
+zixi
+
+for the standard binary coordinate inner product. 
+
+Proposition 36 (One-dimensional extension criterion) There is a correcting one-dimensional extension of the published code if and only if the affine system 
+
+z · νA = 1 for every A ∈ [n]3
+
+!
+
+, z ∈ Fr0 
+
+> 2
+
+, (D21) 
+
+is consistent. In particular, a set T ⊆  [n]3
+
+ of odd cardinality satisfying 
+
+M
+
+> A∈T
+
+νA = 0 (D22) 
+
+certifies that no such extension exists. Proof A one-dimensional extension corresponds to a hyperplane W in the row coefficient space Fr0 
+
+> 2
+
+of H0. It produces the new parity-check space 
+
+RW ≜ {xTH0 : x ∈ W }.
+
+For a failed triple A, define the restriction map 
+
+ϕA : Fr0 
+
+> 2
+
+−→ Fr0−12 , ϕA(x) ≜ xTH0,A .
+
+The full column rank of H0,A gives ker ϕA = span {νA}. Since both W and the codomain have dimension r0 − 1, the new checks recover the erased triple exactly when ϕA|W is invertible, equivalently when νA /∈ W . Write the hyperplane using a nonzero normal vector z ∈ Fr0 
+
+> 2
+
+as 
+
+W ≜ {x : z · x = 0 }
+
+. Then νA /∈ W is exactly z · νA = 1, giving (D21). Taking the inner product of z with (D22) for an odd family gives the contradiction 0 = 1. □
+
+49 Exact odd-dependency certificates were produced and independently verified for the admissible sample lengths 
+
+n = 5 , 11 , 13 , 19 .
+
+The complete certificates and their independent exact verification are archived in the verification package [14]. For example, at n = 13, the eleven triples 
+
+{0, 1, k }, 2 ≤ k ≤ 12 ,
+
+already satisfy (D22). Thus simply removing one independent check from the published check space cannot solve the missing-bit problem at these lengths. 
+
+# Appendix E Dual Weight Data and the Failure of a Univariate MacWilliams Transform 
+
+By [11, Thm. 1], a combinatorial metric admits a MacWilliams-type identity if and only if its irredundant cover is a partition into equal-sized blocks. For n ≥ 2, the node-star cover is irredundant, because star i uniquely contains the loop ei,i , while distinct stars overlap on ordinary-edge coordinates. Hence the univariate node-weight enumerator of a linear code cannot determine the corresponding enumerator of its dual. The following two-vertex witness fixes our ambient and duality conventions. 
+
+A two-vertex witness. 
+
+In the full three-coordinate looped graph space on two vertices over F2, for 0 ≤ i ≤ j ≤
+
+1, let ui,j ∈ G 2(2) denote the graph word whose only nonzero label is ei,j = 1, and let 
+
+D1 ≜ ⟨u0,0⟩, D2 ≜ ⟨u0,1⟩.
+
+Both codes have node-weight enumerator 
+
+W N 
+
+> D1
+
+(z) = W N 
+
+> D2
+
+(z) = 1 + z. 
+
+Their edge-coordinate duals are respectively specified by 
+
+y00 = 0 and y01 = 0 .
+
+Their node-weight enumerators are 
+
+W N
+
+> D⊥
+> 1
+
+(z) = 1 + 3 z, W N
+
+> D⊥
+> 2
+
+(z) = 1 + 2 z + z2.
+
+Thus equal primal enumerators can have unequal dual enumerators. There is nevertheless an exact Fourier identity. Fix a nontrivial additive character 
+
+χ of Fq . For every integer 0 ≤ w ≤ n, define the function 
+
+Kw : Gq (n) −→ C, Kw(y) ≜ X 
+
+> x∈G q(n)wt N(x)= w
+
+χ ⟨x, y ⟩E
+
+.
+
+50 Character orthogonality gives, for every linear code, 
+
+AN
+
+> w
+
+(C) = 1
+
+|C ⊥|
+
+X
+
+> y∈C ⊥
+
+Kw(y). (E23) The preceding witness says precisely that Kw(y) is not a function of wt N(y) alone. A useful dual theory must therefore refine node weight by additional intersection data, for example the orbit type of the support under vertex relabeling. 
+
+# Acknowledgment 
+
+The author used OpenAI’s ChatGPT and Codex as assistive tools in developing and revising portions of the abstract, introduction, definitions, construction and metric sections, discussion, and appendices, and in developing the accompanying verifica-tion code. The systems were used to generate candidate mathematical arguments, formulations, proof checks, and code. Their outputs were treated as suggestions and were critically reviewed, corrected, and edited by the author. The author assumes full responsibility for all statements, proofs, computations, citations, and code in this article. 
+
+# References 
+
+[1] L. Yohananov and E. Yaakobi, “Codes for graph erasures,” IEEE Trans. Inf. Theory ,vol. 65, no. 9, pp. 5433–5453, Sep. 2019, doi: 10.1109/TIT.2019.2910040. [2] L. Yohananov, Y. Efron, and E. Yaakobi, “Double and triple node-erasure-correcting codes over complete graphs,” IEEE Trans. Inf. Theory , vol. 66, no. 7, pp. 4089–4103, Jul. 2020, doi: 10.1109/TIT.2020.2971997. [3] L. Yohananov and E. Yaakobi, “Codes over trees,” IEEE Trans. Inf. Theory , vol. 67, no. 6, pp. 3599–3622, Jun. 2021, doi: 10.1109/TIT.2021.3057939. [4] A. Barg, M. Schwartz, and L. Yohananov, “Storage codes on coset graphs with asymptotically unit rate,” Combinatorica , vol. 44, no. 6, pp. 1193–1209, Dec. 2024, doi: 10.1007/s00493-024-00114-2. [5] S. Kopparty, A. Potukuchi, and H. Sha, “Error-correcting graph codes,” in Proc. 16th Innovations in Theoretical Computer Science Conf. (ITCS) , vol. 325, 2025, Art. no. 67, pp. 67:1–67:20, doi: 10.4230/LIPIcs.ITCS.2025.67. [6] Y. Chen, M. Cheraghchi, and N. Shagrithaya, “Optimal erasure codes and codes on graphs,” 2025, arXiv:2504.03090. [7] U. Mart´ ınez-Pe˜ nas, “Multilayer crisscross error and erasure correction,” Linear Algebra Appl. , vol. 728, pp. 349–375, Jan. 2026, doi: 10.1016/j.laa.2025.09.014. 
+
+51 [8] K.-U. Schmidt, “Symmetric bilinear forms over finite fields of even characteris-tic,” J. Combin. Theory, Ser. A, vol. 117, no. 8, pp. 1011–1026, Nov. 2010, doi: 10.1016/j.jcta.2010.05.006. [9] K.-U. Schmidt, “Quadratic and symmetric bilinear forms over finite fields and their association schemes,” Algebr. Comb. , vol. 3, no. 1, pp. 161–189, Feb. 2020, doi: 10.5802/alco.88. [10] P. Delsarte and J.-M. Goethals, “Alternating bilinear forms over GF( q),” J. Combin. Theory, Ser. A , vol. 19, no. 1, pp. 26–50, Jul. 1975, doi: 10.1016/0097-3165(75)90090-4. [11] J. A. Pinheiro, R. A. Machado, and M. Firer, “Combinatorial metrics: MacWilliams-type identities, isometries and extension property,” Des. Codes Cryptogr. , vol. 87, nos. 2–3, pp. 327–340, Mar. 2019, doi: 10.1007/s10623-018-0527-9. [12] D. R. Heath-Brown, “Artin’s conjecture for primitive roots,” Quart. J. Math. Oxford Ser. (2) , vol. 37, no. 1, pp. 27–38, Mar. 1986, doi: 10.1093/qmath/37.1.27. [13] R. Gow and R. Quinlan, “Galois extensions and subspaces of alternating bilinear forms with special rank properties,” Linear Algebra Appl. , vol. 430, nos. 8–9, pp. 2212–2224, Apr. 2009, doi: 10.1016/j.laa.2008.11.021. [14] A. L. Zabokritskiy (Yohananov), “Exact verification companion to Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-ary Metric Balls, and Duality,” Zenodo, Software, ver. 1.0.1, Sep. 1, 2026, doi: 10.5281/zenodo.22224461. [15] S. Yoshiara, “Dimensional dual hyperovals associated with quadratic APN functions,” 
+
+Innov. Incidence Geom. , vol. 8, pp. 147–169, 2008, doi: 10.2140/iig.2008.8.147. [16] W. M. Kantor and E. E. Shult, “Veroneseans, power subspaces and independence,” Adv. Geom. , vol. 13, no. 3, pp. 511–531, Jul. 2013, doi: 10.1515/advgeom-2012-0042. [17] H.-A. Loeliger, “On the basic averaging arguments for linear codes,” in Communications and Cryptography: Two Sides of One Tapestry , R. E. Blahut, D. J. Costello, Jr., U. Maurer, and T. Mittelholzer, Eds. Boston, MA, USA: Kluwer Academic, 1994, pp. 251– 261, doi: 10.1007/978-1-4615-2694-0 25. [18] L. Lov´ asz, “On the ratio of optimal integral and fractional covers,” Discrete Math. ,vol. 13, no. 4, pp. 383–390, 1975, doi: 10.1016/0012-365X(75)90058-8. [19] V. Chv´ atal, “A greedy heuristic for the set-covering problem,” Math. Oper. Res. , vol. 4, no. 3, pp. 233–235, Aug. 1979, doi: 10.1287/moor.4.3.233. [20] E. A. Bender, E. R. Canfield, and B. D. McKay, “The asymptotic number of labeled graphs with n vertices, q edges, and no isolated vertices,” J. Combin. Theory Ser. A ,vol. 80, no. 1, pp. 124–150, Oct. 1997, doi: 10.1006/jcta.1997.2798. [21] L. Holzbaur, S. Puchinger, E. Yaakobi, and A. Wachter-Zeh, “Correctable erasure patterns in product topologies,” in Proc. IEEE Int. Symp. Inf. Theory (ISIT) , 2021, pp. 2054–2059, doi: 10.1109/ISIT45174.2021.9518208. 
+
+52

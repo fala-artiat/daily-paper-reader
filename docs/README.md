@@ -48,7 +48,7 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-17 ~ 2026-09-26</span>
+      <span class="dpr-home-dashboard-kicker">2026-08-28 ~ 2026-09-26</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
     <strong class="dpr-home-dashboard-count">共 2 篇</strong>
@@ -58,7 +58,7 @@
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-26 13:39:24 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-26 13:47:06 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>本期精读 1 篇、速读 1 篇：以对称块设计为基的&quot;无条带&quot;纠删码副本阈值研究拿下 9.0 分，FPGA 上针对有损广域网纠删码 RDMA 的可扩展包追踪以 6.0 分速读。</p>
-<p>最值得看的是高分的《Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs》，它把副本阈值与对称块设计挂钩，指向更省冗余的编码方案；另一条线索是 FPGA 硬件加速在有损广域网下支撑纠删码 RDMA 的可行性。</p>
-<p>若你只跟一个方向，建议先读那篇 9.0 分的精读，重点看阈值结论能否落到你现有存储或传输系统里，FPGA 那篇可留作工程实现的旁证。</p>
+<p>本期精读一篇9.0分编码理论论文，速读一篇7.0分二元多节点纠删码论文，聚焦MSR码奇偶校验矩阵构造与完全图上的纠删码设计。最值得看的是MSR码的最优访问协作构造及统一变换思路，以及完全图上二元多节点纠删码的构造、q元度量球与对偶性。普通读者可先读9.0分精读文章了解MSR码构造主线，再按兴趣补充速读文章中的图结构纠删码视角。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -83,7 +81,7 @@
     <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs">Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Optimal-Access Cooperative MSR Codes: Parity-Check Matrix Construction And a Unified Transformation">Optimal-Access Cooperative MSR Codes: Parity-Check Matrix Construction And a Unified Transformation</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">raid-erasure <strong>1</strong></span></div>
 </section>
@@ -96,7 +94,7 @@
     <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Scalable Packet Tracking on FPGAs for Erasure-Coded RDMA over Lossy WANs">Scalable Packet Tracking on FPGAs for Erasure-Coded RDMA over Lossy WANs</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality">Binary Multiple-Node-Erasure-Correcting Codes over Complete Graphs: Constructions, q-Ary Metric Balls, and Duality</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">raid-erasure <strong>1</strong></span></div>
 </section>
