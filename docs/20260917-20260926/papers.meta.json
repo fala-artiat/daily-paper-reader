@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-17 ~ 2026-09-26",
+  "date": "2026-09-17 ~ 2026-09-26",
+  "generated_at": "2026-09-26T13:39:27",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "20260917-20260926/2609.29149v1-replica-thresholds-for-stripeless-erasure-coding-based-on-symmetric-block-designs",
+      "section": "deep",
+      "title_en": "Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs",
+      "authors": "Guiwen Luo, Xiao Li, Yaqiang Zhang, Ke Wang",
+      "date": "2026-09-24",
+      "pdf": "https://arxiv.org/pdf/2609.29149v1",
+      "score": "9.0",
+      "evidence": "无条带纠删码副本阈值与节点故障恢复保证",
+      "tldr": "本文研究基于对称平衡不完全区组设计（SBIBD）的无条带纠删码中，每对象需多少副本才能保证任意至多 p 个节点故障后可恢复。作者细化广义 SBIBD(v,k,λ) 构造的充分恢复条件，并定义通用副本阈值 q^*(A,p) 以检验其紧性。结果表明：p=1 时 1 个副本充要；p≥2 时 q=λ(p-1)+2 个副本可保证恢复，且 p=2 一轮、一般至多两轮。对 p≥3，用成对分离集和私有目标置换刻画阈值是否可达；除 λ>1 且无规模 p 成对分离集的遗留情形外，给出精确阈值，并改进该情形界。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "This paper investigates a fundamental question in stripeless erasure coding based on symmetric balanced incomplete block designs (SBIBDs): how many replicas per object are precisely required to guarantee recovery from any set of at most $p$ node failures? We refine the known sufficient recovery guarantee for the generalized SBIBD $(v,k,λ)$ construction. One replica is necessary and sufficient for $p=1$, and $q=λ(p-1)+2$ replicas ($q\\le k$) guarantee recovery for $p\\ge2$. Recovery takes one round for $p=2$ and at most two rounds in general. To study the tightness of this count, we define the universal replica threshold $q^\\ast(A,p)$ for a fixed zero-diagonal SBIBD representative~$A$. We determine $q^\\ast(A,p)$ for $p=1$ and $p=2$. For $p\\ge3$, we identify pairwise separated sets and private target permutations as the structures determining whether the sufficient count is tight or can be further reduced. These conditions give exact thresholds for all but the case where $λ>1$ and $A$ contains no pairwise separated set of size~$p$. We improve the bounds for this remaining case and leave its exact threshold open. Finally, we give sufficient conditions for pairwise separated sets and show how affinity relabeling can realize private target permutations.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "20260917-20260926/2609.21774v1-scalable-packet-tracking-on-fpgas-for-erasure-coded-rdma-over-lossy-wans",
+      "section": "quick",
+      "title_en": "Scalable Packet Tracking on FPGAs for Erasure-Coded RDMA over Lossy WANs",
+      "authors": "Yicheng Qian, Konstantin Taranov, Yevgeny Yankilevich, Assaf Shacham, Mahmoud Elhaddad, Abdul Kabbani, Miriam Leeser, Nadeen Gebara",
+      "date": "2026-09-18",
+      "pdf": "https://arxiv.org/pdf/2609.21774v1",
+      "score": "6.0",
+      "evidence": "纠删码用于RDMA丢包恢复",
+      "tldr": "跨数据中心AI工厂依赖RDMA over WAN，但多路径乱序、高时延与丢包严重制约性能；纠删码恢复丢包又亟需硬件高效跟踪包到达。COMET是首个在FPGA网卡上全硬件卸载的多路径纠删码RDMA包到达跟踪设计，采用可扩展缓存架构。它可在400 Gbps及以上线速运行，并将片上内存占用与链路BDP解耦，支持比SOTA SoC方案多6倍的并发连接。该工作证明当前速率下可扩展全硬件跟踪可行，并可延伸至1.6 Tbps及未来网卡。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "Modern AI workloads increasingly rely on scale across architectures that interconnect multiple datacenters to form a single \"AI factory\", overcoming the power and cooling constraints of individual sites. However, extending Remote Direct Memory Access (RDMA) across wide area networks (WANs) introduces fundamental challenges: multi-path packet reordering, high latency, and packet loss that severely degrade performance. While erasure coding (EC) has emerged as a promising mechanism for loss recovery, its effectiveness critically depends on efficient packet arrival tracking implemented in hardware. We present COmpact Multi-path Erasure-coded Tracking (COMET), the first fully hardware-offloaded packet-arrival tracking design implemented on an FPGA-based network interface card (NIC) for multi-path RDMA over lossy WANs. COMET employs a scalable cache-based architecture that supports operation at high link rates. Our evaluation shows that COMET sustains line rate operation at 400 Gbps and beyond. Critically, COMET decouples on-chip memory footprint from link Bandwidth-Delay Product (BDP), and its cache-based architecture (COMET Cache) enables supporting 6 times more concurrent connections than state-of-the-art (SOTA) SoC-based designs. These results demonstrate that scalable, fully hardware-offloaded packet-arrival tracking is practical on FPGA-based NICs at current data rates, and its architectural scalability extends to emerging 1.6 Tbps NICs and beyond.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

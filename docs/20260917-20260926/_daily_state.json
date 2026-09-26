@@ -1,0 +1,41 @@
+{
+  "date": "20260917-20260926",
+  "date_label": "2026-09-17 ~ 2026-09-26",
+  "generated_at": "2026-09-26 13:39:24 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.29149v1",
+      "route": "20260917-20260926/2609.29149v1-replica-thresholds-for-stripeless-erasure-coding-based-on-symmetric-block-designs",
+      "title": "Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "无条带纠删码副本阈值与节点故障恢复保证",
+      "first_seen_at": "2026-09-26 13:39:24 UTC",
+      "updated_at": "2026-09-26 13:39:24 UTC"
+    },
+    {
+      "paper_id": "2609.21774v1",
+      "route": "20260917-20260926/2609.21774v1-scalable-packet-tracking-on-fpgas-for-erasure-coded-rdma-over-lossy-wans",
+      "title": "Scalable Packet Tracking on FPGAs for Erasure-Coded RDMA over Lossy WANs",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "纠删码用于RDMA丢包恢复",
+      "first_seen_at": "2026-09-26 13:39:24 UTC",
+      "updated_at": "2026-09-26 13:39:24 UTC"
+    }
+  ]
+}

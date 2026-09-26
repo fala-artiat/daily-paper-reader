@@ -1,0 +1,97 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-26T13:37:07.890607+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [
+    {
+      "id": "2609.29149v1",
+      "source": "arxiv",
+      "title": "Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs",
+      "abstract": "This paper investigates a fundamental question in stripeless erasure coding based on symmetric balanced incomplete block designs (SBIBDs): how many replicas per object are precisely required to guarantee recovery from any set of at most $p$ node failures? We refine the known sufficient recovery guarantee for the generalized SBIBD $(v,k,λ)$ construction. One replica is necessary and sufficient for $p=1$, and $q=λ(p-1)+2$ replicas ($q\\le k$) guarantee recovery for $p\\ge2$. Recovery takes one round for $p=2$ and at most two rounds in general. To study the tightness of this count, we define the universal replica threshold $q^\\ast(A,p)$ for a fixed zero-diagonal SBIBD representative~$A$. We determine $q^\\ast(A,p)$ for $p=1$ and $p=2$. For $p\\ge3$, we identify pairwise separated sets and private target permutations as the structures determining whether the sufficient count is tight or can be further reduced. These conditions give exact thresholds for all but the case where $λ>1$ and $A$ contains no pairwise separated set of size~$p$. We improve the bounds for this remaining case and leave its exact threshold open. Finally, we give sufficient conditions for pairwise separated sets and show how affinity relabeling can realize private target permutations.",
+      "authors": [
+        "Guiwen Luo",
+        "Xiao Li",
+        "Yaqiang Zhang",
+        "Ke Wang"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT"
+      ],
+      "published": "2026-09-24T07:26:31+00:00",
+      "link": "https://arxiv.org/pdf/2609.29149v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "stripeless erasure coding replica thresholds guaranteeing recovery from node failures",
+      "llm_evidence_cn": "无条带纠删码副本阈值与节点故障恢复保证",
+      "llm_evidence": "无条带纠删码副本阈值与节点故障恢复保证",
+      "canonical_evidence": "无条带纠删码副本阈值与节点故障恢复保证",
+      "llm_tldr_en": "Studies how many replicas per object are needed in stripeless erasure coding based on symmetric block designs to recover from up to p node failures, refining sufficient recovery guarantees and deriving tight replica thresholds.",
+      "llm_tldr_cn": "针对无条带纠删码中副本数量缺乏精确理论刻画的问题，本文研究基于对称平衡不完全块设计（SBIBD）的构造，在任意至多p个节点故障下需要多少副本才能保证恢复。作者细化了广义(v,k,λ)构造的充分恢复条件，定义并求解通用副本阈值q*(A,p)，证明p=1时单副本充要，p≥2时λ(p-1)+2个副本即可保证恢复。该结果给出了副本开销与恢复轮次的紧致边界，对分布式存储的可靠性与效率设计具有指导意义。",
+      "llm_tldr": "针对无条带纠删码中副本数量缺乏精确理论刻画的问题，本文研究基于对称平衡不完全块设计（SBIBD）的构造，在任意至多p个节点故障下需要多少副本才能保证恢复。作者细化了广义(v,k,λ)构造的充分恢复条件，定义并求解通用副本阈值q*(A,p)，证明p=1时单副本充要，p≥2时λ(p-1)+2个副本即可保证恢复。该结果给出了副本开销与恢复轮次的紧致边界，对分布式存储的可靠性与效率设计具有指导意义。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "data reconstruction and recovery in erasure-coded storage",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.21774v1",
+      "source": "arxiv",
+      "title": "Scalable Packet Tracking on FPGAs for Erasure-Coded RDMA over Lossy WANs",
+      "abstract": "Modern AI workloads increasingly rely on scale across architectures that interconnect multiple datacenters to form a single \"AI factory\", overcoming the power and cooling constraints of individual sites. However, extending Remote Direct Memory Access (RDMA) across wide area networks (WANs) introduces fundamental challenges: multi-path packet reordering, high latency, and packet loss that severely degrade performance. While erasure coding (EC) has emerged as a promising mechanism for loss recovery, its effectiveness critically depends on efficient packet arrival tracking implemented in hardware. We present COmpact Multi-path Erasure-coded Tracking (COMET), the first fully hardware-offloaded packet-arrival tracking design implemented on an FPGA-based network interface card (NIC) for multi-path RDMA over lossy WANs. COMET employs a scalable cache-based architecture that supports operation at high link rates. Our evaluation shows that COMET sustains line rate operation at 400 Gbps and beyond. Critically, COMET decouples on-chip memory footprint from link Bandwidth-Delay Product (BDP), and its cache-based architecture (COMET Cache) enables supporting 6 times more concurrent connections than state-of-the-art (SOTA) SoC-based designs. These results demonstrate that scalable, fully hardware-offloaded packet-arrival tracking is practical on FPGA-based NICs at current data rates, and its architectural scalability extends to emerging 1.6 Tbps NICs and beyond.",
+      "authors": [
+        "Yicheng Qian",
+        "Konstantin Taranov",
+        "Yevgeny Yankilevich",
+        "Assaf Shacham",
+        "Mahmoud Elhaddad",
+        "Abdul Kabbani",
+        "Miriam Leeser",
+        "Nadeen Gebara"
+      ],
+      "primary_category": "cs.AR",
+      "categories": [
+        "cs.AR"
+      ],
+      "published": "2026-09-18T13:43:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.21774v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "erasure coding for loss recovery in RDMA",
+      "llm_evidence_cn": "纠删码用于RDMA丢包恢复",
+      "llm_evidence": "纠删码用于RDMA丢包恢复",
+      "canonical_evidence": "纠删码用于RDMA丢包恢复",
+      "llm_tldr_en": "COMET is the first fully hardware-offloaded packet-arrival tracking design on FPGA for erasure-coded RDMA over lossy WANs, enabling efficient loss recovery amid multi-path reordering, high latency and packet loss.",
+      "llm_tldr_cn": "现代AI工作负载通过跨数据中心互联构建AI工厂，但把RDMA扩展到广域网会遭遇多路径乱序、高延迟与丢包，严重损害性能。纠删码被视为丢包恢复的有力手段，其效果却依赖高效的数据包到达追踪硬件。作者提出COMET，首个完全硬件卸载的FPGA数据包到达追踪设计，用于纠删码RDMA。该系统在有损广域网上支撑高效的丢包恢复，为跨数据中心纠删码RDMA提供了可扩展的硬件追踪方案。",
+      "llm_tldr": "现代AI工作负载通过跨数据中心互联构建AI工厂，但把RDMA扩展到广域网会遭遇多路径乱序、高延迟与丢包，严重损害性能。纠删码被视为丢包恢复的有力手段，其效果却依赖高效的数据包到达追踪硬件。作者提出COMET，首个完全硬件卸载的FPGA数据包到达追踪设计，用于纠删码RDMA。该系统在有损广域网上支撑高效的丢包恢复，为跨数据中心纠删码RDMA提供了可扩展的硬件追踪方案。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "erasure coding techniques for data storage and recovery",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

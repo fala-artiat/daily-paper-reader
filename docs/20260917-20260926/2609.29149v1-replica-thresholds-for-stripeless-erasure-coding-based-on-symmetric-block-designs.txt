@@ -1,0 +1,1132 @@
+Title: Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs
+
+URL Source: https://arxiv.org/pdf/2609.29149v1
+
+Published Time: Fri, 25 Sep 2026 00:41:51 GMT
+
+Number of Pages: 23
+
+Markdown Content:
+> IEEE TRANSACTIONS ON INFORMATION THEORY 1
+
+# Replica Thresholds for Stripeless Erasure Coding Based on Symmetric Block Designs 
+
+## Guiwen Luo, Xiao Li, Yaqiang Zhang, and Ke Wang 
+
+Abstract 
+
+This paper investigates a fundamental question in stripeless erasure coding based on symmetric balanced incomplete block designs (SBIBDs): how many replicas per object are precisely required to guarantee recovery from any set of at most p node failures? We refine the known sufficient recovery guarantee for the generalized 
+
+SBIBD( v, k, λ ) construction. One replica is necessary and sufficient for p = 1 , and q = λ(p − 1) + 2 replicas (q ≤ k) guarantee recovery for p ≥ 2. Recovery takes one round for p = 2 and at most two rounds in general. To study the tightness of this count, we define the universal replica threshold q∗(A, p ) for a fixed zero-diagonal SBIBD representative A. We determine q∗(A, p ) for p = 1 and p = 2 . For p ≥ 3, we identify pairwise separated sets and private target permutations as the structures determining whether the sufficient count is tight or can be further reduced. These conditions give exact thresholds for all but the case where λ > 1 and A contains no pairwise separated set of size p. We improve the bounds for this remaining case and leave its exact threshold open. Finally, we give sufficient conditions for pairwise separated sets and show how affinity relabeling can realize private target permutations. 
+
+Index Terms 
+
+Distributed storage, erasure coding, fault tolerance, symmetric balanced incomplete block designs. 
+
+I. I NTRODUCTION 
+
+# COnventional erasure coding organizes data and parity chunks into fixed stripes. Each data chunk has a predetermined set of companion chunks, and recovery is performed within this fixed group. Stripeless erasure coding removes this persistent stripe membership. Each object retains one primary copy and sends temporary replicas to selected target nodes. A target node combines replicas received from different primary nodes into an XOR parity and then discards the constituent replicas. Consequently, objects can be placed and encoded independently without first being assigned to fixed stripes. Removing stripe boundaries is particularly useful for distributed storage systems that keep many small objects in memory. In such systems, splitting objects or collecting multiple objects into stripes, and maintaining stripe metadata can introduce coordination and data placement overheads that are significant relative to memory and network latency. Stripeless coding replaces global stripe construction with repli-cation at the object level and local parity formation at each node. Its main target is object storage with low latency in which the management cost of fixed stripes is a major concern. Conventional stripes may remain preferable for large objects and workloads optimized for bandwidth that benefit from mature MDS coding and sequential data access. Gao et al. [1] first introduced Nos, a stripeless data placement scheme for distributed storage systems that keep small objects in memory. Let p denote the maximum number of simultaneous node failures to be tolerated. For each object primary on node i, Nos independently selects p + 1 target nodes from the 
+
+k nodes permitted by a zero-diagonal SBIBD( v, k, 1) representative. Each target node forms a parity by XORing one replica from each of its k prescribed source nodes. This organization removes persistent stripe membership and allows replica placement and parity formation without a centralized metadata service. The intersection property with λ = 1 supports recovery from any set of at most p (p < k ) failed nodes. However, Nos leaves two issues unresolved. First, the flexibility of Nos is limited by its design parameters.              
+
+> The authors are with IEIT SYSTEMS Co., Ltd., Jinan 250101, China. Email: {luoguiwen,lixiao09,zhangyaqiang, wangke12 }@ieisystem.com. Corresponding author: Xiao Li. arXiv:2609.29149v1 [cs.IT] 24 Sep 2026 IEEE TRANSACTIONS ON INFORMATION THEORY 2
+
+The condition λ = 1 forces v = k(k − 1) + 1 , so the number of design nodes grows quadratically with k
+
+and only certain combinations of cluster size and parity width are available. Second, Nos uses q = p + 1 
+
+as a uniform sufficient replica count but does not determine whether this count is tight. FLESC [2] alleviates the parameter limitation of Nos in two complementary ways. At the scheme level, its coding scheme replaces SBIBD( v, k, 1) by SBIBD( v, k, λ ) with a general admissible value of λ. It proves that q = λ(p − 1) + 2 replicas per object suffice when k ≥ λ(p − 1) + 2 . When λ = 1 , this count becomes p + 1 and the scheme reduces to Nos. Allowing larger values of λ changes the design size to v = k(k − 1) /λ + 1 , which expands the available parameter choices when the corresponding SBIBDs exist. At the deployment level, FLESC introduces a virtual node layer that separates the design nodes from the physical storage nodes. Nevertheless, the threshold question remains unresolved. Like Nos, FLESC does not investigate whether its sufficient replica count is tight or can be reduced for a fixed SBIBD representative. This paper focuses on determining the exact universal replica threshold for recovery from any set of at most p node failures. For a fixed zero-diagonal SBIBD representative A, we define the universal replica threshold q∗(A, p ) as the minimum replica count that guarantees recovery for every legal placement and every failure set of at most size p. Compared to FLESC, we sharpen its sufficient recovery guarantee by treating p = 1 , p = 2 and p ≥ 3 separately and by making the recovery rounds explicit. We then determine when this sufficient replica count is tight and when it can be reduced. The resulting classification shows that the threshold depends not only on the SBIBD( v, k, λ ), but also on structural properties of the chosen representative matrix. Our main contributions in this paper are as follows. 
+
+Contributions.  
+
+> •
+
+We refine the sufficient recovery guarantee established in FLESC. For p = 1 , we prove that one replica per object is necessary and sufficient. For p = 2 , we show that every lost object is directly recoverable under the sufficient replica count. For p ≥ 3, we make the two round recovery structure explicit and give a more rigorous and complete proof that applies to every legal placement.  
+
+> •
+
+For a fixed zero-diagonal SBIBD representative A, we define and study the universal replica threshold 
+
+q∗(A, p ). For p = 1 , we determine the exact threshold q∗(A, 1) = 1 . For p = 2 , the exact threshold is classified by introducing reciprocal pairs . For p ≥ 3, we derive general bounds and classify the threshold using pairwise separated sets and private target permutations . Table I summarizes the resulting classification, which is exact except when p ≥ 3, λ > 1, and A contains no pairwise separated set of size p. 
+
+> •
+
+We investigate when the structures used in the threshold classification can occur. We give a sufficient condition and a greedy construction for pairwise separated sets, establish their existence for suffi-ciently large feasible values of k, and show how suitable affinity relabelings can realize reciprocal pairs and private target permutations. We further discuss the design implications of these results. General admissible values of λ provide greater flexibility in the cluster size. We also quantify the supported failure tolerance, encoding traffic, and persistent parity storage, and show that selecting a suitable representative reduces the replica count by one compared to Nos and FLESC. 
+
+Other uses of block designs in coding and storage. Block designs have long been used for different purposes in coding and storage. Smith [3] used incomplete block designs to construct codes with majority logic decoding, while Kou et al. [4] used incidence structures from finite geometries to construct LDPC codes. In distributed storage, Tian et al. [5], [6] used block designs to organize shorter erasure codes for exact node repair. Fractional repetition codes also use Steiner systems and other combinatorial designs to place repeated coded packets and support uncoded exact repair [7], [8]. Block designs have further been used to distribute parity groups across disk arrays and balance the reconstruction load after a disk failure [9]. More recently, Rukavina and Tonchev [10] classified a family of symmetric designs and studied the ternary linear codes generated by their incidence matrices. IEEE TRANSACTIONS ON INFORMATION THEORY 3
+
+These studies use block designs to define parity constraints, distribute coded packets, organize repair groups, or balance disk layouts. Our work uses an SBIBD representative differently. It specifies the admissible relationships between primary nodes and target nodes, while each object may independently select its target set. II. P RELIMINARIES 
+
+A. Symmetric balanced incomplete block designs 
+
+Definition 1 (Symmetric balanced incomplete block design) . For integers 1 ≤ λ < k < v , an SBIBD( v, k, λ )
+
+consists of v points and v blocks such that every block contains k points, every point lies in k blocks, and every two distinct points lie together in exactly λ blocks. After independently labeling the points and blocks by 0, 1, · · · , v − 1, its incidence matrix A = ( Aij ) ∈ { 0, 1}v×v is defined by Aij = 1 if and only if point i lies in block j. Such an independent labeling is called an affinity labeling and the resulting incidence matrix a representative of the SBIBD. An affinity labeling is said to have a zero diagonal if its representative satisfies Aii = 0 for every i ∈ { 0, 1, · · · , v − 1}.Every SBIBD( v, k, λ ) admits a zero-diagonal representative. A proof is given in Appendix A. Unless stated otherwise, the representative matrices considered in this paper are zero-diagonal. Counting pairs consisting of an unordered point pair and a block containing that pair gives λ v
+
+> 2
+
+ = v k
+
+> 2
+
+, and hence 
+
+λ(v − 1) = k(k − 1) , v = k(k − 1) 
+
+λ + 1 . (1) The identity (1) is necessary but not sufficient for the existence of an SBIBD( v, k, λ ). General existence results and constructions are surveyed in [11], [12]. 
+
+B. Stripeless erasure coding on an SBIBD 
+
+Suppose we have a storage cluster consisting of v nodes indexed by 0, 1, · · · , v − 1. We utilize the block design to organize replica placement and parity formation in the coding scheme. Each node plays both roles in this scheme. It may store primary copies of data objects and also host parities formed from replicas received from other nodes. In the representative A, row i represents node i as a primary node, while column j represents node j as a parity host. Aij = 1 means that an object primary on node i is allowed to send a replica to node j for parity formation. For a node j, define its replication source set by 
+
+Ssrc (j) := {i : Aij = 1 },
+
+and for a node i, define its replication target set by 
+
+Stgt (i) := {j : Aij = 1 }.
+
+The first set lists the primary nodes from which node j may receive replicas. The second lists the target nodes available to objects primary on node i. Both sets have size k. Since A has zero diagonal, 
+
+i / ∈ S tgt (i).
+
+For distinct nodes i and j, let 
+
+Bij := Stgt (i) ∩ S tgt (j). (2) 
+
+Bij is the set of common admissible target nodes for objects primary on node i and objects primary on node j. By the SBIBD property, 
+
+|Bij | = λ, B ij = Bji , B ij ∩ { i, j } = ∅.
+
+We assume all data objects are binary words of equal length, and XOR denotes componentwise addition over F2. Each object x has exactly one primary copy, stored at its primary node i. For an integer q ∈IEEE TRANSACTIONS ON INFORMATION THEORY 4
+
+{0, 1, · · · , k }, the object selects a set Tx ⊆ S tgt (i) of q distinct target nodes and sends one replica to each node in Tx. The set Stgt (i) is common to all objects primary on node i, whereas Tx is selected separately for each object and may differ between such objects. Thus Stgt (i) contains all k admissible targets, while Tx contains the q targets actually used by x. A smaller q reduces replication traffic, while a larger q provides greater recovery redundancy. Incoming replicas at node j are temporarily buffered according to their primary nodes. A placement is legal if at each node j the replicas received at j are partitioned into k-tuples, each containing ex-actly one replica from every primary node in Ssrc (j). We analyze only completed legal placements. An implementation may also buffer unmatched replicas or store partial parities. If one such tuple contains the objects x1, x 2, · · · , x k, node j stores 
+
+P = x1 ⊕ x2 ⊕ · · · ⊕ xk
+
+as one parity. The parity encodes these objects, which are called its encodees . After the parity has been formed, the replicas used to form it are discarded. Each object x occurs in exactly one parity at every node in its selected set Tx. Thus q is also the number of parities encoding x.
+
+Definition 2 (Node, object, and parity states) . Fix a set F ⊆ { 0, 1, · · · , v − 1} of failed nodes. Nodes in F are failed , and all other nodes are alive . An object is lost if its primary node is failed, and a parity is 
+
+lost if the node storing it is failed. Here “lost” means unavailable at its original location, not necessarily unrecoverable. An object or parity that is not lost is called alive .Given a set of failed nodes, the surviving primary copies and parities form a system of XOR equations. The lost objects are recoverable if their values are uniquely determined by this surviving information. 
+
+Definition 3 (Direct recovery) . A lost object x is directly recoverable if some alive parity P encoding x
+
+has no other lost encodee. If P = x ⊕ x1 ⊕ x2 ⊕ · · · ⊕ xk−1, then x = P ⊕ x1 ⊕ x2 ⊕ · · · ⊕ xk−1, where every xℓ can be fetched from its alive primary node. Recovery is organized into rounds. The first round may use only alive primary copies and alive parities. Later rounds may also use values recovered in earlier rounds. Thus direct recovery is recovery in the first round. III. U NIVERSAL RECOVERY GUARANTEE 
+
+FLESC [2] established the sufficient count λ(p − 1) + 2 for multiple node failures through a counting argument. We refine that result by treating one and two failures separately, making the recovery rounds explicit, and formulating the guarantee uniformly over all legal placements. For p ≥ 1, define 
+
+q =
+
+(
+
+1, p = 1 ,λ(p − 1) + 2 , p ≥ 2. (3) 
+
+Theorem III.1 (Universal sufficient replica count) . Let p ≥ 1 be an integer, let A be a fixed zero-diagonal representative of an SBIBD( v, k, λ ), and let q be given by (3) . If q ≤ k, then every legal placement using exactly q distinct target nodes per object permits recovery after the failure of any set of at most p nodes. If at most two nodes fail, every lost object is directly recoverable. In general, all directly recoverable lost objects can be restored in the first round and every remaining lost object in the second round. Proof. Let F be a failure set with |F | ≤ p. The case F = ∅ is trivial. Suppose F = {i}. An object x whose primary node is alive can be read directly. If the primary node of x is i, then Tx ⊆ S tgt (i) and i / ∈ S tgt (i) because Aii = 0 . Hence every parity encoding x is alive and has no other lost encodee. Thus x is directly recoverable. Now let F = {i, j }, and let x be primary on node i. Since i / ∈ Tx, at most one parity encoding x is lost, namely the one hosted on node j if j ∈ Tx. Any parity encoding x that contains another lost encodee IEEE TRANSACTIONS ON INFORMATION THEORY 5
+
+must be hosted in Bij . Hence at most 1 + |Bij | = λ + 1 parities are unusable for direct recovery. Since 
+
+p ≥ 2 implies q = λ(p − 1) + 2 ≥ λ + 2 , at least one parity of x is alive and contains no other lost encodee. Thus x is directly recoverable. It remains to consider |F | ≥ 3. If |F | < p , enlarge F to a set of size p. Recovery under the enlarged failure set also gives recovery under the original failure set. We may therefore assume that |F | = p.Without loss of generality, assume that node 0 is failed, and let x be an object primary on node 0.Object x has q = λ(p − 1) + 2 parities, one on each of the q distinct selected target nodes Tx. Let 
+
+Lx := F ∩ Tx, ℓ x := |Lx|.
+
+Thus Lx is the set of failed hosts of parities encoding x, and 0 ≤ ℓx ≤ p − 1 because A00 = 0 . The remaining q − ℓx parities encoding x are alive. If some alive parity P0 of x has only directly recoverable lost encodees other than x, recover those encodees in the first round and then recover x. Suppose, for a contradiction, that no such P0 exists. From every alive parity of x, choose a lost encodee y̸ = x that is not directly recoverable, and let Y be the resulting multiset. The same lost y may occur more than once. Thus |Y | = q − ℓx, where cardinality is counted with multiplicity. Since a legal parity contains exactly one encodee from each source node and it already contains x, every selected object y ∈ Y has a primary node different from node 0.We use the following two facts implied by (2). First, if an occurrence y ∈ Y has primary node i, then for each other failed node j̸ = i, at most λ parities of y also encode an object from j. Second, for each failed node i̸ = 0 , at most λ occurrences in Y have primary node i, because the parities of x from which these occurrences were selected are hosted at distinct nodes in B0i.Consider the multiset of all pairs consisting of an occurrence in Y and a parity that encodes its object: 
+
+Q = {(y, P ) | y ∈ Y, P is a parity encoding y},
+
+where the multiplicity of each y is inherited from Y . Since the object in every occurrence is encoded by exactly q parities, each occurrence contributes exactly q pairs, and therefore 
+
+|Q| = q(q − ℓx).
+
+For s ∈ { 1, 2, 3}, let Qs denote the pairs covered by Case s below. Because every occurrence in Y is not directly recoverable, each pair (y, P ) lies in at least one of these three submultisets. 
+
+Case 1: P is on failed node 0. Each occurrence contributes at most one such pair, so |Q 1| ≤ q − ℓx.
+
+Case 2: P encodes more than one lost encodee. For an occurrence on node i, each of the other p − 1
+
+failed nodes can occur with it in at most λ parities. Hence 
+
+|Q 2| ≤ λ(p − 1)( q − ℓx).
+
+Case 3: P is lost and encodes exactly one lost object (namely y). P is hosted by a failed node j̸ = 0 .Because every parity hosted at j contains one object from each source in Ssrc (j), the premise of this case implies that exactly one failed source, say i, sends to j. Moreover, j / ∈ Lx, since every node in Lx receives from failed node 0. There are p − ℓx − 1 possible storage nodes j. For each one, the second consequence above bounds the number of relevant occurrences from its unique failed source by λ. Therefore 
+
+|Q 3| ≤ λ(p − ℓx − 1) .
+
+The number of pairs outside the union of the three cases is at least 
+
+Nout := q(q − ℓx) − [1 + λ(p − 1)]( q − ℓx) − λ(p − ℓx − 1) = ( q − ℓx)[ q − 1 − λ(p − 1)] − λ(p − ℓx − 1) .
+
+Substitution of q = λ(p − 1) + 2 gives 
+
+Nout = ( q − ℓx) − λ(p − ℓx − 1) = ( λ − 1) ℓx + 2 > 0.IEEE TRANSACTIONS ON INFORMATION THEORY 6
+
+Thus some pair (y∗, P ∗) belongs to none of the three cases. Its parity is alive and has y∗ as its only lost encodee, so y∗ is directly recoverable, contrary to the construction of Y . The desired parity P0 therefore exists. Recover its other lost encodees in the first round and x in the second. Since node 0 and object x
+
+were arbitrary, the conclusion holds for every failed node and every lost object. IV. R EFINING THE SUFFICIENT REPLICA COUNT 
+
+Theorem III.1 gives a sufficient replica count for recovery, uniformly over all legal placements and all failure sets of at most p nodes. However, it does not determine whether fewer replicas suffice for a fixed zero-diagonal representative A. We therefore introduce the universal replica threshold q∗(A, p ) and investigate how far the sufficient count can be reduced. We first derive unconditional bounds and then identify incidence structures that yield exact thresholds or sharper bounds. 
+
+A. Threshold definition and unconditional bounds 
+
+Assume k ≥ 1 for p = 1 and k ≥ λ(p − 1) + 2 for p ≥ 2.
+
+Definition 4 (Universal replica threshold) . For a fixed zero-diagonal representative A of an SBIBD( v, k, λ )
+
+and an integer p ≥ 1, let q∗(A, p ) be the smallest integer q ∈ { 0, 1, · · · , k } such that every legal placement of any finite object collection using exactly q target nodes per object permits recovery from every set of at most p failed nodes. By Theorem III.1, the threshold q∗(A, p ) is well defined. 
+
+Proposition IV.1. For p = 1 ,
+
+q∗(A, 1) = 1 .
+
+For every p ≥ 2,
+
+max {p, λ + 1 } ≤ q∗(A, p ) ≤ λ(p − 1) + 2 . (4) 
+
+In particular, 
+
+λ + 1 ≤ q∗(A, 2) ≤ λ + 2 . (5) 
+
+Proof. For p = 1 , failing the primary node of an object shows that q = 0 does not suffice, while Theorem III.1 shows that q = 1 does. Hence q∗(A, 1) = 1 .For p ≥ 2, first take q = p − 1, select the q target nodes of an object x, and fail those nodes together with the primary node of x. The primary copy of x and every parity encoding x are lost. Hence x cannot be recovered, so q∗(A, p ) ≥ p.Next choose two distinct primary nodes i and j. Set q = λ and choose objects xi and xj with Txi =
+
+Txj = Bij , which is possible because |Bij | = λ. Fail only nodes i and j, an admissible failure pattern for every p ≥ 2. Since A has zero diagonal, Bij ∩ { i, j } = ∅, so all selected parities remain alive. At every target in Bij , place xi and xj in the same parity and complete the remaining positions with objects whose primary nodes are alive. These are the only parities containing xi or xj : each object selects exactly q = λ targets, and each of its replicas is assigned to exactly one parity. Every such parity contains both lost objects, so neither object is uniquely recoverable. Thus q = λ does not guarantee recovery and q∗(A, p ) ≥ λ + 1 . Combining the two constructions gives the lower bound in (4). Theorem III.1 gives the upper bound. Finally, setting 
+
+p = 2 in (4) and using λ ≥ 1 gives (5). IEEE TRANSACTIONS ON INFORMATION THEORY 7
+
+B. Exact classification for p = 2 
+
+The following condition distinguishes the two possible thresholds for a fixed representative. Section V-B examines its behavior under different zero-diagonal affinity labelings. 
+
+Definition 5 (Reciprocal pair) . Two distinct nodes i and j form a reciprocal pair if 
+
+j ∈ S tgt (i) and i ∈ S tgt (j).
+
+Proposition IV.2 (Exact classification for p = 2 ). Let A be a fixed zero-diagonal representative of an 
+
+SBIBD( v, k, λ ) and assume k ≥ λ + 2 . Then 
+
+q∗(A, 2) = 
+
+(
+
+λ + 2 , if A contains a reciprocal pair ,λ + 1 , otherwise .
+
+Proof. First suppose that i, j form a reciprocal pair, and let Bij be their λ common targets. Since the diagonal of A is zero, neither i nor j belongs to Bij . Set q = λ + 1 . Choose an object xi on node i with targets Bij ∪ { j}, and an object xj on node j with targets Bij ∪ { i}. Fail nodes i and j. The two parities hosted on the failed nodes are lost. At every node in Bij , arrange for xi and xj to enter the same parity. After subtracting alive encodees, all surviving equations have coefficient row (1 , 1) , so their rank is one. Thus q = λ + 1 does not guarantee recovery and q∗(A, 2) = λ + 2 by (5). Now suppose that A has no reciprocal pair, and let i and j be the failed nodes. Without loss of generality, 
+
+j / ∈ S tgt (i). Hence all q = λ + 1 parities encoding an object x primary on i are alive. Only target nodes in 
+
+Bij can host such a parity containing another lost encodee primary on j. Since q = λ + 1 > |Bij | = λ, at least one parity contains no other lost encodee, and x is directly recoverable. After recovering all objects primary on i, each object primary on j has at least q − 1 = λ alive parities, and all other encodees in any such parity are known. Thus all objects primary on j are also recoverable. Therefore q = λ + 1 suffices, and combining with the lower bound in (5) gives q∗(A, 2) = λ + 1 .Appendix B gives an explicit zero-diagonal representative of an SBIBD(7 , 4, 2) exhibiting this obstruc-tion from a reciprocal pair. 
+
+C. Classification for p ≥ 3
+
+For p ≥ 3, the threshold depends on how the failed rows overlap at target nodes. The following condition isolates the case with low overlap, and Section V-A studies when it exists and how it can be constructed. 
+
+Definition 6 (Pairwise separated set) . For F ⊆ { 0, 1, · · · , v − 1} and t ∈ { 0, 1, · · · , v − 1}, let 
+
+dF (t) := {i ∈ F : Ait = 1 } = X
+
+> i∈F
+
+Ait .
+
+The set F is pairwise separated if 
+
+dF (t) ≤ 2 for every t ∈ { 0, 1, · · · , v − 1}.
+
+The value dF (t) is the number of rows indexed by F that have entry 1 in column t. F is pairwise separated if no column has entry 1 in three distinct rows indexed by F . Consequently, the sets Bij 
+
+corresponding to the unordered pairs {i, j } ⊆ F are mutually disjoint. For i ∈ F , define 
+
+Ui(F ) := [ 
+
+> j∈F\{ i}
+
+Bij .
+
+If F is pairwise separated and |F | = p, then 
+
+|Ui(F )| = λ(p − 1) .IEEE TRANSACTIONS ON INFORMATION THEORY 8
+
+When λ = 1 and the design is a projective plane, this is the classical arc condition that no three points are collinear [13]. 
+
+Proposition IV.3 (Pairwise separated lower bound) . Let p ≥ 3. If A contains a pairwise separated set F
+
+of size p and k ≥ λ(p − 1) + 2 , then q = λ(p − 1) does not guarantee recovery. Consequently, 
+
+λ(p − 1) + 1 ≤ q∗(A, p ) ≤ λ(p − 1) + 2 . (6) 
+
+Proof. Set q = λ(p − 1) and take the p nodes in F as the failure set. We construct a legal placement in which the selected objects are not uniquely recoverable, showing that this value of q does not guarantee recovery. For each i ∈ F , select an object xi primary on node i with Txi = Ui(F ). Then 
+
+|Txi | = λ(p − 1) = q. 
+
+For every unordered pair {i, j } ⊆ F and every t ∈ Bij , arrange the replicas of xi and xj to enter the same parity hosted by node t.Consider any surviving parity P encoding xi, and let h denote its host. Since Txi = Ui(F ), we have 
+
+h ∈ Ui(F ) \ F , so h belongs to a unique Bij with j ∈ F \ { i}. Membership in Bij gives dF (h) ≥ 2, while pairwise separation gives dF (h) ≤ 2, hence dF (h) = 2 . By construction, xi and xj are therefore the only lost encodees in this parity. All other encodees are alive and can be cancelled, leaving 
+
+xi ⊕ xj = γh,
+
+where γh is known. Let w be any nonzero binary object of the same length as the selected objects, and define 
+
+x′ 
+
+> i
+
+= xi ⊕ w for every i ∈ F. 
+
+Every surviving parity contains either no selected object, or exactly two selected objects due to dF (h) = 2 .For every surviving parity containing two selected objects, 
+
+x′ 
+
+> i
+
+⊕ x′ 
+
+> j
+
+= ( xi ⊕ w) ⊕(xj ⊕ w) = xi ⊕ xj .
+
+Thus replacing (xi)i∈F by (x′
+
+> i
+
+)i∈F leaves every surviving parity unchanged. Since w̸ = 0 , these are two distinct object collections that produce exactly the same surviving data. Hence the selected objects are not uniquely recoverable when q = λ(p − 1) . Therefore, 
+
+q∗(A, p ) ≥ λ(p − 1) + 1 .
+
+The upper bound follows from Proposition IV.1, completing the proof of (6). The preceding proposition identifies an obstruction supported by a pairwise separated set of size p. We now consider the complementary case in which A contains no such set. Then every set of p failed nodes has a target shared by at least three of its nodes. Such higher overlap reduces the number of distinct targets blocked by other lost encodees and leads to a stronger recovery bound. Next we show that the resulting higher intersections refine the sufficient replica count by one. 
+
+Proposition IV.4 (Recovery without pairwise separation) . Let p ≥ 3 and k ≥ λ(p − 1) + 1 . If the fixed zero-diagonal representative A contains no pairwise separated set of size p, then 
+
+max {p, λ + 1 } ≤ q∗(A, p ) ≤ λ(p − 1) + 1 . (7) 
+
+In particular, if λ = 1 , then 
+
+q∗(A, p ) = p. 
+
+Proof. Set 
+
+q = λ(p − 1) + 1 .IEEE TRANSACTIONS ON INFORMATION THEORY 9
+
+We prove that every legal placement using q target nodes per object is recoverable from any set of at most p failed nodes. It suffices to consider exactly p failed nodes. Fix such a failure set F .The recovery proceeds iteratively. Initially, let H = F . At each stage, H contains the failed nodes not yet processed by the recovery procedure. We seek a node i ∈ H such that every object primary on i
+
+has an alive parity whose other encodees are already known. We then recover all objects primary on i,remove i from H, and repeat. Fix a stage with H̸ = ∅ and put r = |H|. For i ∈ H, a target t ∈ S tgt (i) cannot provide the next recovery step for objects primary on i for one of two reasons. First, every parity at t encoding an object primary on i also contains an encodee primary on another node in H. This occurs when dH (t) ≥ 2, so let 
+
+ai(H) := |{ t ∈ S tgt (i) : dH (t) ≥ 2}| .
+
+Second, if dH (t) = 1 , such a parity contains no encodee primary on another node in H, but it is still unavailable when its host t has failed. These targets satisfy t ∈ F and dH (t) = 1 . Let 
+
+bi(H) := |{ t ∈ F ∩ S tgt (i) : dH (t) = 1 }| .
+
+The two classes are disjoint. Hence the total number of unusable targets in Stgt (i) at the current stage is 
+
+ci(H) := ai(H) + bi(H). (8) For simplicity, the dependence of bi(H) and ci(H) on the fixed failure set F is omitted from the notation. If ci(H) < q , then the q-element target set Tx ⊆ S tgt (i) of any object x primary on node i cannot be contained in the set of unusable targets. Hence some t ∈ Tx is not counted by ci(H). By the definitions of ai(H) and bi(H), we have dH (t) = 1 and t / ∈ F . Therefore, the parity encoding x at node t is alive and contains no encodee primary on another node in H. All its other encodees are available from alive primary nodes or have already been recovered. Thus every object primary on i can be recovered at the current stage. It therefore suffices to show that some i ∈ H satisfies 
+
+ci(H) < q. (9) We next estimate these two counts. Since every pair of distinct rows has λ common targets, |Bij | = λ
+
+for every j ∈ H \ { i}, we have X
+
+> j∈H\{ i}
+
+|Bij | = λ(r − 1) .
+
+The sets Bij may not be disjoint. A target t shared by row i and dH (t) − 1 other rows in H is counted 
+
+dH (t) − 1 times on the left hand side, but only once in ai(H). Define this excess multiplicity by 
+
+δi(H) := X 
+
+> t∈S tgt (i),d H(t)≥2
+
+ dH (t) − 2,
+
+which measures the excess multiplicity caused by targets shared by row i and at least two other rows in H. It follows that 
+
+ai(H) + δi(H) = X 
+
+> t∈S tgt (i),d H(t)≥2
+
+1 +  dH (t) − 2 
+
+= X 
+
+> t∈S tgt (i),d H(t)≥2
+
+ dH (t) − 1
+
+We count the pairs (j, t ) satisfying j ∈ H \ { i} and t ∈ Bij . For a fixed j, there are |Bij | choices of t.For a fixed t, there are dH (t) − 1 choices of j. It follows that 
+
+X
+
+> j∈H\{ i}
+
+|Bij | = X
+
+> t∈S tgt (i)
+
+ dH (t) − 1
+
+= X 
+
+> t∈S tgt (i),d H(t)≥2
+
+ dH (t) − 1.IEEE TRANSACTIONS ON INFORMATION THEORY 10 
+
+The final equality follows because a target with dH (t) = 1 contributes zero to the sum. Combining the preceding identities gives 
+
+ai(H) + δi(H) = λ(r − 1) . (10) Moreover, every failed target with dH (t) = 1 is counted by bi(H) for exactly one node i ∈ H. Therefore 
+
+X
+
+> i∈H
+
+bi(H) = |{ t ∈ F : dH (t) = 1 }| ≤ p. (11) Suppose otherwise that ci(H) ≥ q for every i ∈ H. Equations (8) and (10) give 
+
+bi(H) ≥ q − ai(H)= λ(p − 1) + 1 −  λ(r − 1) − δi(H)
+
+= λ(p − r) + 1 + δi(H). (12) First suppose that r = p. Then H = F . Since A contains no pairwise separated set of size p, some target t satisfies dH (t) ≥ 3. Consequently, δi(H) > 0 for at least one node i ∈ H. Summing (12) over H
+
+gives X
+
+> i∈H
+
+bi(H) ≥ p + X
+
+> i∈H
+
+δi(H) > p, 
+
+contradicting (11). Next suppose that 2 ≤ r < p . Since λ ≥ 1, summing (12) gives 
+
+X
+
+> i∈H
+
+bi(H) ≥ rλ(p − r) + 1 
+
+≥ r(p − r + 1) 
+
+> p, 
+
+where the last inequality follows from 
+
+r(p − r + 1) − p = ( r − 1)( p − r) > 0.
+
+This again contradicts (11). Finally, if r = 1 , then ai(H) = 0 . Since Aii = 0 , at most the other p − 1 failed nodes can be targets of node i, and hence 
+
+ci(H) = bi(H) ≤ p − 1 < q. 
+
+Thus (9) holds in every case. Choose such an i satisfying (9), recover all objects primary on i, remove i from H, and repeat. At least one node is removed at each stage, so after at most p stages, H = ∅ and all lost objects have been recovered. This proves 
+
+q∗(A, p ) ≤ λ(p − 1) + 1 .
+
+The constructions for the lower bound used in the proof of Proposition IV.1 require only the replica counts p − 1 and λ, both of which are feasible under k ≥ λ(p − 1) + 1 . They therefore give 
+
+q∗(A, p ) ≥ max {p, λ + 1 }.
+
+This proves (7). When λ = 1 , the two bounds coincide and give 
+
+q∗(A, p ) = p. IEEE TRANSACTIONS ON INFORMATION THEORY 11 
+
+For λ > 1, the exact value of q∗(A, p ) within this interval depends on finer local incidence information that is not captured by the SBIBD parameters or by the existence of a pairwise separated set alone. Sharper bounds for a specific representative might be obtained by introducing additional conditions that record intersections of multiplicity at least three and their positions relative to failed parity hosts. However, such refinements would produce a conclusion that increasingly depends on the individual case. We therefore do not refine the case further. We now return to representatives that contain pairwise separated sets. Pairwise separation alone leaves a gap of one between the bounds in (6). The following additional condition closes that gap. Section V-B shows how it can be realized by choosing an affinity labeling. 
+
+Definition 7 (Private target permutation) . Let F be a pairwise separated set with |F | = p. We say that F
+
+admits a private target permutation if there exists a permutation σ : F → F such that 
+
+σ(i) ∈ S tgt (i) and dF
+
+ σ(i) = 1 for every i ∈ F. 
+
+The definition assigns each node i ∈ F a private target σ(i) ∈ F . These targets are all distinct because 
+
+σ is a permutation. Since A has zero diagonal, σ(i)̸ = i.For p = 2 , pairwise separation is automatic and a private target permutation exists exactly when the two nodes form a reciprocal pair. For p ≥ 4, a private target permutation need not consist of a single cycle. For example, when p = 4 , it may consist of one cycle of length four, (i1 i2 i3 i4), or two disjoint cycles of length two, (i1 i2)( i3 i4).
+
+Proposition IV.5 (Exact threshold under pairwise separation) . Let p ≥ 3 and k ≥ λ(p − 1) + 2 . Suppose that A contains at least one pairwise separated set of size p. Then q∗(A, p ) depends on whether any such set admits a private target permutation: 
+
+q∗(A, p ) = 
+
+(
+
+λ(p − 1) + 2 , if at least one does ,λ(p − 1) + 1 , otherwise . (13) 
+
+Proof. If a pairwise separated set admits a private target permutation, we extend the nonrecoverable placement from Proposition IV.3 by assigning one additional failed target to each selected object. The additional parities are lost, so the original ambiguity remains. Conversely, if no such permutation exists, we reuse the iterative recovery framework and blocked target counts from Proposition IV.4. At every later stage, these counts identify a node whose primary objects can all be recovered. The only structure that could prevent the initial recovery step would itself define a private target permutation. First, let σ be a private target permutation of a pairwise separated set F with |F | = p. For each i ∈ F ,following the similar construction used in the proof of Proposition IV.3, choose an object xi primary on node i and set 
+
+Txi = Ui(F ) ∪ { σ(i)}.
+
+Every t ∈ Ui(F ) satisfies dF (t) = 2 , whereas dF
+
+ σ(i) = 1 . Hence σ(i) /∈ Ui(F ) and 
+
+|Txi | = |Ui(F )| + 1 = λ(p − 1) + 1 .
+
+For every unordered pair {i, j } ⊆ F and every t ∈ Bij , place xi and xj in the same parity at node t.Complete the remaining parity positions with objects whose primary nodes lie outside F to obtain a legal placement. Fail all nodes in F . Since σ(i) ∈ F , the parity hosted at the added target σ(i) is lost. Every surviving parity encoding some xi (i ∈ F ) is hosted at a target t ∈ Bij for a unique j ∈ F \ { i} and contains exactly the two lost objects xi and xj . Consequently, replacing every xi by xi ⊕ w, for any fixed nonzero binary word w, leaves all surviving parity equations unchanged. Thus q = λ(p − 1) + 1 does not guarantee unique recovery, and hence 
+
+q∗(A, p ) ≥ λ(p − 1) + 2 .IEEE TRANSACTIONS ON INFORMATION THEORY 12 
+
+Theorem III.1 gives the reverse inequality, proving the first case of (13). Conversely, suppose that no pairwise separated set of size p admits a private target permutation, and set 
+
+q = λ(p − 1) + 1 .
+
+Enlarge any failure set to a set F of p nodes. Use the notation for each recovery stage and counting identities from the proof of Proposition IV.4, which apply to every failure set F .At a recovery stage H ⊆ F , first suppose that 2 ≤ r = |H| < p . If ci(H) ≥ q for every i ∈ H, then (10) gives 
+
+p ≥ X
+
+> i∈H
+
+bi(H) ≥ rλ(p − r) + 1  ≥ r(p − r + 1) > p, 
+
+a contradiction. If r = 1 , the zero diagonal gives 
+
+ci(H) = bi(H) ≤ p − 1 < q. 
+
+It remains to consider the initial stage H = F . Suppose that ci(F ) ≥ q for every i ∈ F . Equation (10) then gives 
+
+bi(F ) ≥ 1 + δi(F ) for every i ∈ F. 
+
+Together with (11), this forces 
+
+δi(F ) = 0 , b i(F ) = 1 for every i ∈ F, 
+
+and X
+
+> i∈F
+
+bi(F ) = p. 
+
+The equalities δi(F ) = 0 show that F is pairwise separated. Moreover, for every i ∈ F , there is exactly one σ(i) ∈ F ∩ S tgt (i) such that dF
+
+ σ(i) = 1 . These values are distinct because a column with incidence degree one cannot belong to Stgt (i) for two different i ∈ F .Hence σ : F → F is a private target permutation. This contradicts the hypothesis. Therefore, at every recovery stage, some i ∈ H satisfies ci(H) < q . All objects primary on i can be recovered, after which i is removed from H. Repeating this step recovers every lost object. Hence 
+
+q∗(A, p ) ≤ λ(p − 1) + 1 .
+
+Proposition IV.3 gives the reverse inequality, proving the second case of (13). Appendix C gives an explicit SBIBD(16 , 6, 2) example with p = 3 in which a pairwise separated set admits a private target permutation. 
+
+D. Summary of thresholds for fixed representatives 
+
+Table I summarizes the exact values and structural bounds established above. Its two rows for p = 2 are distinguished by the existence of a reciprocal pair. For p ≥ 3, it gives a mutually exclusive and exhaustive classification according to the existence of pairwise separated sets of size p, parameter λ, and whether any such set admits a private target permutation. The exact threshold for a fixed representative remains open when p ≥ 3, λ > 1, and A contains no pairwise separated set of size p. Appendix B gives an explicit zero-diagonal SBIBD(7 , 4, 2) representative that realizes the case with a reciprocal pair for p = 2 . Appendices C and D give two zero-diagonal representatives of the same SBIBD(16 , 6, 2) for p = 3 . In one representative, some pairwise separated set of size 3 admits a private target permutation. In the other, pairwise separated sets of size 3 exist, but none admits a private target permutation. IEEE TRANSACTIONS ON INFORMATION THEORY 13                                                               
+
+> TABLE I EXACT VALUES AND BOUNDS FOR THE UNIVERSAL REPLICA THRESHOLD OF A FIXED ZERO -DIAGONAL SBIBD REPRESENTATIVE A.THE STANDING FEASIBILITY ASSUMPTIONS ARE k≥1FOR p= 1 AND k≥λ(p−1) + 2 FOR p≥2.Failure count pand structural conditions on AThreshold or current bounds
+> p= 1 q∗(A, 1) = 1
+> p= 2 , no reciprocal pair q∗(A, 2) = λ+ 1
+> p= 2 , a reciprocal pair exists q∗(A, 2) = λ+ 2
+> p≥3, no pairwise separated set of size pλ= 1 q∗(A, p ) = pλ > 1max {p, λ + 1 } ≤ q∗(A, p )≤λ(p−1) + 1
+> p≥3, a pairwise separated set of size pexists No set admits a private target permutation q∗(A, p ) = λ(p−1) + 1
+> Some set admits a private target permutation q∗(A, p ) = λ(p−1) + 2
+
+V. E XISTENCE AND RELABELING OF THRESHOLD STRUCTURES 
+
+Section IV identified reciprocal pairs, pairwise separated sets and private target permutations as the structures controlling the replica threshold. Pairwise separation depends only on the underlying SBIBD, whereas a private target permutation may also depend on the affinity labeling. For p = 2 , pairwise separation is automatic, and a private target permutation is precisely a reciprocal pair. This section first studies the existence of pairwise separated sets and then shows how suitable zero-diagonal labelings realize private target permutations. 
+
+A. Existence and construction of pairwise separated sets 
+
+The following condition depending only on the parameters gives a constructive guarantee for the existence of a pairwise separated set of size p.
+
+Proposition V.1 (Sufficient condition for pairwise separation) . Let A be any representative of an SBIBD( v, k, λ )
+
+and let p ≥ 3. If 
+
+v > (p − 1) + λ ·
+
+p − 12
+
+
+
+· (k − 2) , (14) 
+
+then A contains a pairwise separated set of size p. For p = 3 , the condition becomes 
+
+λ(k − 2) < v − 2.
+
+Proof. Start with any two row indices, which automatically form a pairwise separated set. Suppose that a pairwise separated set F with |F | = m < p has been selected. The sets Bij over all unordered pairs 
+
+{i, j } ⊆ F are mutually disjoint. Since |Bij | = λ, there are exactly 
+
+λ ·
+
+m
+
+2
+
+
+
+column indices t satisfying dF (t) = 2 .For each such t, exactly k − 2 row indices u / ∈ F satisfy Aut = 1 . None of these indices can be added to F , since doing so would give dF ∪{ u}(t) = 3 . Thus at most 
+
+λ
+
+m
+
+2
+
+
+
+(k − 2) 
+
+indices outside F are excluded. A new index can therefore be selected whenever 
+
+v > m + λ
+
+m
+
+2
+
+
+
+(k − 2) .IEEE TRANSACTIONS ON INFORMATION THEORY 14 
+
+The right hand side increases with m. Condition (14), which is the case m = p − 1, guarantees that the construction continues until |F | = p.The proof also gives a greedy construction. At each step, choose any u / ∈ F satisfying 
+
+Aut = 0 , for every t such that dF (t) = 2 .
+
+Pairwise separated sets are not automatic, even under the feasibility condition k ≥ λ(p − 1) + 2 . For any prime power ρ ≥ 3, incidence between points and planes in PG(3 , ρ ) gives a symmetric design with parameters 
+
+(v, k, λ ) = ( ρ3 + ρ2 + ρ + 1 , ρ 2 + ρ + 1 , ρ + 1) .
+
+Any three points lie in a plane, so no three rows are pairwise separated. Moreover, k ≥ 2λ + 2 for ρ ≥ 3,making this a feasible family for p = 3 . The smallest member has parameters (40 , 13 , 4) [12]. Since the absence of a pairwise separated set of size 3 excludes every larger such set, the same family is feasible for every 3 ≤ p ≤ ρ, because k ≥ λ(p − 1) + 2 in precisely that range. Equivalently, whenever λ − 1 is a prime power and 3 ≤ p ≤ λ − 1, this construction gives an explicit design with k = λ2 − λ + 1 that contains no pairwise separated set. 
+
+Corollary V.2 (Pairwise separated sets for large k). Fix p ≥ 3 and λ ≥ 1. There exists K = K(p, λ ) such that, whenever k ≥ K and an SBIBD( v, k, λ ) exists, every such design contains a pairwise separated set of size p.Proof. Substituting v = k(k − 1) /λ + 1 into (14) gives 
+
+k(k − 1) 
+
+λ + 1 > (p − 1) + λ
+
+p − 12
+
+
+
+(k − 2) .
+
+For fixed p and λ, the left hand side is quadratic in k and the right hand side is linear in k. Hence the inequality holds for all sufficiently large feasible values of k.Consequently, for fixed p and λ, a design without a pairwise separated set of size p can occur for finitely many possible values of k.
+
+B. Private target permutations under zero-diagonal relabeling 
+
+Proposition V.3 (Realizing private target permutations) . Suppose p ≥ 2 and k ≥ λ(p − 1) + 2 . Let A
+
+be a representative of an SBIBD( v, k, λ ). If A contains a pairwise separated set F of size p, then the columns of A can be relabeled to obtain a zero-diagonal representative A′ in which F admits a private target permutation. Consequently, 
+
+q∗(A′, p ) = λ(p − 1) + 2 . (15) 
+
+Proof. We treat p = 2 and p ≥ 3 separately. First let p = 2 . Let F = {i, j } ⊆ { 0, 1, · · · , v − 1} be an arbitrary set of size two. Since dF (t) ≤ 2 for every column t, the set F is automatically pairwise separated. Construct a bipartite graph whose two vertex parts are the row indices {0, 1, · · · , v − 1} and column indices {0, 1, · · · , v − 1}. Connect a row vertex h and a column vertex t if and only if Aht = 0 . Since every row and column of A contains exactly v − k zero entries, every vertex has degree 
+
+d := v − k = (k − 1)( k − λ)
+
+λ .
+
+The assumption k ≥ λ + 2 implies that d > 2. Since d is an integer, we have d ≥ 3. The graph is the incidence graph of the complementary symmetric design, so it is bipartite and distance regular. Since 
+
+Stgt (i) \ S tgt (j) = Stgt (j) \ S tgt (i) = k − λ ≥ 2,IEEE TRANSACTIONS ON INFORMATION THEORY 15 
+
+there exist two distinct columns τi and τj such that 
+
+τi ∈ S tgt (j) \ S tgt (i)
+
+and 
+
+τj ∈ S tgt (i) \ S tgt (j).
+
+By their definitions, 
+
+Aiτ i = Ajτ j = 0 , A jτ i = Aiτ j = 1 .
+
+The two zero entries at (i, τ i) and (j, τ j ) lie in different rows and different columns in A. Hence the corresponding edges (i, τ i) and (j, τ j ) in the graph have no common endpoint. By [14, Theorem 3.17], in a bipartite graph that is distance regular of degree d, every set of at most ⌊(d + 1) /2⌋ edges with no common endpoint is contained in a perfect matching. Since d ≥ 3, we have ⌊(d + 1) /2⌋ ≥ 2. Hence some perfect matching contains both (i, τ i) and (j, τ j ).A perfect matching pairs every row vertex with a distinct column vertex. Consequently, it defines a bijection 
+
+π : {0, 1, · · · , v − 1} −→ { 0, 1, · · · , v − 1}
+
+such that 
+
+Ah,π (h) = 0 , for every h ∈ { 0, 1, · · · , v − 1},
+
+with 
+
+π(i) = τi, π (j) = τj .
+
+Define the relabeled representative A′ by 
+
+A′ 
+
+> rh
+
+:= Ar,π (h), r, h ∈ { 0, 1, · · · , v − 1},
+
+then 
+
+A′ 
+
+> hh
+
+= Ah,π (h) = 0 , h ∈ { 0, 1, · · · , v − 1}.A′ is zero-diagonal. Since π(i) = τi and π(j) = τj ,
+
+A′ 
+
+> ji
+
+= Aj,π (i) = Ajτ i = 1 , A ′ 
+
+> ij
+
+= Ai,π (j) = Aiτ j = 1 ,
+
+we have that F = {i, j } is a reciprocal pair in A′. Define 
+
+σ(i) = j, σ (j) = i, 
+
+then σ is a private target permutation of F in A′.Now let p ≥ 3, and write the pairwise separated set as 
+
+F = {i1, i 2, · · · , i p}.
+
+For each fixed r ∈ { 1, 2, · · · , p },
+
+Stgt (ir) \ Uir (F ) = t ∈ S tgt (ir) : dF (t) = 1 .
+
+Because 
+
+Stgt (ir) = k, |Uir (F )| = λ(p − 1) ,
+
+we have t ∈ S tgt (ir) : dF (t) = 1 = k − λ(p − 1) ≥ 2.
+
+Choose one such column and denote it by tr, i.e., 
+
+tr ∈ S tgt (ir), d F (tr) = 1 .IEEE TRANSACTIONS ON INFORMATION THEORY 16 
+
+Repeating this choice for r ∈ { 1, 2, · · · , p } gives a family of columns t1, t 2, · · · , t p. These columns are distinct. Otherwise, if tr = ts for r̸ = s, the common column would belong to both Stgt (ir) and Stgt (is),giving dF (tr) ≥ 2.Define ip+1 = i1. Since ir+1 ̸ = ir and dF (tr) = 1 , we have 
+
+tr /∈ S tgt (ir+1 ),
+
+and hence 
+
+Air+1 ,t r = 0 .
+
+The row indices ir+1 are distinct, and the column indices tr are distinct. Hence the p zero entries 
+
+Air+1 ,t r , r ∈ { 1, 2, · · · , p } lie in different rows and different columns. Delete the rows in F and the columns t1, t 2, · · · , t p from A. The resulting submatrix has v − p rows and v − p columns. Since every row and column of A contains v − k zero entries, every row and column of the submatrix contains at least v − k − p zero entries. The assumption k ≥ λ(p − 1) + 2 gives 
+
+λ ≤ k − 2
+
+p − 1 .
+
+Using the SBIBD identity, we obtain 
+
+v = k(k − 1) 
+
+λ + 1 ≥ (p − 1) k(k − 1) 
+
+k − 2 + 1 ≥ 2k + p. 
+
+The last inequality follows from 
+
+(p − 1) k(k − 1) 
+
+k − 2 + 1 − (2 k + p) = ( p − 3) k + 2( p − 1) 
+
+k − 2 ≥ 0.
+
+Therefore, 
+
+v − k − p ≥ v − p
+
+2 .
+
+Let R0 := {0, 1, · · · , v − 1} \ F and C0 := {0, 1, · · · , v − 1} \ { t1, t 2, · · · , t p}. Construct a bipartite graph with vertex parts R0 and C0, in which row vertex h and column vertex t are connected if and only if Aht = 0 . Both parts have size 
+
+n := v − p, 
+
+and every vertex has degree at least 
+
+v − k − p ≥ n
+
+2 .
+
+We verify Hall’s condition. Let S ⊆ R0, let N (S) ⊆ C0 be the set of column indices adjacent to at least one element of S. If 1 ≤ | S| ≤ n/ 2, then the neighbors of any row vertex in S already give 
+
+|S| ≤ n
+
+2 ≤ | N (S)|.
+
+If |S| > n/ 2, suppose that some column vertex lies outside N (S). All its neighbors would then lie in 
+
+R0 \ S, which contains fewer than n/ 2 vertices. This contradicts its degree being at least n/ 2. Hence 
+
+N (S) = C0, and 
+
+|S| ≤ n = |N (S)|.
+
+Hall’s theorem therefore gives a perfect matching between R0 and C0. Consequently, there is a bijection 
+
+π0 : R0 −→ C0
+
+such that 
+
+Ah,π 0(h) = 0 for every h ∈ R0.IEEE TRANSACTIONS ON INFORMATION THEORY 17 
+
+Extend π0 to a bijection 
+
+π : {0, 1, · · · , v − 1} −→ { 0, 1, · · · , v − 1}
+
+by setting 
+
+π(ir+1 ) = tr (r ∈ { 1, 2, · · · , p }).
+
+Then 
+
+Ah,π (h) = 0 for every h ∈ { 0, 1, · · · , v − 1}.
+
+Keep the row labels fixed and define the relabeled representative A′ by 
+
+A′ 
+
+> hℓ
+
+:= Ah,π (ℓ) (h, ℓ ∈ { 0, 1, · · · , v − 1}).
+
+It follows that 
+
+A′ 
+
+> hh
+
+= Ah,π (h) = 0 ,
+
+so A′ is zero-diagonal. Moreover, for r ∈ { 1, 2, · · · , p },
+
+A′  
+
+> ir,i r+1
+
+= Air ,π (ir+1 ) = Air ,t r = 1 
+
+and p
+
+X
+
+> s=1
+
+A′ 
+
+> is,i r+1
+
+=
+
+> p
+
+X
+
+> s=1
+
+Ais,t r = 1 .
+
+The column relabeling also preserves pairwise separation because 
+
+X
+
+> i∈F
+
+A′ 
+
+> iℓ
+
+= X
+
+> i∈F
+
+Ai,π (ℓ) ≤ 2, for ℓ ∈ { 0, 1, · · · , v − 1}.
+
+Therefore, the cyclic permutation 
+
+σ(ir) = ir+1 , r ∈ { 1, 2, · · · , p }
+
+is a private target permutation of F in A′.For p = 2 , Proposition IV.2 gives (15). For p ≥ 3, Proposition IV.5 gives the same conclusion. For p = 2 , Proposition V.3 shows that every underlying SBIBD admits at least one zero-diagonal representative containing a reciprocal pair. It does not assert that every zero-diagonal representative contains such a pair. For example, the cyclic representative A of an SBIBD(7 , 3, 1) defined by 
+
+Aij = 1 ⇐⇒ j − i (mod 7) ∈ { 1, 2, 4}
+
+has zero diagonal but no reciprocal pair, because {1, 2, 4} ∩ {− 1, −2, −4} = ∅ modulo 7. Hence this representative has threshold q∗(A, 2) = 2 = λ + 1 , although another zero-diagonal affinity labeling of the same SBIBD yields a representative with threshold 3.Proposition V.3 concerns the existence of a zero-diagonal affinity labeling whose representative attains the upper endpoint. Changing the point and block labels independently preserves the SBIBD but need not preserve the zero diagonal. A simultaneous node relabeling A 7 → ΠAΠT, where Π is a permutation matrix, preserves both the zero diagonal and the existence or nonexistence of a private target permutation, so it cannot create one in a fixed representative. The matching construction instead chooses a different affinity labeling whose representative remains zero-diagonal. Combining Corollary V.2 and Proposition V.3, for fixed p ≥ 3 and λ and all sufficiently large feasible k,every existing SBIBD admits a zero-diagonal affinity labeling whose representative A′ satisfies q∗(A′, p ) = 
+
+λ(p−1)+2 . This is still not a statement that every fixed zero-diagonal representative attains that endpoint. The threshold therefore depends on local incidence structures that are not determined by the parameters 
+
+(v, k, λ ) alone. IEEE TRANSACTIONS ON INFORMATION THEORY 18 
+
+VI. D ISCUSSION 
+
+This section discusses three aspects of the generalized stripeless erasure coding scheme studied in this paper, i.e., parameter flexibility relative to Nos, the selection of SBIBDs and their affinity labelings, and the resulting failure tolerance and redundancy. Compared to Nos, our construction provides more flexible parameter choices. For a suitable SBIBD representative A, the required replica count can be reduced by one. 
+
+A. Parameter flexibility beyond Nos 
+
+Nos uses an SBIBD with λ = 1 [1]. The SBIBD identity then reduces to 
+
+v = k(k − 1) + 1 ,
+
+which restricts the admissible combinations of the cluster size v and the number k of admissible target nodes. Theorem III.1 confirms the Nos sufficient count 
+
+q = p + 1 
+
+for p ≥ 2 under k ≥ p + 1 . For p = 1 , the exact count is q = 1 .Allowing any admissible value of λ changes the SBIBD identity to 
+
+v = k(k − 1) 
+
+λ + 1 .
+
+This provides more flexibility in choosing the cluster size v and the number of admissible target nodes 
+
+k. For example, an SBIBD(11 , 5, 2) exists, whereas no SBIBD(11 , k, 1) exists because k2 − k + 1 = 11 
+
+has no integral solution [12]. For p = 2 , Theorem III.1 applies to the former design with q = 4 .This additional parameter flexibility involves a tradeoff. For fixed k, a larger value of λ reduces the value of v permitted by the design identity, but increases the sufficient replica count 
+
+q = λ(p − 1) + 2 .
+
+For prescribed v and p, the parameters must therefore satisfy 
+
+v = k(k − 1) 
+
+λ + 1 , k ≥ q, 
+
+and an SBIBD with these parameters must exist. 
+
+B. Selecting a design and an affinity labeling 
+
+The results in Sections IV and V provide criteria for selecting an SBIBD and its affinity labeling when the goal is to minimize the replica threshold. The selection has two levels. The parameters and the underlying block design determine the admissible incidence structure. The affinity labeling then determines which points and blocks represent the same storage nodes. Consequently, matrices obtained from different zero-diagonal affinity labelings of the same SBIBD may have different replica thresholds. For p = 2 , a zero-diagonal representative without a reciprocal pair is preferable whenever one exists. Proposition IV.2 gives 
+
+q∗(A, 2) = λ + 1 
+
+for such a representative, compared with 
+
+q∗(A, 2) = λ + 2 
+
+when a reciprocal pair exists. IEEE TRANSACTIONS ON INFORMATION THEORY 19 
+
+For p ≥ 3, the structure that attains the sufficient endpoint is a pairwise separated set of size p that admits a private target permutation. If some such set exists, Proposition IV.5 gives 
+
+q∗(A, p ) = λ(p − 1) + 2 .
+
+If pairwise separated sets of size p exist but none admits a private target permutation, then 
+
+q∗(A, p ) = λ(p − 1) + 1 .
+
+Choosing an underlying design with no pairwise separated set of size p is another sufficient way to reduce the replica thresholds. In this case, Proposition IV.4 gives 
+
+q∗(A, p ) ≤ λ(p − 1) + 1 .
+
+When λ = 1 , this bound is exact and gives q∗(A, p ) = p.In particular, Nos uses λ = 1 and the general sufficient replica count q = p + 1 for p ≥ 2. Whenever a suitable zero-diagonal representative is available, the structural refinements developed above reduce this count by one, from p + 1 to p. For p = 2 , this reduction is obtained by choosing a representative without a reciprocal pair. For p ≥ 3, it is obtained by choosing a representative in which no pairwise separated set of size p admits a private target permutation. An underlying design with no pairwise separated set of size p is another way to ensure the latter condition. In either case, the amortized parity storage per primary object decreases from (p + 1) /k to p/k .
+
+C. Failure tolerance and redundancy 
+
+For fixed SBIBD parameters (v, k, λ ), the largest number of node failures certified by Theorem III.1 is 
+
+puniversal = max 
+
+
+
+1,
+
+k − 2
+
+λ
+
+
+
++ 1 
+
+
+
+.
+
+Each data object contributes to q parities, and every parity combines k objects. Since the temporary replicas are deleted after parity formation, the amortized persistent parity storage per primary object is 
+
+qk .
+
+Including the primary copy gives the total storage ratio 
+
+1 + qk .
+
+The transmission cost of encoding is q replicas per object. Theorem III.1 gives the universally sufficient ratio of parity storage 
+
+ηsuff =
+
+(
+
+1/k, p = 1 ,
+
+[λ(p − 1) + 2] /k, p ≥ 2.
+
+For a fixed representative A and a failure tolerance target p, using the exact threshold changes this ratio to q∗(A, p )
+
+k .
+
+A reduction of one replica in the replica threshold reduces the encoding traffic by one replica per object and at the same time reduces the persistent ratio of parity storage by 1/k .IEEE TRANSACTIONS ON INFORMATION THEORY 20 
+
+VII. C ONCLUSION 
+
+This paper studied the recovery threshold of SBIBD based stripeless erasure coding. We refined the sufficient recovery guarantee by obtaining the exact replica count for p = 1 , identifying direct recovery for p = 2 , and making the two round recovery structure explicit for p ≥ 3. The resulting guarantee applies uniformly to all legal object placements. We then investigated when the universal sufficient replica count can be reduced. By relating the recovery threshold to structural properties of a fixed SBIBD representative, we obtained exact thresholds for several classes. The exact threshold remains open when p ≥ 3, λ > 1, and the fixed representative A contains no pairwise separated set of size p. This case appears to depend on finer incidence information that is not captured by the present structures, and we leave its exact characterization as an open problem. Finally, we studied the realization of the structural conditions used in the threshold analysis. The existence and relabeling results connect the theoretical classification with the selection of SBIBDs and affinity labelings for coding applications. REFERENCES 
+
+[1] J. Gao, J. Shu, B. Yan, Y. Zhang, and K. Huang, “Stripeless data placement for Erasure-Coded In-Memory storage,” in 19th USENIX Symposium on Operating Systems Design and Implementation (OSDI 25) , 2025, pp. 821–838. [2] X. Li, G. Luo, Y. Zhang, Y. Zhao, and J. Wang, “FLESC: Flexible stripeless erasure coding scheme for in-memory storage systems,” in Proceedings of the International Conference on Web and Big Data , 2026, to appear. [3] K. J. C. Smith, “An application of incomplete block designs to the construction of error-correcting codes,” Institute of Statistics, University of North Carolina, Chapel Hill, NC, USA, Mimeo Series 587, 1968. [4] Y. Kou, S. Lin, and M. P. C. Fossorier, “Low-density parity-check codes based on finite geometries: A rediscovery and new results,” 
+
+IEEE Transactions on Information Theory , vol. 47, no. 7, pp. 2711–2736, 2001. [5] C. Tian, V. Aggarwal, and V. A. Vaishampayan, “Exact-repair regenerating codes via layered erasure correction and block designs,” in 
+
+2013 IEEE International Symposium on Information Theory . IEEE, 2013, pp. 1431–1435. [6] C. Tian, B. Sasidharan, V. Aggarwal, V. A. Vaishampayan, and P. V. Kumar, “Layered exact-repair regenerating codes via embedded error correction and block designs,” IEEE Transactions on Information Theory , vol. 61, no. 4, pp. 1933–1947, 2015. [7] S. El Rouayheb and K. Ramchandran, “Fractional repetition codes for repair in distributed storage systems,” in 2010 48th Annual Allerton Conference on Communication, Control, and Computing . IEEE, 2010, pp. 1510–1517. [8] O. Olmez and A. Ramamoorthy, “Fractional repetition codes with flexible repair from combinatorial designs,” IEEE Transactions on Information Theory , vol. 62, no. 4, pp. 1565–1591, 2016. [9] M. Holland and G. A. Gibson, “Parity declustering for continuous operation in redundant disk arrays,” in Proceedings of the 5th International Conference on Architectural Support for Programming Languages and Operating Systems , 1992, pp. 23–35. [10] S. Rukavina and V. D. Tonchev, “Symmetric 2-(36 , 15 , 6) designs with an automorphism of order two,” Journal of Combinatorial Designs , vol. 32, no. 10, pp. 606–624, 2024. [11] C. C. Lindner and C. A. Rodger, Design Theory , 2nd ed. Boca Raton: Chapman and Hall/CRC, 2017. [12] C. J. Colbourn and J. H. Dinitz, Eds., Handbook of Combinatorial Designs , 2nd ed. Chapman & Hall/CRC, 2006. [13] N. Kaplan, S. Kimport, R. Lawrence, L. Peilen, and M. Weinreich, “Counting arcs in projective planes via Glynn’s algorithm,” Journal of Geometry , vol. 108, no. 3, pp. 1013–1029, 2017. [14] S. M. Cioab˘ a, J. Koolen, and W. Li, “Max-cut and extendability of matchings in distance-regular graphs,” European Journal of Combinatorics , vol. 62, pp. 232–244, 2017. IEEE TRANSACTIONS ON INFORMATION THEORY 21 
+
+APPENDIX 
+
+The appendix gives supplementary proofs and explicit representatives referenced in the main text. 
+
+A. Existence of zero-diagonal representatives 
+
+Proposition A.1. Every SBIBD( v, k, λ ) admits a zero-diagonal representative. Proof. Let A be an arbitrary representative of the given SBIBD. Let R and C denote the row and column index sets respectively, with 
+
+R = C = {0, 1, · · · , v − 1}.
+
+They are regarded as two distinct parts of a bipartite graph. Define its edge set by 
+
+E := {(i, j ) ∈ R × C : Aij = 0 }.
+
+Every row and column of A contains exactly k entries equal to 1 and v − k entries equal to 0, thus every vertex has degree 
+
+d = v − k > 0.
+
+For a subset of row indices S ⊆ R, let N (S) ⊆ C be the set of column indices adjacent to at least one element of S. Every row vertex in S has degree d, and all its edges end in N (S), so there are exactly 
+
+d|S| edges between S and N (S). Each column vertex in N (S) is incident with at most d of these edges, so 
+
+d|S| ≤ d|N (S)|.
+
+Since d > 0, we obtain |S| ≤ | N (S)|. Thus Hall’s condition holds for every S ⊆ R. Since |R| = |C| = v,Hall’s theorem gives a perfect matching for the bipartite graph. Consequently, there is a bijection 
+
+π : R → C
+
+such that 
+
+Ai,π (i) = 0 for every i ∈ R. 
+
+Relabel old column π(i) as column i, and define 
+
+A′ 
+
+> hi
+
+:= Ah,π (i).
+
+Then 
+
+A′ 
+
+> ii
+
+= Ai,π (i) = 0 for every i ∈ R, 
+
+so A′ is a zero-diagonal representative of the SBIBD. 
+
+B. An obstruction from a reciprocal pair for p = 2 
+
+The complement of the Fano plane has the following zero-diagonal SBIBD(7 , 4, 2) representative [12]: 
+
+A =
+
+
+
+0 1 1 1 0 0 10 0 1 0 1 1 10 1 0 1 1 1 01 1 1 0 1 0 01 1 0 0 0 1 11 0 0 1 1 0 11 0 1 1 0 1 0
+
+
+
+.
+
+Every row and column contains exactly four entries equal to 1, and any two distinct rows contain 1’s in exactly two common columns. In particular, Stgt (0) = {1, 2, 3, 6} and Stgt (3) = {0, 1, 2, 4}, so B03 =
+
+{1, 2} and nodes 0, 3 form a reciprocal pair. Choose an object x on node 0 with targets {1, 2, 3} and an object y on node 3 with targets {0, 1, 2}. At nodes 1 and 2, place x and y in the same parity. If nodes 0
+
+and 3 fail, the parities selected at nodes 3 and 0, respectively, are lost, whereas both surviving equations reduce to x ⊕ y = γ. Their coefficient matrix has rank one. Thus q = 3 = λ + 1 fails, and Proposition IV.2 gives q∗(A, 2) = 4 .IEEE TRANSACTIONS ON INFORMATION THEORY 22 
+
+C. A representative with a private target permutation on a pairwise separated triple 
+
+The following is a zero-diagonal representative of an SBIBD(16 , 6, 2) :
+
+A =
+
+
+
+0 1 0 0 0 0 1 0 0 0 1 1 1 0 1 0 0 0 0 0 1 0 0 1 1 0 0 1 1 0 0 1 0 0 0 1 0 0 0 0 0 1 0 0 1 1 1 1 1 0 1 0 0 1 0 0 0 0 0 1 0 0 1 1 1 0 0 0 0 0 1 0 1 0 1 0 0 1 0 1 1 1 0 0 1 0 0 1 0 0 0 0 0 1 1 0 1 1 0 1 0 0 0 0 1 1 0 1 0 0 0 0 0 1 1 0 0 1 0 0 1 0 0 0 1 1 0 0 0 1 0 1 0 1 0 1 0 0 1 0 0 0 0 1 0 0 0 1 1 1 1 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 1 0 1 0 1 0 1 0 0 1 0 1 1 0 0 1 1 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 0 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 1 1 1 0 0 0 1 0 0 0 1 1 1 0 0 0 0 0 1 1 0 1 0 0 1 0 0 0 1 1 0 0 0 1 1 0 1 0 0 0 
+
+
+
+.
+
+A direct count shows that every row and column has weight 6, while any two distinct rows meet in exactly two columns. For F = {0, 1, 4}, the relevant target sets are 
+
+Stgt (0) = {1, 6, 10 , 11 , 12 , 14 },
+
+Stgt (1) = {4, 7, 8, 11 , 12 , 15 },
+
+Stgt (4) = {0, 6, 8, 10 , 13 , 15 }.
+
+Consequently, 
+
+B01 = {11 , 12 }, B 04 = {6, 10 }, B 14 = {8, 15 }.
+
+These three sets are disjoint, so F is pairwise separated. Moreover, 0 → 1 → 4 → 0 is a private target permutation of F , since A0,1 = A1,4 = A4,0 = 1 and dF (1) = dF (4) = dF (0) = 1 .
+
+To realize the obstruction at q = 5 = λ(p−1)+1 , choose objects x0, x 1, x 4 on nodes 0, 1, 4, respectively, with target sets 
+
+Tx0 = {1, 6, 10 , 11 , 12 },Tx1 = {4, 8, 11 , 12 , 15 },Tx4 = {0, 6, 8, 10 , 15 }.
+
+At each target in Bij , place xi and xj in the same parity, and fill the remaining parity positions with objects on alive primary nodes. Now fail the nodes in F . The three cycle parities, hosted at nodes 1, 4, 0,are lost. After the alive encodees have been subtracted, the six surviving equations have coefficient matrix 
+
+M =
+
+
+
+1 1 01 1 01 0 11 0 10 1 10 1 1
+
+
+
+, with columns indexed by (x0, x 1, x 4).
+
+Thus M · (1 , 1, 1) T = 0 and rank( M ) = 2 < 3, so the three lost objects are not uniquely determined. Therefore q = 5 fails, whereas Theorem III.1 gives recovery at q = 6 . Hence q∗(A, 3) = 6 .IEEE TRANSACTIONS ON INFORMATION THEORY 23 
+
+D. A relabeled representative with no private target permutation on any pairwise separated triple 
+
+We next relabel the columns of the same representative in Appendix C while keeping the row labels fixed. Define the permutation π by 
+
+ π(0) , π (1) , · · · , π (15)  = (2 , 3, 11 , 8, 4, 5, 7, 6, 9, 0, 10 , 1, 12 , 13 , 15 , 14) ,
+
+and let 
+
+A′ 
+
+> it
+
+:= Ai,π (t), for all i, t ∈ { 0, 1, · · · , 15 }.
+
+Direct check shows 
+
+Ai,π (i) = 0 , for every i ∈ { 0, 1, · · · , 15 },
+
+so A′ is also zero-diagonal. Since A′ is obtained by permuting the columns of A, it is another zero-diagonal representative of the same SBIBD(16 , 6, 2) .We next verify that no pairwise separated set of size 3 admits a private target permutation under A′.For a node set G, define its incidence degree with respect to A′ by 
+
+d′
+
+> G
+
+(t) := X
+
+> i∈G
+
+A′
+
+> it
+
+and also let 
+
+s(G) := |{ i ∈ G : some t ∈ G satisfies A′ 
+
+> it
+
+= 1 and d′
+
+> G
+
+(t) = 1 }| .
+
+A direct enumeration of the  16 3
+
+ = 560 node triples finds 240 pairwise separated triples. Among them, the numbers of triples with s(G) = 0 , s(G) = 1 , and s(G) = 2 are respectively 37 , 136 , 67 (37 + 136 + 67 = 240 ). In particular, no pairwise separated triple has s(G) = 3 . Since private targets belonging to different sources are necessarily distinct, a triple admits a private target permutation exactly when s(G) = 3 . Hence no pairwise separated triple under A′ admits such a permutation. Proposition IV.5 therefore gives 
+
+q∗(A′, 3) = λ(3 − 1) + 1 = 5 .
+
+The matrices A and A′ are two zero-diagonal representatives of the same SBIBD(16 , 6, 2) obtained from different affinity labelings, but 
+
+q∗(A, 3) = 6 , q ∗(A′, 3) = 5 .
+
+Thus the universal replica threshold depends on the affinity labeling as well, not only on the underlying SBIBD.
