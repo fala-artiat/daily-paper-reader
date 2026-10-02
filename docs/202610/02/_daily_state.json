@@ -1,0 +1,41 @@
+{
+  "date": "20261002",
+  "date_label": "",
+  "generated_at": "2026-10-02 22:35:57 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.01900v1",
+      "route": "202610/02/2610.01900v1-recovery-set-structures-and-service-rates-of-codes-obtained-by-the-plotkin-type-construction",
+      "title": "Recovery Set Structures and Service Rates of Codes Obtained by the Plotkin-type Construction",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "分布式存储中码的恢复集结构与服务速率",
+      "first_seen_at": "2026-10-02 22:35:57 UTC",
+      "updated_at": "2026-10-02 22:35:57 UTC"
+    },
+    {
+      "paper_id": "2610.01733v1",
+      "route": "202610/02/2610.01733v1-asymptotically-unit-rate-storage-codes-from-binary-bch-codes",
+      "title": "Asymptotically unit-rate storage codes from binary BCH codes",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "存储码从邻居恢复符号并纠错",
+      "first_seen_at": "2026-10-02 22:35:57 UTC",
+      "updated_at": "2026-10-02 22:35:57 UTC"
+    }
+  ]
+}

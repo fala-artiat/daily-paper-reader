@@ -1,0 +1,621 @@
+Title: Asymptotically unit-rate storage codes from binary BCH codes
+
+URL Source: https://arxiv.org/pdf/2610.01733v1
+
+Published Time: Fri, 02 Oct 2026 01:47:10 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 
+
+ARYEH LEV ZABOKRITSKIY (YOHANANOV) 
+
+Abstract. A storage code on a graph assigns a symbol to each vertex so that the symbol can be recovered from its neighbors. We prove that the binary full-parity storage codes on triangle-free coset graphs of primitive BCH codes have rate tending to one for every fixed error-correction capability of at least two. The conclusion also holds for an increasing error budget under an explicit growth condition. The proof bounds the binary rank of convolution matrices associated with polynomial maps. Low coordinate degree forces cancellation in the polynomial representing the image, and a polynomial rank bound converts this cancellation into a quantitative estimate for the storage rate. For the double-error-correcting family over 
+
+F2m , we prove that the storage deficiency is Θ(((1 + √5) /4) m). This refinement follows from an exact Fibonacci formula for a polynomial coefficient rank and a matching exponential lower bound after finite-field evaluation. 
+
+1. Introduction 
+
+A storage code on a graph is a collection of assignments of symbols to the vertices in which each symbol is determined by the symbols at neighboring vertices. The graph prescribes the available recovery sets, and the objective is to maximize the rate of the code. Complete graphs support rates tending to one through a single parity check. Requiring the graph to be triangle-free removes this construction and leads to a substantially different question. Barg and Zémor [2] studied binary full-parity storage codes on coset graphs of linear codes and constructed families with rates above one half. They also identified BCH and Reed– Muller codes as natural sources of further examples. Constructions yielding asymptotically unit-rate binary storage codes on triangle-free graphs were obtained by Golovnev and Ha-viv [6], Barg, Schwartz, and Yohananov [1], and Huang and Xiang [8]. Deng, Huang, Weng, and Xiang [4] proved that the family arising from the double-error-correcting BCH code has asymptotically unit rate, and studied further constructions with two coordinates over an extension field. Here we consider the primitive binary BCH code with designed distance 2 s + 1, whose parity-check columns can be written as (a, a 3, . . . , a 2s−1), a ∈ F∗ 
+
+> 2m
+
+.
+
+We prove that its coset graph supports a full-parity storage code of rate tending to one for every fixed s ≥ 2. More quantitatively, writing Rm,s for this storage rate and ds = 1+ ⌊log 2 s⌋,we obtain 1 − Rm,s ≤ 2 exp 
+
+(
+
+− m
+
+2sd 2
+
+> s
+
+)
+
+.
+
+The same estimate proves convergence to one whenever s = s(m) ≥ 2 and s(log( s + 1)) 2 =
+
+o(m). The underlying graphs are connected and triangle-free. The parameter s refers to the error-correction capability of the BCH code used to define the graph. 
+
+Key words and phrases. Storage codes, BCH codes, Cayley graphs, polynomial method.  
+
+> 1arXiv:2610.01733v1 [cs.IT] 1 Oct 2026 2ARYEH LEV ZABOKRITSKIY (YOHANANOV)
+
+The argument uses the Boolean algebraic degree of the parity-check columns. We establish a rank bound for convolution by the image of a polynomial map over F2 and apply it to the BCH power map. The key step is that low coordinate degrees force high-degree coefficients to vanish in the polynomial recording the parity of the fibres. The subsequent rank step is the polynomial rank argument of Croot, Lev, and Pach [3]. The relevant dimensions explain the scope of the application: for fixed s, the BCH syndrome space has dimension at most 
+
+sm , whereas the nonconstant quadratic evaluation map has target dimension m(m + 1) /2. For the double-error-correcting family we also determine the exponential order of the rank. With φ = (1 + √5) /2, its storage deficiency is Θ(( φ/ 2) m). The proof computes an exact Fibonacci formula for the coefficient rank of the polynomial used in [4], and derives matching exponential upper and lower bounds after evaluation over F2m . This sharpens the displayed rank estimate in that work, whose exponential base is 2 + √2 before normalization. A related open problem comes from the quadratic Reed–Muller construction proposed by Barg and Zémor [2, author version, Section 7.2, item 3], who left the determination of its storage-code rates open. We do not settle whether these rates tend to one. Instead, we identify the corresponding Cayley graph with the rank-one graph on symmetric binary matrices and express the unit-rate question as a binary matrix-rank problem in that setting. We also give an equivalent formulation through the intersection of the graph’s cut and cycle spaces. These connections offer further approaches to the Reed–Muller problem: rank and dimension estimates in these settings give storage-rate bounds, while storage-code estimates constrain the same algebraic and graph-theoretic objects. We first describe the storage construction and its convolution matrix. We then prove the polynomial rank bound and apply it to the BCH family. The double-error-correcting case receives a sharper analysis through its coefficient spaces. The final section gives these reformulations for the quadratic Reed–Muller family. 2. Storage codes and polynomial maps 
+
+The storage rate in the construction is determined by a binary matrix indexed by the vertices of a Cayley graph. We describe this matrix explicitly so that its rank can be estimated without computing the dimension of the original BCH code. Let G be a finite simple graph with vertex set V and adjacency matrix A(G). The binary full-parity storage code on G is 
+
+C(G) = ker F2 (I + A(G)) . (1) For every c ∈ C(G) and v ∈ V , the parity check at v gives 
+
+cv = ∑
+
+> u∈NG(v)
+
+cu.
+
+Thus each coordinate can be recovered from its neighbors. The rate of this particular code is 
+
+R(C(G)) = 1 − rank F2 (I + A(G)) 
+
+|V | . (2) This is the full-parity construction of [2, author version, Section 3]; the identity matrix supplies the symbol being recovered. For a binary vector space V and a set S ⊆ V \ { 0}, the Cayley graph Cay( V, S ) has vertex set V , with distinct vertices x, y adjacent when x + y ∈ S. It is connected precisely when S
+
+spans V . If H is a binary matrix whose distinct nonzero columns are the elements of S, the ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 3
+
+syndrome map identifies this graph with the coset graph of ker H, using im H as the vertex space. We will use connection sets parametrized by a map h : Fm 
+
+> 2
+
+→ FD 
+
+> 2
+
+. All sums in the following definition are in F2:
+
+Mh(x, y ) = ∑
+
+> a∈Fm
+> 2
+
+1{x + y = h(a)}, x, y ∈ FD 
+
+> 2
+
+. (3) When h is injective and h(0) = 0, this is exactly I + A(G) for G = Cay( FD 
+
+> 2
+
+, h (Fm 
+
+> 2
+
+) \ { 0}). For a general map, the entry records the parity of the number of preimages of x + y.Every function Fm 
+
+> 2
+
+→ F2 has a unique multilinear polynomial representation. Its Boolean algebraic degree is the degree of this representation. A coordinate degree bound for h is preserved by a binary linear change of coordinates in the target. In particular, one may replace a redundant target space by the span of the image: every linear coordinate on that span extends to a linear functional on the original target. Retaining a larger ambient space gives one identical connected component on each coset of the span. Both the rank of the full-parity matrix and its order are multiplied by the number of cosets. Thus its normalized rank, and hence the storage rate, agree with those of a single component. 3. A rank bound for polynomial maps 
+
+We now bound the rank of (3) in terms of the input dimension and coordinate degree of 
+
+h. The proof first represents the parity of each fibre by a polynomial of low degree. Splitting its monomials between the two matrix indices then bounds the rank. For an integer t, put 
+
+BD(t) = 
+
+> min( t,D )
+
+∑
+
+> j=0
+
+(Dj
+
+)
+
+,
+
+with BD(t) = 0 when t < 0. Thus BD(t) counts the squarefree monomials of degree at most 
+
+t in D variables. 
+
+Theorem 3.1. Let m, D, d ≥ 1 be integers, and let h : Fm 
+
+> 2
+
+→ FD 
+
+> 2
+
+have Boolean coordinate degrees at most d. Set k = ⌈m/d ⌉. If k > D , then Mh = 0 . If k ≤ D, then 
+
+rank F2 Mh ≤ BD
+
+(⌊ D − k
+
+2
+
+⌋) 
+
++ BD
+
+(⌈ D − k
+
+2
+
+⌉
+
+− 1
+
+)
+
+. (4) 
+
+In either case, 
+
+rank F2 Mh
+
+2D ≤ min 
+
+{ 12 , 2 exp 
+
+(
+
+− k2
+
+2D
+
+)} 
+
+. (5) 
+
+Proof. Write h = ( h1, . . . , h D) and define the multilinear polynomial 
+
+F (z) = ∑
+
+> a∈Fm
+> 2
+> D
+
+∏
+
+> i=1
+
+(1 + zi + hi(a)) . (6) For a fixed a, the product is one precisely when z = h(a). Hence Mh(x, y ) = F (x + y). For 
+
+S ⊆ { 1, . . . , D }, the coefficient of zS = ∏ 
+
+> i∈S
+
+zi in F is [zS ]F = ∑
+
+> a∈Fm
+> 2
+
+∏
+
+> i / ∈S
+
+(1 + hi(a)) . (7) 4 ARYEH LEV ZABOKRITSKIY (YOHANANOV) 
+
+The summand, viewed as a Boolean polynomial in a, has degree at most d(D − | S|). ABoolean polynomial of degree less than m sums to zero over Fm 
+
+> 2
+
+: each squarefree monomial of degree j < m takes the value one at 2 m−j points. It follows that (7) vanishes whenever 
+
+D − | S| < k . Consequently deg F ≤ D − k, and F = 0 if k > D .Suppose k ≤ D, and put 
+
+u = 
+
+> ⌊
+
+D − k
+
+2
+
+> ⌋
+
+, v = 
+
+> ⌈
+
+D − k
+
+2
+
+> ⌉
+
+− 1.
+
+Every monomial xAyB in F (x + y) satisfies |A| + |B| ≤ D − k. Group those with |A| ≤ u by their x-monomial. Every remaining monomial has |B| ≤ v, so these can be grouped by their 
+
+y-monomial. Thus 
+
+F (x + y) = ∑
+
+> |A|≤ u
+
+xApA(y) + ∑
+
+> |B|≤ v
+
+qB (x)yB
+
+for suitable polynomials pA, q B . Each summand, evaluated on all pairs ( x, y ), gives a matrix of rank at most one. Rank subadditivity proves (4). This is the polynomial separation used in the proof of [3, Lemma 1]. For the exponential estimate, let X have binomial distribution with parameters D and 1 /2. Since v ≤ u ≤ (D−k)/2, the right side of (4), divided by 2 D, is at most 2 Pr( X−D/ 2 ≤ − k/ 2). For t > 0, the exponential Markov inequality gives Pr( X − D/ 2 ≤ − k/ 2) ≤ e−tk/ 2 cosh( t/ 2) D ≤ exp( −tk/ 2 + Dt 2/8) .
+
+Here log cosh w ≤ w2/2, which follows by integrating tanh w ≤ w for w ≥ 0. Taking t = 2 k/D 
+
+gives the exponential term in (5). Finally, for b ∈ FD 
+
+> 2
+
+, let Tb be the translation matrix acting on functions by ( Tbf )( x) = 
+
+f (x + b). Then Mh = ∑ 
+
+> a
+
+Th(a). These matrices commute and T 2 
+
+> b
+
+= I, so in characteristic two 
+
+M 2 
+
+> h
+
+= ∑
+
+> a∈Fm
+> 2
+
+T 2 
+
+> h(a)
+
+= 2 mI = 0 .
+
+Therefore im Mh ⊆ ker Mh and rank Mh ≤ 2D−1. □
+
+The exact rounding in (4) is useful at the endpoints. When k = D, it gives rank at most one. This is attained by h(a) = a with D = m and d = 1, for which Mh is the all-one matrix. 
+
+Corollary 3.2. For a sequence of maps as in Theorem 3.1, the normalized rank 2−D rank Mh
+
+tends to zero if 
+
+m2
+
+d2D −→ ∞ .
+
+If the maps are injective and send zero to zero, the corresponding full-parity storage rates tend to one. Proof. The hypothesis implies k2/D → ∞ . Apply (5), followed by (2) in the injective case. 
+
+□
+
+4. BCH coset graphs 
+
+For BCH parity checks, the number of binary output coordinates grows linearly with the extension degree when the error budget is fixed. This allows the rank estimate to give asymptotically unit storage rate. Let m ≥ 1 and s ≥ 2 be integers, put q = 2 m, and suppose that 2 s + 1 ≤ q − 1. Define 
+
+hs : Fq −→ Fsq, hs(a) = ( a, a 3, . . . , a 2s−1). (8) ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 5
+
+After choosing a binary basis of Fq, use the columns hs(a) for a̸ = 0 as a binary parity-check matrix Hm,s . Its kernel is the primitive narrow-sense binary BCH code Bm,s of designed distance 2 s+1. Indeed the odd power checks imply all power checks with exponents 1 , . . . , 2s,since an even power sum is the square of the power sum with half its exponent. For completeness, these checks exclude every nonzero codeword of weight at most 2 s. If such a word had support a1, . . . , a w, then 
+
+> w
+
+∑
+
+> i=1
+
+aji = 0 , 1 ≤ j ≤ w. 
+
+The matrix ( aji )1≤j,i ≤w is invertible: its determinant is the product of the nonzero ai and the Vandermonde determinant on the distinct ai. This contradicts its annihilating the all-one vector. Thus Bm,s corrects at least s errors. Let 
+
+Vm,s = span F2 {hs(a) : a ∈ Fq}, Dm,s = dim F2 Vm,s ,
+
+and define 
+
+Gm,s = Cay( Vm,s , h s(F∗ 
+
+> q
+
+)) , Cm,s = C(Gm,s ). (9) The graph is connected by its definition, and Dm,s ≤ sm . Its degree equals the length q − 1of the seed code Bm,s , whereas the storage code has length 2 Dm,s .
+
+Theorem 4.1. For s ≥ 2 and 2s + 1 ≤ 2m − 1, the graph Gm,s is triangle-free and 
+
+1 − R(Cm,s ) ≤ 2 exp 
+
+(
+
+− m
+
+2s(1 + ⌊log 2 s⌋)2
+
+)
+
+. (10) 
+
+Consequently R(Cm,s ) → 1 as m → ∞ for every fixed s ≥ 2. The same conclusion holds for 
+
+s = s(m) ≥ 2 satisfying s(log( s + 1)) 2 = o(m).Proof. The first coordinate in (8) makes hs injective, and hs(0) = 0. A triangle in Gm,s would give distinct nonzero a, b, c with hs(a) + hs(b) + hs(c) = 0. The first two coordinates imply 
+
+c = a + b and 0 = a3 + b3 + ( a + b)3 = ab (a + b),
+
+which is impossible. For a nonnegative integer e, write wt 2(e) for the number of ones in its binary expansion. The map a 7 → ae is a product of wt 2(e) Frobenius maps. Each Frobenius map is F2-linear, and field multiplication is bilinear over F2. Thus its binary coordinate degrees are at most wt 2(e). It follows that the coordinate degrees of hs are at most 
+
+ds = max  
+
+> 1≤j≤s
+
+wt 2(2 j − 1) = 1 + ⌊log 2 s⌋.
+
+To verify the equality, write 2 r ≤ s < 2r+1 . The exponent 2 r+1 − 1 occurs and has r + 1 ones; every integer with at least r + 2 ones is at least 2 r+2 − 1 > 2s − 1. Pass to binary coordinates on Vm,s . The coordinate degree bound is unchanged. Equations (3) and (9) identify Mhs with I + A(Gm,s ), and Theorem 3.1 gives 1 − R(Cm,s ) ≤ 2 exp 
+
+(
+
+− ⌈m/d s⌉2
+
+2Dm,s 
+
+)
+
+≤ 2 exp 
+
+(
+
+− m
+
+2sd 2
+
+> s
+
+)
+
+.
+
+This proves (10). For fixed s the exponent tends to −∞ . Under the stated growth condition, 
+
+sd 2 
+
+> s
+
+= o(m), so the same argument applies. That condition also gives s = o(m), ensuring 2s + 1 ≤ 2m − 1 for all sufficiently large m. □6 ARYEH LEV ZABOKRITSKIY (YOHANANOV) 
+
+For s = 2, the construction is the BCH family treated in [4]. For s = 3, the map is (a, a 3, a 5), its coordinate degrees are at most two, and (10) gives 1 − R(Cm, 3) ≤ 2e−m/ 24 .
+
+The argument applies uniformly to all the odd power checks in (8); it uses an upper bound on the rank of the storage matrix rather than an exact rank formula. 5. Fibonacci ranks for the double-error-correcting family 
+
+The general degree estimate proves convergence of the rate for every fixed error budget. For two errors, a more detailed analysis determines its exponential order. We use the polynomial representation from [4, Section II], and compute its coefficient rank by tracking an intersection of coefficient spaces. For m ≥ 1, put q = 2 m and let ̂ Gm = Cay( F2 
+
+> q
+
+, {(a, a 3) : a ∈ F∗ 
+
+> q
+
+}), with adjacency matrix 
+
+Am. For the admissible two-error parameters, its connected components are copies of the graph Gm, 2 defined in (9). The rank of I + Am also occurs in the theory of almost perfect nonlinear (APN) functions. For f : Fq → Fq, put Γ f = {(a, f (a)) : a ∈ Fq}. The binary incidence rank of the points of 
+
+F2 
+
+> q
+
+and the translates of Γ f is called the Γ-rank of f ; see [5, Section 2] and [9, Section 3.3]. Indexing the blocks by all translations, the incidence entry for point ( x, b ) and block Γ f +( y, c )is one precisely when b + c = f (x + y). For the Gold function f (a) = a3, this is exactly the matrix I + Am. Repeated blocks, if any, do not change its rank. Thus the evaluated-rank bounds below also give bounds on this established invariant of a 7 → a3.Small-dimensional values of the Γ-rank of a 7 → a3 were tabulated by Edel and Pott [5, Tables 3–4]. The bounds below determine its exponential order as the extension degree tends to infinity. As ordinary polynomials, also allowing m = 0, set 
+
+d(x, u ; y, v ) = x2y + xy 2 + u + v, Pm = d 2m−1 (m ≥ 0) .
+
+For m ≥ 1 and vertices ( x, b ), (y, c ) of ̂ Gm, membership of their difference in {(a, a 3) : a ∈ Fq}
+
+is the equation b + c + ( x + y)3 = 0. The bijective row and column substitutions u = b + x3,
+
+v = c + y3 change its left side to d(x, u ; y, v ). Thus I + Am is permutation equivalent to the evaluation of 1 + Pm.We first compute the ordinary coefficient rank. Let Km be the coefficient matrix of Pm,with rows indexed by monomials in ( x, u ) and columns by monomials in ( y, v ), and put 
+
+rm = rank F2 Km, as in [4, Definition 4]. These are ordinary polynomial coefficients, before reduction by finite-field identities. Write f0 = 0, f1 = 1, and fj+2 = fj+1 + fj for the Fibonacci numbers. 
+
+Theorem 5.1. For every m ≥ 0,
+
+rm = 2 mfm+2 . (11) 
+
+Equivalently, r0 = 1 , r1 = 4 , and rm+1 = 2 rm + 4 rm−1 for m ≥ 1.Proof. We regard coefficient vectors as elements of E = F2[x, u ], with its monomial basis, and identify the column variables ( y, v ) with ( x, u ). Each Km has finite support and is symmetric. Let X be multiplication by x on E; its transpose in the monomial basis deletes one x when the exponent is positive and otherwise gives zero. Products involving Km have finite support, so their ranks can be computed after finite zero padding. For a subspace W ⊆ E, write 
+
+W [2] = {w2 : w ∈ W }.ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 7
+
+Fix m ≥ 1 and abbreviate K = Km−1, U = im K, and W = U + xU . The identity 
+
+Pm = dP 2 
+
+> m−1
+
+splits the coefficient matrix according to the parities of the exponents. In the order (0 , 0) , (0 , 1) , (1 , 0) for both pairs of variables, deleting the zero (1 , 1) rows and columns and dividing the even parts of exponents by two gives 
+
+Km =
+
+
+
+0 K XK K 0 0
+
+KX T 0 0
+
+ . (12) The two nonzero rectangular blocks are transposes and have disjoint row and column sup-ports. Hence 
+
+rm = 2 rank[ K XK ] = 2 dim W. (13) To obtain a recurrence, we determine how much the new image intersects its translate by 
+
+x. Define 
+
+L = {(Kc, KX Tc) : c ∈ E} ⊆ U ⊕ U, Z = {g : (0 , g ) ∈ L}.
+
+Transposing [ K XK ] shows that dim L = dim W . The projection of L onto its first coordi-nate is onto U , and therefore dim Z = dim W − dim U. (14) Returning from the parity blocks to polynomial coordinates, (12) identifies the image Um =im Km as 
+
+Um = W [2] ⊕ { uf 2 + xg 2 : ( f, g ) ∈ L}. (15) The two summands have different exponent parities, as do the two displayed coordinates inside the second summand. The key step behind the Fibonacci recurrence is the following intersection identity: 
+
+Um ∩ xU m = ( xZ )[2] ⊕ xZ [2] . (16) In an equality between an element of (15) and x times another such element, the terms with odd u-exponent have opposite x-parities. Their f -coordinates must therefore both vanish. The remaining spaces on the two sides are 
+
+W [2] ⊕ xZ [2] , xW [2] ⊕ x2Z[2] .
+
+Their even-x intersection is x2Z[2] = ( xZ )[2] , since xZ ⊆ W , and their odd-x intersection is 
+
+xZ [2] , since Z ⊆ W . Both inclusions follow from Z ⊆ U . This proves (16), including that every vector in its right side belongs to both spaces. Squaring is injective and F2-linear. Equations (13)–(16) consequently give dim( Um ∩ xU m) = 2 dim Z = rm − 2rm−1.
+
+Applying (13) at the next index yields 
+
+rm+1 = 2 dim( Um + xU m) = 4 rm − 2( rm − 2rm−1) = 2 rm + 4 rm−1.
+
+Finally P0 = 1 gives r0 = 1, and the four terms of d give r1 = 4. The Fibonacci recurrence proves (11). □
+
+Evaluation can identify different monomials, so the rank of the storage matrix requires a separate estimate. 8 ARYEH LEV ZABOKRITSKIY (YOHANANOV) 
+
+Theorem 5.2. For every m ≥ 1,
+
+2mfm+1 ≤ rank F2 (I + Am) ≤ 2mfm+2 . (17) 
+
+Consequently, with φ = (1 + √5) /2,
+
+rank F2 (I + Am) = Θ((1 + √5) m), 1 − R(Cm, 2) = Θ(( φ/ 2) m).
+
+The storage-rate assertion is taken as m → ∞ in the admissible BCH range. Proof. By the preceding identification, it remains to bound the rank of the evaluated matrix of 1 + Pm. Write 
+
+Em = (Pm(x, u ; y, v ))
+
+> (x,u ),(y,v )∈F2
+> q
+
+for the binary evaluation matrix of Pm. Let J sum rows over u ∈ Fq with x fixed and repeat that sum at each value of u. Then J2 = qJ = 0, so I + J is invertible over F2. For every fixed x, y, v , exactly q − 1 choices of u make d̸ = 0, and hence the sum over u of Pm = dq−1
+
+is one. Thus (I + J)Em = Em + 11 T,
+
+where 1 is the all-one vector indexed by F2 
+
+> q
+
+. The right side is the evaluation matrix of 1 + Pm,so it has the same binary rank as Em. Evaluation factors through Km, and extension of scalars preserves the rank of a binary matrix. This proves the upper bound in (17) from Theorem 5.1. For the lower bound, set Q = 2 m−1, so that q = 2 Q. Frobenius gives 
+
+Pm = Pm−1(xqyQ + xQyq + uQ + vQ).
+
+As a function on F4 
+
+> q
+
+, this is represented by the reduction of 
+
+Pm−1(xy Q + xQy + uQ + vQ) (18) modulo xq = x and yq = y. The individual x, y degrees of Pm−1 are at most 2( Q − 1) = q − 2, and its u, v degrees are at most Q − 1. Thus Pm−1 itself requires no reduction over Fq, and the u- and v-degrees in (18) stay below q.Use the reduced row basis xiuj and column basis yivj , with 0 ≤ i, j < q . Partition rows according to j < Q or j ≥ Q, and do the same for the v-exponent in the columns. The cross terms xy Q + xQy affect only the upper-left block, even after reduction. The terms uQ and 
+
+vQ give the two off-diagonal blocks, each an embedded copy K of the ordinary matrix Km−1.The lower-right block is zero. The reduced coefficient matrix therefore has the form 
+
+> (
+
+B KK 0
+
+> )
+
+.
+
+Its rank is at least 2 rank K: selecting a nonsingular minor of K in both off-diagonal posi-tions gives a nonsingular minor of twice that order, independently of B. Theorem 5.1 gives 2 rank K = 2 mfm+1 .Evaluation of all monomials of degree below q at the q distinct field elements is invertible, and the two-variable evaluation matrices are tensor products of these Vandermonde matrices. Thus reduced coefficient rank equals evaluated rank over Fq; this is the evaluation principle in [4, Lemma 24]. The evaluated entries of Pm are binary, so their rank is unchanged on extending F2 to Fq. This proves the lower bound, including m = 1, where P0 = 1. The asymptotic statements now follow from fm+j = Θ( φm) for fixed j, division by q2, and the component normalization described in Section 2. □ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 9
+
+The estimate in [4, Theorems 2 and 9] uses the number of supported row monomials, whose exponential growth is (2 + √2) m. Theorem 5.1 instead computes the rank of the corresponding coefficient matrix, with growth (1 + √5) m. The lower bound in Theorem 5.2 shows that this latter base is also the exact exponential order of the evaluated storage-matrix rank. In terms of the ambient graph order N = q2, the deficiency is Θ( N −ε/ 2), where 
+
+ε = log 2(2 /φ ) = 0 .3057580863 . . . .6. Quadratic evaluation and symmetric matrices 
+
+We now leave the BCH family and turn to the quadratic Reed–Muller construction pro-posed by Barg and Zémor [2, author version, Section 7.2, item 3]. They left the determination of the associated storage-code rates open. The BCH argument does not establish convergence to one for this family, whose target dimension is quadratic rather than linear in the input dimension. Our purpose here is to express the remaining question in terms of symmetric binary matrices and, subsequently, the graph’s cut and cycle spaces, so that information in either setting can be transferred to the storage problem. The coordinates of the quadratic evaluation map are the nonconstant squarefree monomials of degree at most two, namely xi and xixj with i < j . These are the quadratic Reed–Muller evaluation coordinates after removing the constant coordinate. They can be assembled into a single symmetric matrix, which gives the desired reformulation. For m ≥ 1, let Xm = Sym m(F2), of dimension D = m(m + 1) /2, and define νm : Fm 
+
+> 2
+
+→
+
+Xm by νm(x) = xx T. Let Gsym  
+
+> m
+
+have vertex set Xm, with distinct S, T adjacent when rank( S + T ) = 1. This rank-one relation belongs to the translation association scheme of symmetric bilinear forms; see [10, Section 2]. All ranks of matrices with entries in F2 are taken over F2.
+
+Proposition 6.1. The graph Gsym  
+
+> m
+
+is the connected Cayley graph generated by νm(Fm 
+
+> 2
+
+\ { 0}).It has degree 2m − 1, is triangle-free, and its full-parity matrix is 
+
+Mνm (S, T ) = 1{rank( S + T ) ≤ 1} = (I + A(Gsym  
+
+> m
+
+)) 
+
+> S,T
+
+. (19) 
+
+Proof. The diagonal of xx T is x, and its strict upper-triangular entries are xixj . Thus νm
+
+is the quadratic evaluation map under the indicated linear identification of coordinates, and it is injective. Every nonzero symmetric matrix of rank one over F2 has the form xx T for a unique nonzero x: a rank-one matrix is uv T, and symmetry forces the nonzero vectors u, v 
+
+to be proportional, hence equal over F2. This proves (19) and the degree assertion. The generators span Xm. Indeed νm(ei) = Eii , and 
+
+νm(ei + ej ) + νm(ei) + νm(ej ) = Eij + Eji .
+
+For triangle-freeness, three distinct nonzero generators summing to zero would give νm(x) + 
+
+νm(y) = νm(z), with z = x + y by the diagonal coordinates. The remaining equation is 
+
+xy T + yx T = 0. If x, y are distinct nonzero binary vectors they are linearly independent; a linear functional taking the values one on x and zero on y, applied on the left, would give 
+
+yT = 0, a contradiction. □
+
+Theorem 3.1 applies with d = 2 and k = ⌈m/ 2⌉. Here k/ √D → 1/√2, and the exact binomial bound gives lim sup 
+
+> m→∞
+
+2−D rank Mνm ≤ 2Φ( −1/√2) = 0 .4795001222 . . . , (20) where Φ is the standard normal distribution function. To see this, standardize a binomial random variable with mean D/ 2 and standard deviation √D/ 2 in each of the two terms 10 ARYEH LEV ZABOKRITSKIY (YOHANANOV) 
+
+of (4). Both thresholds tend to −1/√2, so the central limit theorem gives (20). Thus this method yields a storage rate of at least 0 .5204998778 . . . − o(1) for the quadratic family. 
+
+Open question. Does the full-parity storage rate R(C(Gsym  
+
+> m
+
+)) tend to one as m → ∞ ?Equivalently, does the binary rank satisfy rank F2 (1{rank( S + T ) ≤ 1})S,T ∈Xm = o
+
+(
+
+2m(m+1) /2)
+
+. (21) The two ranks in this expression act on different spaces: S + T is an m × m matrix, while the matrix of indicators is indexed by all symmetric matrices. Formula (21) concerns linear dependence among these indicator rows. Counts of symmetric matrices by rank describe the connection relations but do not by themselves determine this binary rank. There is also an exact interpretation in terms of the cut and cycle spaces of the same graph. For any connected graph G on N vertices, let B be its binary incidence matrix, with rows indexed by edges and columns by vertices, and let B = im B ⊆ FE(G)2 be its cut space. Its orthogonal complement is the cycle space. If every vertex has odd degree, then 
+
+BTB = I + A(G), rank( I + A(G)) = N − 1 − dim( B ∩ B ⊥).
+
+The first identity follows by counting common incident edges. For the second, rank B = N −1by connectedness, and the kernel of BT restricted to im B is B ∩B ⊥. The intersection is called the bicycle space, and the second identity is the standard relation with binary Laplacian nullity; see, for example, the proof in [7, Proposition 2.11]. Accordingly, (21) asks whether its dimension is N − o(N ) for Gsym  
+
+> m
+
+. Theorem 4.1 already gives this conclusion for the BCH graphs in its stated parameter range. 7. Conclusions 
+
+The full-parity storage codes obtained from primitive binary BCH codes have asymptot-ically unit rate for every fixed error budget of at least two. A single bound for polynomial maps proves this statement and also permits an error budget that grows with the extension degree. The bound depends on the Boolean coordinate degree and the dimension of the syn-drome space, so it can be applied to other parametrized connection sets with these quantities under control. For the double-error-correcting family, the intersection of coefficient spaces gives an exact Fibonacci rank formula. The accompanying finite-field lower bound determines the expo-nential order of the storage deficiency, refining the qualitative unit-rate conclusion in this case. Determining the largest growth range of the BCH error budget that still gives asymp-totically unit rate remains an open direction. For quadratic Reed–Muller evaluation, the rank-one graph on symmetric binary matrices gives an exact formulation of the correspond-ing question. In that family the target dimension is quadratic in the input dimension, and a stronger rank argument is needed to reach asymptotically unit rate. 
+
+Declarations 
+
+The author received no funding for this work. The author declares no conflict of interest. 
+
+References       
+
+> [1] A. Barg, M. Schwartz, and L. Yohananov, Storage codes on coset graphs with asymptotically unit rate,
+> Combinatorica 44 (2024), 1193–1209. doi:10.1007/s00493-024-00114-2. [2] A. Barg and G. Zémor, High-rate storage codes on triangle-free graphs, IEEE Transactions on Information Theory 68 (2022), 7787–7797. doi:10.1109/TIT.2022.3191309. Author version: arXiv:2110.02378v2. ASYMPTOTICALLY UNIT-RATE STORAGE CODES FROM BINARY BCH CODES 11
+
+[3] E. Croot, V. F. Lev, and P. P. Pach, Progression-free sets in Zn 
+
+> 4
+
+are exponentially small, Annals of Mathematics 185 (2017), 331–337. doi:10.4007/annals.2017.185.1.7. [4] H. Deng, H. Huang, G. Weng, and Q. Xiang, The BCH family of storage codes on triangle-free graphs and its relation to R(3 , t ), IEEE Transactions on Information Theory 70 (2024), 6258–6268. doi:10.1109/TIT.2024.3396465. [5] Y. Edel and A. Pott, A new almost perfect nonlinear function which is not quadratic, Advances in Mathematics of Communications 3 (2009), 59–81. doi:10.3934/amc.2009.3.59. [6] A. Golovnev and I. Haviv, The (generalized) orthogonality dimension of (generalized) Kneser graphs: Bounds and applications, Theory of Computing 18 (2022), no. 22, 1–22. doi:10.4086/toc.2022.v018a022. [7] D. J. Hemmer, Billiard orbits in Young diagrams: medial links, bicycle spaces, and domino tilings, preprint (2026). arXiv:2609.16533v1. [8] H. Huang and Q. Xiang, Construction of storage codes of rate approaching one on triangle-free graphs, 
+
+Designs, Codes and Cryptography 91 (2023), 3901–3913. doi:10.1007/s10623-023-01278-6. [9] N. S. Kaleyski, Invariants for EA- and CCZ-equivalence of APN and AB functions, Cryptography and Communications 13 (2021), 995–1023. doi:10.1007/s12095-021-00541-8. [10] K.-U. Schmidt, Quadratic and symmetric bilinear forms over finite fields and their association schemes, 
+
+Algebraic Combinatorics 3 (2020), 161–189. doi:10.5802/alco.88. 
+
+Department of Computer Science, Tel-Hai University of Kiryat Shmona in the Galilee, Is-rael; and MIGAL—Galilee Research Institute, Israel 
+
+Email address : yuhanalev@telhai.ac.il

@@ -1,0 +1,2063 @@
+Title: Recovery Set Structures and Service Rates of Codes Obtained by the Plotkin-type Construction
+
+URL Source: https://arxiv.org/pdf/2610.01900v1
+
+Published Time: Fri, 02 Oct 2026 01:58:23 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+> 1
+
+# Recovery Set Structures and Service Rates of Codes Obtained by the Plotkin-type Construction 
+
+Priyanka Choudhary and Maheshanand Bhaintwal 
+
+Abstract 
+
+In distributed storage systems, redundancy enables a single data object to be reconstructed using several disjoint groups of servers. The resulting service rate region (SRR) captures all combinations of object request rates that the system can support simultaneously without overloading any individual server. We analyze the SRR of binary codes obtained via the Plotkin-type construction. We demonstrate that each recovery set for an information object of the Plotkin-type code Cp
+
+induces a corresponding recovery set for the same data object characterized by the underlying code C. Furthermore, by characterizing the recovery sets structure of Cp in terms of the recovery set structure of C, we identify the additional recovery sets introduced by this construction. Using the associated recovery hypergraphs, we establish bounds on the SRRs of Cp and iterated code Cpm in terms of the SRR of C. We consider the family of first-order binary Reed–Muller codes and show how the recovery structure, and consequently, the service rates of R (1 , m ) for arbitrary m can be recursively derived from a generator matrix of R (1 , 2) through our results for successive Plotkin-type constructions. 
+
+Index Terms 
+
+Erasure codes, hypergraphs, Plotkin construction, service rate region, recovery sets, Reed-Muller codes. 
+
+I. I NTRODUCTION 
+
+# THe increasing demand for concurrent data access in distributed storage systems (DSS) has motivated the study of coding schemes that can provide both reliability and efficient service. In this context, the service rate region (SRR) captures the collection of request rate vectors that a storage system can support simultaneously and therefore provides a natural way to quantify its service capability [2]. The SRR of a code characterizes the set of request rate vectors that can be simultaneously supported when the coordinates of a codeword are stored on individual servers. In this setting, a request for a data object may be served from any of its recovery sets, and the achievable service rates depend not only on the code parameters but also on the combinatorial structure of those sets. Consequently, understanding the recovery-set structure of a code is fundamental to analyzing its SRR. For linear codes, the SRR is closely tied to the combinatorial structure of their recovery sets and can be viewed as a convex polytope in Rk [2]. This connection has led to detailed studies of SRRs for several classes of codes, including MDS codes [1], [7], [13], binary simplex codes [9], [10], batch codes [3], Hamming codes [6], and first-order Reed– Muller codes [10]. The role of the structure of the dual of a code and its generator matrix in bounding achievable service rates was investigated in [4]. Related works have also explored bounds for the maximum achievable service rate for an individual data symbol using general linear coding schemes, and whether these bounds can be achieved when there are combinatorial designs in the supports of dual codewords [12], [15]. Despite these developments, determining the SRR becomes increasingly difficult as the recovery set structure grows in complexity, particularly when the recovery graphs/hypergraphs cannot be explicitly enumerated. Recently, Ly, Soljanin, and Lalitha [14] studied the recovery structure of Reed–Muller codes and obtained bounds on the maximum service rate of information symbols. Then, Yu et al. [5] refined the existing SRR analysis by providing an explicit characterization of the intersection patterns of recovery sets for high-order Reed–Muller codes. These results highlight the strong interplay between the algebraic structure of a code and its achievable service rates, and motivate further investigation into how specific code constructions transform recovery sets and, consequently, their SRRs. A parallel line of work addresses the code designing problem, i.e., constructing codes whose service regions attain given structural requirements or contain a specific demand vector [17], [18]. The hypergraph-based approach [13], [6] indicates that the collection of recovery sets associated with an information object naturally defines a recovery hypergraph. This representation provides a useful framework for studying the service capabilities of a code. In particular, matchings yield collections of pairwise disjoint recovery sets that can serve requests simultaneously, whereas fractional matchings allow recovery capacity to be distributed among intersecting recovery 
+
+The authors are with the Department of Mathematics, Indian Institute of Technology Roorkee, Roorkee 247667, India (e-mails: priyanka c@ma.iitr.ac.in, maheshanand@ma.iitr.ac.in). arXiv:2610.01900v1 [cs.IT] 1 Oct 2026 2
+
+sets. The corresponding fractional vertex cover problem, through linear programming duality, provides an equivalent characterization and useful upper bounds on the achievable service rates. What is largely absent from the literature is a complementary perspective: rather than computing the region of one code family at a time, one may ask how the region transforms when a standard code construction operator is applied to a code whose recovery structure or, consequently, the SRR is already known. The Plotkin, or (u | u + v), construction is the natural initial test case: it gives the elementary step in the recursive description of Reed–Muller codes and doubles the number of servers while adding only one new information object. Thus, any gain it offers reflects increased flexibility rather than improved storage efficiency. In this work, we investigate the effect of the Plotkin construction on the recovery structure and SRR of a code. The Plotkin construction considered here is a recursive construction that constructs a code of length 2n from two constituent codes, namely any arbitrary code C of length n and a repetition code of length n. We determine the minimal recovery sets for the information objects of the Plotkin-type code Cp = {(c, c) : c ∈ C} ∪ { (c, 1n + c) : c ∈ C} in terms of the recovery structure of that object in C. Our main structural result shows that the map Rp 7 → R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+sends every minimal recovery set corresponding to the generator matrix Gp to a recovery set corresponding to the generator matrix 
+
+G. Our work not only enumerates all recovery sets associated with Plotkin-type code but also determines bounds on the service rates of codes obtained through recursive applications of the Plotkin construction, and the resulting service rate region becomes explicitly computable. As an application, we examine the family of first-order binary Reed–Muller codes. The codes R (1 , m ) can be described recursively using the Plotkin construction, building upon lower-order codes of the family. Therefore, beginning with the recovery structure associated with a generator matrix of R (1 , 2) , our results provide a recursive method to identify the recovery sets and analyze the service rates of R (1 , m ) for arbitrary m ≥ 2.The remainder of the paper is organized as follows. Section II introduces the necessary preliminaries required to read this paper. In Section III, we characterize the recovery sets arising from the Plotkin-type construction and establish the relationship between the recovery structures of C and Cp. We give a complete characterization of the minimal recovery sets of an information object in Cp in terms of its recovery sets in the parent code C and the supports of codeowrds of C⊥. Section IV studies the corresponding recovery hypergraphs and derives bounds on the SRR through matching and fractional covering techniques. Starting from an optimal fractional vertex cover and an optimal fractional matching of the recovery hypergraph associated with C, we derive bounds on the fractional vertex cover number and matching numbers of the corresponding hypergraph for Cp, and thereby bounds on the service rates of the associated data symbols. Furthermore, we recursively define the code Cpm and derive bounds on the SRR of this code as well. Within this section, we apply these results to first-order binary Reed–Muller codes, providing a recursive characterization of their service rates starting from R (1 , 2) . Finally, Section V concludes the paper. II. P RELIMINARIES 
+
+In this section, we present the notation and terminology used throughout the paper. We first recall the basic notions of linear codes, and then introduce recovery sets and their associated hypergraph representation. Next, we recall the definition of the service rate region of a coded distributed storage system. Finally, we describe the Plotkin-type construction examined in this work, along with the corresponding generator matrix. 
+
+A. Linear Codes 
+
+For positive integers a and b with a ≤ b, let [a, b ] = {a, a +1 , . . . , b }, and, in particular, let [1 , n ] = [ n] = {1, 2, . . . , n }.
+
+Let q be a prime power and let Fq denote the finite field with q elements. The all-zero and all-one vectors of length n
+
+are denoted by 0n and 1n, respectively. The i-th standard basis vector of Fkq is denoted by ei. For a set S, |S| denotes the cardinality of S.A q-ary linear [n, k, d ] code C is a k-dimensional subspace of Fnq with minimum Hamming distance d. A k × n matrix 
+
+G ∈ Fk×nq of rank k whose rows form a basis of C is called a generator matrix of C. For an information (message) vector x = ( x1, . . . , x k) ∈ Fkq , the corresponding codeword in C is c = u · G, where (·) denotes the usual Euclidean product. We denote the j-th column of G by gj , j ∈ [n]. A column gj is called systematic for i ∈ [k] if gj = αe i, for some α ∈ Fq . If for every i ∈ [k], there exists a systematic column in G, then G is known as a systematic generator matrix for C. Without loss of generality, throughout this paper, we consider the standard form for a systematic generator matrix, G =  Ik P  , where Ik is the k × k identity matrix. For a vector c = ( c1, . . . , c n) ∈ Fnq , its support is defined by supp( c) = {j ∈ [n] : cj̸ = 0 }. The dual code of C is defined by 
+
+C⊥ = h ∈ Fnq : h · c⊤ = 0 for every c ∈ C .3
+
+It is an [n, n − k, d ⊥] linear code, where d⊥ = d(C⊥) denotes the minimum distance of C⊥. Let H be a generator matrix of C⊥, then G · H ⊤ = 0 . The matrix H is called a parity-check matrix of C.
+
+A vector h = ( h1, . . . , h n) ∈ C ⊥ induces a linear dependence relation among the entries cj for every c = ( c1, . . . , c n) ∈C, i.e., nX
+
+> j=1
+
+hj cj = 0.
+
+B. Recovery Sets and Hypergraph Representation 
+
+Consider a coded data storage system consisting of n servers storing k information symbols, where server j stores the 
+
+j-th coordinate of the encoded vector x · G . The i-th information symbol xi is represented by the standard basis vector 
+
+ei.
+
+Definition 1. Let i ∈ [k]. A set R ⊆ [n] is called a recovery set for the i-th information symbol if ei ∈ span {gj : j ∈ R}.
+
+A recovery set R for an information symbol xi is called minimal if no proper subset of R is a recovery set for xi. We denote the collection of all minimal recovery sets for xi corresponding to the generator matrix G by Rmin  
+
+> i
+
+(G) = Ri(G).For a systematic generator matrix G, a set R ⊆ [n] \ { i} is a non-singleton recovery set for xi if and only if there exists a codeword v ∈ C ⊥ such that i ∈ supp( v) ⊆ R ∪ { i} [4]. This characterization links the recovery sets directly to the supports of codewords of the dual code. Let h ∈ C ⊥, we say D = supp( h) is an inclusion-minimal support if D contains no proper subset whose corresponding columns of G
+
+sum to zero. Equivalently, D is a minimal linear dependency among the columns of G. The term dual support means that the given set is the support of a codeword of C⊥.
+
+The recovery set structure of a linear code can be represented by a hypergraph. 
+
+Definition 2. For a generator matrix G of a linear code C, define the recovery hypergraph ΓG =  [n], E), whose vertex set is the set of storage nodes [n], and E is the set of all hyperedges. Here, E is the collection of all the minimal recovery sets in Ri(G) for all i ∈ [k].
+
+All hyperedges corresponding to Ri(G) are labeled ei. We may also define the partial recovery hypergraph of any 
+
+I ⊆ [k] as ΓG (I) =  [n], E(I), where E(I) consists of hyperedges only in Ri(G) for all i ∈ I, i.e., all hyperedges labeled ej are removed from ΓG , where j ∈ [k] \ I. Throughout this paper, whenever I = {a} ⊆ [n], we adopt the notation Γa 
+
+> G
+
+for the partial recovery hypergraph. A matching in hypergraph ΓG is a set ( ⊆ E ) of pairwise vertex-disjoint hyperedges. The matching number of ΓG ,denoted by ν(Γ G ), is the maximum cardinality of a matching. Equivalently, 
+
+ν(Γ G ) = max 
+
+( X
+
+> E∈E
+
+αE : X
+
+> E∋v
+
+αE ≤ 1 ∀v ∈ [n]
+
+)
+
+,
+
+where αE ∈ { 0, 1} for all E ∈ E . A vertex cover of ΓG is a subset S ⊆ [n] that intersects every hyperedge. The vertex cover number , denoted by τ (Γ G ), is the minimum cardinality of a vertex cover, and can equivalently be written as 
+
+τ (Γ G ) = min 
+
+X
+
+> v∈[n]
+
+βv : X
+
+> v∈E
+
+βv ≥ 1 ∀ E ∈ E 
+
+ ,
+
+where βv ∈ { 0, 1} ∀ v ∈ [n]. Relaxing the integrality constraints gives the corresponding fractional notions. A fractional matching is an assignment γ : E → [0 , 1] satisfying 
+
+X
+
+> E∋v
+
+γE ≤ 1 for every v ∈ [n].
+
+The fractional matching number , denoted by νf (Γ G ), is the maximum total weight of such an assignment, i.e., νf (Γ G ) = max P  
+
+> E∈E
+
+γE . Similarly, a fractional vertex cover is an assignment δ : [ n] → [0 , 1] satisfying 
+
+X
+
+> v∈E
+
+δv ≥ 1 for every E ∈ E ,
+
+and the fractional vertex cover number , denoted by τf (Γ G ), is given by τf (Γ G ) = min 
+
+nP 
+
+> v∈[n]
+
+δv
+
+o
+
+.4
+
+C. Service Rate Region and Fractional Matchings 
+
+Consider a coded DSS with n servers storing k information symbols using a generator matrix G. We assume that each server has unit service capacity. Thus, server j can process requests at an average rate of at most μj = 1 , j ∈ [n].Let λ = ( λ1, . . . , λ k) ∈ Rk 
+
+> ≥0
+
+denote a request-rate vector, where λi is the rate at which requests for the i-th information symbol arrive. For each i ∈ [k], let Ri(G) = {Ri, 1, . . . , R i,t i } denote the collection of minimal recovery sets for i-th information symbol. A scheduling policy distributes the requests for each information symbol among its recovery sets. Let λi,ℓ ≥ 0 denote the fraction of λi assigned to Ri,ℓ .
+
+Definition 3. The service rate region of G, denoted by Λ( G), is the set of all λ ∈ Rk 
+
+> ≥0
+
+for which there exists a nonnegative allocation {λi,ℓ : i ∈ [k], ℓ ∈ [ti]} satisfying 
+
+> ti
+
+X
+
+> ℓ=1
+
+λi,ℓ = λi, i ∈ [k], (1) 
+
+and kX
+
+> i=1
+
+X 
+
+> ℓ:j∈Ri,ℓ
+
+λi,ℓ ≤ 1, j ∈ [n]. (2) Constraint (1) ensures that the complete request rate for each information symbol is served. Constraint (2) ensures that the aggregate request rate assigned to any server does not exceed its unit service capacity. An allocation satisfying (1) and (2) is called a feasible allocation for λ. A request rate vector belonging to Λ( G) is called achievable . Let I ⊆ [k],then define X
+
+> i∈I
+
+λi
+
+!∗
+
+= max 
+
+(X
+
+> i∈I
+
+λi : λ = ( λ1, . . . , λ k) ∈ Λ( G)
+
+)
+
+.
+
+For I = {i}, λ∗ 
+
+> i
+
+is called the maximal achievable service rate for the i-th information symbol. Since every recovery set contains at least one minimal recovery set, it is sufficient to consider inclusion-minimal recovery sets when determining the SRR. The SRR of a coded DSS admits a natural combinatorial interpretation through the recovery hypergraph associated with a generator matrix of the code. Let C be an [n, k, d ] linear code with a generator matrix G, and let ΓG = ([ n], E)
+
+denote its recovery hypergraph. Consider a request vector λ = ( λ1, λ 2, . . . , λ k). If wE denotes the amount of demand assigned to the recovery set represented by the hyperedge E ∈ E , then the node-capacity constraints are given by 
+
+X
+
+> E∋v
+
+wE ≤ 1, ∀ v ∈ [n].
+
+As shown in [13], [9], [1], these are precisely the feasibility constraints of a fractional matching on ΓG. Consequently, every fractional matching w ∈ R|E| ≥0 induces a feasible service allocation λ(w) = ( λ1(w), λ 2(w), . . . , λ k(w)) , where 
+
+λi(w) is the total sum of wE over all edges labeled by ei. Conversely, every feasible service allocation corresponds to a fractional matching [1, Proposition 1]. In other words, the SRR is the image of the fractional matching polytope of the recovery hypergraph under a linear mapping that associates each fractional matching with its corresponding request rate vector. Under the fractional matching problem formulation of SRR [9], the maximum achievable service rate is characterized by the fractional matching number of the recovery hypergraph. This, together with the classical matching–vertex cover inequality gives 
+
+ν(Γ G ) ≤
+
+> k
+
+X
+
+> i=1
+
+λi
+
+!∗
+
+= νf (Γ G ) = τf (Γ G ) ≤ τ (Γ G ). (3) It can easily be verified that the relation given in (3) is also true for any partial recovery hypergraph ΓG (I), where 
+
+I ⊂ [k].5
+
+D. Codes and Their Plotkin-Type Construction 
+
+Let C be an [n, k, d ] binary linear code with a generator matrix and a parity-check matrix G and H, respectively. We consider the Plotkin-type construction [8] 
+
+Cp = {(c, c) : c ∈ C} ∪ { (c, 1n + c) : c ∈ C} .
+
+Cp is an [2 n, k + 1 , min {n, 2d}] linear code over F2.A generator matrix and a parity-check matrix for Cp is given by 
+
+Gp =
+
+ G G
+
+0n 1n
+
+
+
+, and Hp =
+
+ H O
+
+H′ H′
+
+
+
+,
+
+respectively, where O stands for the (n − k) × n zero matrix, and H′ is a (n − 1) × n parity-check matrix of the repetition code. A standard systematic choice for H′ is  In−1 1⊤
+
+> n−1
+
+ . Hence, d(C⊥ 
+
+> p
+
+) = min {d(C⊥), 4}.
+
+Throughout the paper, unless otherwise stated, C denotes a binary linear code, and Cp denotes the associated Plotkin-type code defined in II-D. Their respective generator matrices are denoted by G and Gp as defined in this section. III. R ECOVERY SET STRUCTURE AUGMENTATION AND SRR FOR INDUCTIVE CODES 
+
+Let x = ( x1, x 2, . . . , x k) denote an information vector containing k information symbols for a codeword c =(c1, c 2, . . . , c n) ∈ C , and let xk+1 be the newly added (k + 1) -th information symbol for the associated codeword 
+
+cp = ( c1, c 2, . . . , c n, c n+1 , c n+2 , . . . , c 2n) ∈ C p, where cn+j = cj + xk+1 for all j ∈ [n].For a subset R ⊆ [n], we define R + n := {j + n : j ∈ R}. For subsets A, B ⊆ [2 n], their symmetric difference is defined by A△B := ( A \ B) ∪ (B \ A).It follows immediately from the definition that for any i ∈ [k] of C, we have Ri(G) ⊆ R i(Gp). Therefore, our main focus is on the recovery sets present in Ri(Gp) \ R i(G). Now, we characterize the relationship between a recovery set 
+
+Rp ∈ R i(Gp) and the corresponding recovery set induced in Ri(G).Let i ∈ [k] and let Rp ∈ R i(Gp), i.e., for cp = ( c1, . . . , c n, c n+1 , . . . , c 2n) ∈ C p, we have 
+
+xi = X
+
+> j∈Rp
+
+cj .
+
+Define 
+
+R(1)  
+
+> p
+
+:= Rp ∩ [n], R(2)  
+
+> p
+
+:= {j − n : j ∈ Rp ∩ [n + 1 , 2n]}.
+
+Note that, if R(2)  
+
+> p
+
+= ∅, then R(1)  
+
+> p
+
+= Rp ∈ R i(G). Therefore, we examine only those recovery sets in Ri(Gp) with 
+
+R(2) 
+
+> p
+
+̸ = ∅. Now 
+
+xi = X
+
+> j∈R(1)
+> p
+
+cj + X
+
+> j′∈R(2)
+> p
+
+cn+j′ = X
+
+> j∈R(1)
+> p
+
+cj + X
+
+> j′∈R(2)
+> p
+
+(cj′ + xk+1 )= X 
+
+> j∈R(1)
+> p△R(2)
+> p
+
+cj + |R(2)  
+
+> p
+
+|xk+1 ,
+
+where △ denotes the symmetric difference. Since we want to induce recovery sets associated with G, there should be no role of xk+1 . Therefore, |R(2)  
+
+> p
+
+| must be even. 
+
+Remark 1. The minimality of Rp forces |R(1)  
+
+> p
+
+∩ R(2)  
+
+> p
+
+| ≤ 1. Because if there are two distinct elements m and m′ in 
+
+R(1)  
+
+> p
+
+∩ R(2)  
+
+> p
+
+, then  R(1)  
+
+> p
+
+\ { m, m ′} ∪  (R(2)  
+
+> p
+
+\ { m, m ′}) + n also recovers xi, contradicting minimality of Rp.
+
+Moreover, if there exists h ∈ C ⊥ such that supp( h) = D ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+, then we have 
+
+xi = X  
+
+> j∈(R(1)
+> p△R(2)
+> p)\D
+
+cj .
+
+Hence, (R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+) \ D is a recovery set for xi.
+
+Remark 2. It is important to note that if such a D exists, then |R(2)  
+
+> p
+
+∩ D| is odd. Because, if |R(2)  
+
+> p
+
+∩ D| is even then 
+
+ R(1)  
+
+> p
+
+\ D ∪
+
+ R(2)  
+
+> p
+
+\ D + n
+
+
+
+recovers xi, and it is contained in Rp. This contradicts the minimality of Rp.6
+
+Now, we demonstrate that (R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+)\D is a minimal recovery set for xi. Suppose, for contradiction, that there exists a nonempty proper subset T ⊊
+
+
+
+R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+
+
+\ D such that T ∈ R i(G). Let T = A ∪ B, where A ⊆ R(1)  
+
+> p
+
+\ (R(2)  
+
+> p
+
+∪ D)
+
+and B ⊆ R(2)  
+
+> p
+
+\ (R(1)  
+
+> p
+
+∪ D).First, suppose that there does not exist a nonempty subset D ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+such that D = supp( h) for some h ∈ C ⊥.Then  R(1)  
+
+> p
+
+\ A ∪ A ∪ (B + n) ∪  (R(2)  
+
+> p
+
+\ B) + n = Rp.
+
+We have 
+
+xi = X
+
+> j∈Rp
+
+cj = X 
+
+> j∈R(1)
+> p\A
+
+cj + X
+
+> j∈A
+
+cj + X
+
+> j∈B
+
+(cj + xk+1 ) + X 
+
+> j∈R(2)
+> p\B
+
+(cj + xk+1 ), (4) 
+
+= X 
+
+> j∈R(1)
+> p\A
+
+cj + X 
+
+> j∈R(2)
+> p\B
+
+cj + X
+
+> j∈T
+
+cj + |R(2)  
+
+> p
+
+|xk+1 , (5) 
+
+= X 
+
+> j∈R(1)
+> p\A
+
+cj + X 
+
+> j∈R(2)
+> p\B
+
+cj + xi. (6) Moreover, since T is a proper subset of R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+,  R(1)  
+
+> p
+
+\ A△ R(2)  
+
+> p
+
+\ B is nonempty. This implies that  R(1)  
+
+> p
+
+\
+
+A△ R(2)  
+
+> p
+
+\ B is the support of some codeword of C⊥. This contradicts precisely the assumption that no such D exists. Therefore, in this case no proper subset T exists that recovers xi, implying that  R(1)  
+
+> p
+
+\ A△ R(2)  
+
+> p
+
+\ B \ D is minimal recovery set. Next, assume that there exists a nonempty subset D = supp( h) ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+for some h ∈ C ⊥. We consider two cases according to the parity of |B|.(a). |B| is even. Then it can easily be verified that A∪(B+n) is also a recovery set for xi. It follows that A∪(B+n) ⊊ Rp.
+
+Thus, Rp contains a proper subset that is itself a recovery set for xi, contradicting the minimality of Rp.(b). |B| is odd. Then A ∪ (B + n) ∪  R(1)  
+
+> p
+
+∩ D ∪
+
+ R(2)  
+
+> p
+
+∩ D + n
+
+
+
+⊊ Rp, and recovers xi. Again, contradicting the minimality of Rp.Hence, no such set T exists. Consequently, (R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+) \ D ∈ R i(G). In other words, R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+⊇ R for some 
+
+R ∈ R i(G).
+
+Remark 3. Let i ∈ [k] and let Rp ∈ R i(Gp). If there exists a nonempty subset D ⊆ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+such that D = supp( h)
+
+for some h ∈ C ⊥, then such a D is unique. 
+
+The above observations are summarized in the following theorem. 
+
+Theorem 1. Let C be an [n, k, d ] binary linear code with a generator matrix G. Let i ∈ [k]. Then the following results hold: (i) For any Rp ∈ R i(Gp), Rp ∩ [n + 1 , 2n] must be even. Consequently, no recovery set Rp ⊆ [n + 1 , 2n] with |Rp|
+
+odd belongs to Ri(Gp).(ii) Every recovery set Rp ∈ R i(Gp) induces a recovery set in Ri(G) through the mapping 
+
+Rp 7 −→ (Rp ∩ [n]) △{ j − n : j ∈ Rp ∩ [n + 1 , 2n]}.
+
+Theorem 1 establishes the correspondence from Ri(Gp) to Ri(G). Now, we consider the reverse direction. In the following theorem, for a given R ∈ R i(G), we characterize the recovery sets in Ri(Gp) induced by R, including the additional recovery sets arising from linear dependencies among the corresponding columns. 
+
+Theorem 2. Let C be an [n, k, d ] binary linear code with a generator matrix G. Then the following results hold: (i) Let R ∈ R i(G), where i ∈ [k]. For a nonempty subset T ⊆ R with |T | even, we have a unique recovery set 
+
+R \ T ∪ (T + n) = eRT ∈ R i(Gp),
+
+such that |R| = | eRT |.
+
+(ii) For each j ∈ [n], we have {j, j + n} ∈ R k+1 (Gp). Consequently, there are n disjoint recovery sets for xk+1 of cardinality 2.7
+
+(iii) Let i ∈ [k], let R ∈ R i(G), and there exists a nonempty subset D = supp( h) for some h ∈ C ⊥ with R ∩ D = ∅.Assume that D is the only nonempty dual support contained in R ∪ D. For FR ⊆ R and FD ⊆ D with |FR| and 
+
+|FD | odd, define 
+
+F =  R \ FR
+
+ ∪  D \ FD
+
+ ∪  (FR ∪ FD ) + n.
+
+Then F ∈ R i(Gp).Proof. Thus T = ∅, and since A, B partition M, this forces A′ = A and B′ = B. Hence FES ,E D′ is a minimal recovery set for xi. Given R ∈ R i(G) and a subset T ⊆ R, we have 
+
+xi = X
+
+> j∈R
+
+cj = X
+
+> j∈R\T
+
+cj + X
+
+> j′∈T
+
+(xk+1 + cn+j′ ) = X
+
+> j∈R\T
+
+cj + X
+
+> j′∈T
+
+cn+j′ + |T |xk+1 .
+
+Since |T | is even, the sum can be written as 
+
+xi = X
+
+> j∈R\T
+
+cj + X
+
+> j′∈T
+
+cn+j′ .
+
+It follows that eRT recovers xi. It is easy to verify that eRT is a minimal recovery set. Hence eRT ∈ R i(Gp).
+
+Further, a set of coordinate positions {j, j + n} corresponds to the codeword symbols (cj , c j+n = cj + xk+1 ). Hence, we have {j, j + n} ∈ R k+1 (Gp), for all j ∈ [n]. This implies that there exist n disjoint recovery sets of the form 
+
+{j, j + n} for xk+1 .
+
+For the last part, note that 
+
+X
+
+> j∈F
+
+cj = X
+
+> j∈R\FR
+
+cj + X
+
+> j∈D\FD
+
+cj + X
+
+> j∈FR∪FD
+
+cj+n = X
+
+> j∈R
+
+cj + X
+
+> j∈D
+
+cj + ( |FR| + |FD |)xk+1 = xi.
+
+This indicates that F recovers xi. To prove minimality, suppose that M = A ∪ (B + n) ⊊ F, such that M ∈ R i(G),
+
+A ⊆  R \ FR
+
+ ∪  D \ FD
+
+, and B ⊆ (FR ∪ FD ) with (A, B )̸ =  (R \ FR) ∪ (D \ FD ), F R ∪ FD
+
+. This implies that 
+
+(R ∪ D) \ (A ∪ B) = N (say), is the support of a codeword in C⊥ contained in R ∪ D. According to the assumption, 
+
+N = D or ∅. Now, if N = D, then |B| = |FR ∪ FD | − | FD | is odd, which is a contradiction. Hence, N = ∅. It follows that A =  R \ FR
+
+ ∪  D \ FD
+
+, and B = ( FR ∪ FD ). Therefore, F ∈ R i(Gp). The proof concludes. 
+
+Corollary 1. Consider T = R with |R| even. Then eRR ∈ R i(Gp), such that | eRR| = |R|, and R ∩ eRR = ∅.
+
+Corollary 2. If there are t disjoint recovery sets of even cardinalities in Ri(G) for some i ∈ [k], then there are at least 
+
+2t disjoint recovery sets in Ri(Gp).
+
+Corollary 3. Let i ∈ [k] and R ∈ R i(G). Suppose there exists a nonempty dual support D such that R ∩ D = ∅, |D| is odd, and no proper subset of R ∪ D of even cardinality recovers xi. Then (R ∪ D) + n ∈ R i(Gp).
+
+Lemma 1. Let R ⊆ [n] be a set with |R| = r ≥ 1. Then the number of nonempty subsets of R with even-cardinality is 
+
+2r−1 − 1, whereas the number of subsets of R with odd-cardinality is 2r−1.
+
+Theorem 3. Let C be an [n, k, d ] binary linear code with a generator matrix G. Let R ∈ R i(G), where i ∈ [k] with 
+
+|R| = r. Then the number of new recovery sets in Ri(Gp) obtained as in Theorem 2 by R is 2r−1 − 1.
+
+Proof. This theorem is an immediate consequence of Part (i) of Theorem 2 and Lemma 1 
+
+Counting occurrence of the nodes j and j + n. A node j ∈ R ⊂ [n] appears in eRT if and only if j / ∈ T and j + n
+
+appears in eRT if and only if j ∈ T. Let |R| = r. Since the number of possible choices for T with |T | even such that 
+
+j / ∈ T is 2r−2 − 1, there are 2r−2 − 1 recovery sets eRT ∈ R i(Gp) containing j. The number of possible choices for T
+
+with |T | even such that j ∈ T is 2r−2. Equivalently, this is the number of recovery sets of form eRT ∈ R i(Gp) which contains j + n. 
+
+We now extend the discussion to a systematic generator matrix of C. Our objective is to determine whether additional recovery sets arise from the systematic structure. Since systematic generator matrices possess a column for each i ∈ [k],this analysis provides a characterization of the recovery sets involving the node i + n.
+
+Theorem 4. Let C be an [n, k, d ] binary linear code with a systematic generator matrix G. Let i ∈ [k], and let j ∈ [n]\{ i}.Then, for each j, there exists a recovery set eRj ∈ R i(Gp), where eRj = {j, j + n, i + n}.8
+
+Proof. Fix an information symbol xi, where i ∈ [k]. Given j ∈ [n] \ { i}, we have 
+
+X 
+
+> l∈eRj
+
+cl = cj + cj+n + ci+n = cj + cj + s + ci + s = ci = xi.
+
+This implies that eRj ∈ R i(Gp).
+
+Corollary 4. For a systematic generator matrix G of C, if there exists t recovery sets of cardinality 3 in Ri(G) such that a node j ∈ [n] lies in tj of these recovery sets, then there are at least 3t + n − 1 new recovery sets of cardinality 
+
+3 in Ri(Gp), where j lies in tj + 1 of these recovery sets and j + n lies in 2tj + 1 of these recovery sets. 
+
+Remark 4. Given a systematic G of C, each odd cardinality subset J ⊂ [n] gives rise to a recovery set of the form 
+
+J ∪ J + n ∪ { i + n} for xi corresponding to Gp, but it is not a minimal recovery set. 
+
+The following theorems provide methods to obtain recovery sets in Ri(Gp) (recall that recovery sets in Ri(Gp) are minimal) using an odd cardinality subset of minimal inclusion dual support. 
+
+Theorem 5. Let G be a systematic generator matrix of C. Let i ∈ [k], and let h ∈ C ⊥ such that D = supp( h) is a minimal-inclusion dual support and i / ∈ D. Suppose that there is no element R ∈ R i(G) satisfying R ⊊ D. For J ⊆ D
+
+with |J| odd, define 
+
+DJ =  D \ J ∪ (J + n) ∪ { i + n}.
+
+Then DJ ∈ R i(Gp). Consequently, there are 2|D|− 1 such distinct recovery sets in Ri(Gp), each containing i + n.Proof. Since |J| is odd, we have 
+
+X
+
+> j∈D J
+
+cj =
+
+ X
+
+> j∈D\J
+
+cj
+
+
+
++
+
+ X 
+
+> j∈J
+
+cj+n
+
+
+
++ ci+n = X
+
+> j∈D
+
+cj + ci = ci.
+
+Consequently, DJ is a recovery set for the i-th information symbol. Next, we show that DJ is a minimal recovery set. On the contrary, suppose that there exists T ⊊ DJ such that 
+
+T ∈ R i(Gp). Then, T can be written as 
+
+T = A ∪ (B + n) ∪  ϵ{i + n},
+
+where A ⊆ D \ J, B ⊆ J, and ϵ ∈ { 0, 1}. We consider two cases: (i) ϵ = 0 , and (ii) ϵ = 1 .
+
+(i) Let ϵ = 0 . Then |B| is even and we have 
+
+X
+
+> j∈T
+
+cj = X
+
+> j∈A
+
+cj + X
+
+> j∈B
+
+cj = ci,
+
+which implies that A ∪ B ∈ R i(G). But A ∪ B ⊂ D, which is a contradiction. Hence, DJ ∈ R i(Gp).(ii) Let ϵ = 1 . Then |B| is odd and X
+
+> j∈A∪B
+
+cj = 0 .
+
+Furthermore, A ∪ B̸ = ∅ and A ∪ B ⊊ D. Since D is a minimal-inclusion dual support, we obtain a contradiction. Therefore, in this case as well, DJ ∈ R i(Gp).
+
+Theorem 6. Let C be a binary linear [n, k, d ] code with a systematic generator matrix G. For i ∈ [k], let D = supp( h),
+
+be an inclusion-minimal support of a nonzero codeword of h ∈ C ⊥, and i ∈ D. Let ℓ ∈ [n] \ D such that that there is no element R ∈ R i(G) satisfying ℓ ∈ R ⊊ D ∪ { ℓ}.For E ⊆ D \ { i} with |E| odd, define 
+
+DE =  D \ (E ∪ { i}) ∪ (E + n) ∪ { ℓ, ℓ + n}.
+
+Then DE ∈ R i(Gp).Proof. Since h ∈ C ⊥ X
+
+> j∈D E
+
+cj = X
+
+> ℓ∈D\(E∪{ i})
+
+cj + X
+
+> j∈E
+
+(cj + xk+1 ) + cℓ + cℓ + xk+1 = ci.9
+
+Thus, DE is a recovery set for the i-th information symbol. It remains to prove that DE is minimal. Suppose, to the contrary, that there exists a proper subset T ⊊ DE such that 
+
+T ∈ R i(Gp). We may write T = A ∪ (B + n) ∪ F , where A ⊆ D \ (E ∪ { i}), B ⊆ E, F ⊆ { ℓ, ℓ + n}. We consider the possible choices of F .(i) F = ∅ or F = {ℓ, ℓ + n}. Then X
+
+> j∈T
+
+cj = X
+
+> j∈A∪B
+
+cj = ci.
+
+Thus, if A ∪ B ∪ { i} ⊊ D, we obtain a contradiction to the inclusion-minimality of D as the support of a codeword of dual. It remains to consider the case A ∪ B ∪ { i} = D. In this case, we have B = E. If F = ∅, then |B| is even, contradicting the assumption that |E| is odd. On the other hand, if F = {ℓ, ℓ + n}, then |B| is odd, which implies that T = DE , again contradicting the assumption that T ⊊ DE .(ii) F = {ℓ} or F = {ℓ + n}. In this case, we have 
+
+X
+
+> j∈T
+
+cj = X
+
+> j∈A∪B
+
+cj = ci + cℓ.
+
+Consequently, (A ∪ B) ∪ { ℓ} is a recovery set for xi in C satisfying ℓ ∈ (A ∪ B) ∪ { ℓ} ⊆ D ∪ { ℓ}, contradicting the assumption on ℓ.Therefore, DE ∈ R i(Gp), which completes the proof. Since there are 2|D|− 2 odd cardinality subsets E of D, for each ℓ ∈ [n] \ D, satisfying the condition of Theorem 6, there exist 2|D|− 2 recovery sets DE . The idea of Theorem 6 can be extended by replacing the element ℓ with a subset of odd cardinality to define DE . This set still recovers xi but is not a minimal recovery set. Now we introduce the following lemma, which plays a crucial role in proving Theorem 7. 
+
+Lemma 2. Let i ∈ [k] and Rp ∈ R i(Gp) such that R(1)  
+
+> p
+
+∩ R(2) 
+
+> p
+
+̸ = ∅. Then R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+contains no nonempty dual support, i.e., R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+∈ R i(Gp).
+
+Proof. On the contrary, suppose that D ⊆ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+is a nonempty dual support. Note that 
+
+R(2)  
+
+> p
+
+=  R(2)  
+
+> p
+
+\ (R(1)  
+
+> p
+
+∪ D) ∪ (R(2)  
+
+> p
+
+∩ R(1)  
+
+> p
+
+) ∪ (R(2)  
+
+> p
+
+∩ D).
+
+Since |R(2)  
+
+> p
+
+| is even, by Remarks 1 and 2, the cardinality of the set  R(2)  
+
+> p
+
+\ (R(1)  
+
+> p
+
+∪ D) is even. We already know that  R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+ \ D recovers xi. Moreover, 
+
+ R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+ \ D =  R(1)  
+
+> p
+
+\ (R(2)  
+
+> p
+
+∪ D) ∪  R(2)  
+
+> p
+
+\ (R(1)  
+
+> p
+
+∪ D).
+
+It follows that  R(1)  
+
+> p
+
+\ (R(2)  
+
+> p
+
+∪ D) ∪    R(2)  
+
+> p
+
+\ (R(1)  
+
+> p
+
+∪ D) + n also recovers xi, and is properly contained in Rp. This contradicts the minimality of Rp. Hence the proof. The following theorem provides a systematic characterization of all minimal recovery sets for i ∈ [k] in Gp, i.e., 
+
+Ri(Gp), in terms of the recovery sets associated with the matrix G, namely Ri(G). In particular, it establishes a direct correspondence between the recovery set structure of C and Cp, thereby giving a complete method for determining Ri(Gp)
+
+from Ri(G).
+
+Theorem 7. Let C be an [n, k, d ] binary linear code with a systematic generator matrix G, and let i ∈ [k]. For each 
+
+R ∈ R i(G), let KR denote the collection of recovery sets obtained from R by Theorem 2. Let L , M , and N denote the collections of recovery sets obtained by Theorems 4, 5, and 6, respectively. Then 
+
+Ri(Gp) = Ri(G) ∪ L ∪ M ∪ N ∪ [
+
+> R∈R i(G)
+
+KR.
+
+Proof. It has already been established that 
+
+Ri(G) ∪ L ∪ M ∪ N ∪ [
+
+> R∈R i(G)
+
+KR ⊆ R i(Gp).10 
+
+It remains to prove the reverse inclusion. Let Rp ∈ R i(Gp), and define 
+
+R(1)  
+
+> p
+
+= Rp ∩ [n], R(2)  
+
+> p
+
+= {j − n : j ∈ Rp ∩ [n + 1 , 2n]}.
+
+Then R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+is a recovery set for xi, and |R(2)  
+
+> p
+
+| is even. Moreover, if there exists h ∈ C ⊥ such that 
+
+D = supp( h) ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+,
+
+then  R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+ \ D ∈ R i(G).
+
+The argument splits into two parts according to whether R(1)  
+
+> p
+
+= ∅. We treat the two possibilities separately. First, suppose that R(1)  
+
+> p
+
+= ∅. Then Rp = R(2)  
+
+> p
+
++ n. For this case, we distinguish two further subcases. (I) There is no set D ⊊ R(2)  
+
+> p
+
+such that D = supp( h) for some h ∈ C ⊥. Then R(2)  
+
+> p
+
+∈ R i(G). By Corollary 1 of Theorem 2, 
+
+R(2)  
+
+> p
+
++ n = Rp ∈ KR(2) 
+
+> p
+
+.
+
+(II) There exists D ⊊ R(2)  
+
+> p
+
+such that D = supp( h) for some h ∈ C ⊥. Then R(2)  
+
+> p
+
+\ D ∈ R i(G), and, since |R(2)  
+
+> p
+
+| is even and |D| is odd, |R(2)  
+
+> p
+
+\ D| is odd. Two subcases arise. (i) Suppose R(2)  
+
+> p
+
+\ D = {i}. Then R(2)  
+
+> p
+
+= D ∪ { i}. Taking J = D in Theorem 5, we obtain 
+
+DJ = ( D + n) ∪ { i + n} = R(2)  
+
+> p
+
++ n = Rp ∈ M .
+
+(ii) Suppose R(2)  
+
+> p
+
+\ D̸ = {i}. Since both |R(2)  
+
+> p
+
+\ D| and |D| are odd, Corollary 3 yields 
+
+ (R(2)  
+
+> p
+
+\ D) ∪ D + n = R(2)  
+
+> p
+
++ n = Rp ∈ KR(2)   
+
+> p\D
+
+.
+
+Now suppose that R(1) 
+
+> p
+
+̸ = ∅. In this part as well, we distinguish two subcases. (I) There is no set D ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+such that D = supp( h) for some h ∈ C ⊥. This implies that 
+
+R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+∈ R i(G).
+
+If R(1)  
+
+> p
+
+∩ R(2)  
+
+> p
+
+= ∅, then R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+= R(1)  
+
+> p
+
+∪ R(2)  
+
+> p
+
+∈ R i(G). Since |R(2)  
+
+> p
+
+| is even, Part (i) of Theorem 2 gives 
+
+R(1)  
+
+> p
+
+∪ (R(2)  
+
+> p
+
++ n) = Rp = eRR(2) 
+
+> p
+
+∈ KR(2) 
+
+> p
+
+.
+
+Next, suppose that R(1)  
+
+> p
+
+∩ R(2)  
+
+> p
+
+= {m}. There are again two possibilities. (i) Suppose R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+= {i}. Then R(1)  
+
+> p
+
+\ R(2)  
+
+> p
+
+= ∅, and R(2)  
+
+> p
+
+\ R(1)  
+
+> p
+
+= {i}. Consequently, 
+
+R(2)  
+
+> p
+
+= R(1)  
+
+> p
+
+∪ { i} = {m, i }.
+
+Therefore, 
+
+Rp = R(1)  
+
+> p
+
+∪ (R(2)  
+
+> p
+
++ n) = {m, m + n, i + n} ∈ L .
+
+(ii) Suppose R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+̸ = {i}. Then D′ =  R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+ ∪ { i} is the support of a codeword of C⊥. Note that 
+
+i ∈ D′ and m / ∈ D′. Since |R(2)  
+
+> p
+
+\ R(1)  
+
+> p
+
+| is odd, taking 
+
+E = R(2)  
+
+> p
+
+\ R(1)  
+
+> p
+
+and ℓ = m
+
+in Theorem 6 gives 
+
+DE =  R(1)  
+
+> p
+
+\ R(2) 
+
+> p
+
+ ∪  (R(2)  
+
+> p
+
+\ R(1)  
+
+> p
+
+) + n ∪ { m, m + n}
+
+= R(1)  
+
+> p
+
+∪ (R(2)  
+
+> p
+
++ n) = Rp ∈ N .
+
+(II) There exists D ⊊ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+such that D = supp( h) for some h ∈ C ⊥. By Lemma 2, R(1)  
+
+> p
+
+∩ R(2)  
+
+> p
+
+= ∅.
+
+Consequently,  R(1)  
+
+> p
+
+△R(2) 
+
+> p
+
+ \ D = ( R(1)  
+
+> p
+
+\ D) ∪ (R(2)  
+
+> p
+
+\ D) ∈ R i(G).
+
+Now consider two subcases. (i) Suppose (R(1)  
+
+> p
+
+\ D) ∪ (R(2)  
+
+> p
+
+\ D) = {i}. Since i / ∈ R(1)  
+
+> p
+
+, we have R(1)  
+
+> p
+
+\ D = ∅, and R(2)  
+
+> p
+
+\ D = {i}. Hence 
+
+R(1)  
+
+> p
+
+⊆ D and R(2)  
+
+> p
+
+= ( R(2)  
+
+> p
+
+∩ D) ∪ { i}.11 
+
+Let J = R(2)  
+
+> p
+
+∩ D. Since |R(2)  
+
+> p
+
+| is even, |J| is odd. Applying Theorem 5, we obtain 
+
+DJ = R(1)  
+
+> p
+
+∪  (R(2)  
+
+> p
+
+∩ D) + n ∪ { i + n}
+
+= R(1)  
+
+> p
+
+∪ (R(2)  
+
+> p
+
++ n) = Rp ∈ M .
+
+(ii) Suppose (R(1)  
+
+> p
+
+\ D) ∪ (R(2)  
+
+> p
+
+\ D)̸ = {i}. Let 
+
+FD = R(2)  
+
+> p
+
+∩ D, FR = R(2)  
+
+> p
+
+\ D. 
+
+Since |R(2)  
+
+> p
+
+| is even, |FD | and |FR| have the same parity. By the preceding result, both are odd. Applying Part (iii) of Theorem 2, we obtain 
+
+F = ( R(1)  
+
+> p
+
+\ D) ∪ (R(1)  
+
+> p
+
+∩ D) ∪  (R(2)  
+
+> p
+
+\ D) ∪ (R(2)  
+
+> p
+
+∩ D) + n
+
+= R(1)  
+
+> p
+
+∪ (R(2)  
+
+> p
+
++ n) = Rp ∈ K(R(1)   
+
+> p\D)∪(R(2)
+> p\D)
+
+.
+
+This completes the proof. 
+
+Example 1. Consider a [6 , 3] binary linear code C with a generator matrix as 
+
+G =
+
+
+
+1 0 0 1 0 10 1 0 1 1 00 0 1 0 1 1
+
+ .
+
+The minimal recovery sets of x1, x 2, and x3 are 
+
+R1(G) = {(1) , (2 , 4) , (3 , 6) , (2 , 5, 6) , (3 , 4, 5) },
+
+R2(G) = {(2) , (1 , 4) , (3 , 5) , (1 , 5, 6) , (3 , 4, 6) }, and 
+
+R3(G) = {(3) , (1 , 6) , (2 , 5) , (1 , 4, 5) , (2 , 4, 6) },
+
+respectively. Now consider Cp. By Part (ii) of Theorem 2, we have 
+
+{{ 1, 7}, {2, 8}, {3, 9}, {4, 10 }, {5, 11 }, {6, 12 }} ⊂ R 4(Gp).
+
+For the information symbol x1, we obtain a set K by Theorem 2 (the first two sets by Corollary 1), a set L by Theorem 4, a set M by Theorem 5, and a set N by Theorem 6 as follows: 
+
+K = {{ 8, 10 }, {9, 12 }, {2, 11 , 12 }, {5, 8, 12 }, {6, 8, 11 }, {3, 10 , 11 }, {4, 9, 11 }, {5, 9, 10 }} 
+
+L = {{ 2, 7, 8}, {3, 7, 9}, {4, 7, 10 }, {5, 7, 11 }, {6, 7, 12 }} 
+
+M = {{ 2, 3, 7, 11 }, {2, 5, 7, 9}, {3, 5, 7, 8}, {7, 8, 9, 11 }, {4, 5, 7, 12 }, {4, 6, 7, 11 }, {5, 6, 7, 10 }, {7, 10 , 11 , 12 }} ,
+
+N = {{ 2, 3, 8, 12 }, {2, 3, 9, 10 }, {2, 5, 7, 9}, {2, 5, 10 , 11 }, {2, 6, 8, 9}, {2, 6, 10 , 12 }, {3, 4, 8, 9}, {3, 4, 10 , 12 },
+
+{3, 5, 11 , 12 }, {4, 6, 9, 10 }, {4, 5, 8, 11 }, {5, 6, 9, 11 }} 
+
+.
+
+Additionally, we have R1(Gp) = R1(G) ∪ K ∪ L ∪ M ∪ N . The same conclusion holds for i = 2 and i = 3 , i.e., 
+
+Ri(Gp) can be obtained by the same method for i = 2 , and 3.A. Parameters of the Iterated Plotkin Construction 
+
+We now determine the parameters of the codes obtained by recursively applying the Plotkin construction. Let Cp0 =
+
+C, and Gp0 = G, where C is an [n, k, d ] binary linear code with a generator matrix G. For m ≥ 1, define 
+
+Cpm = {(c, c) | c ∈ C pm−1 } ∪ { (c, 1n + c) | c ∈ C pm−1 }, (7) and 
+
+Gpm =
+
+Gpm−1 Gpm−1
+
+0n 1n
+
+
+
+.
+
+Since the Plotkin construction maps an [n, k, d ] code to an [2 n, k + 1 , min {n, 2d}] code, it can be verified by induction on m that Cpm is an 2mn, k + m, min 2m−1n, 2md  linear code with a generator matrix Gpm .
+
+Theorem 8. Let C be an [n, k, d ] linear code over F2 and let G be a generator matrix of C. Suppose that for some 
+
+i ∈ [k], there exists a systematic node in G and t recovery sets of cardinality 3Ri(G) such that j ∈ [n] is in tj of these recovery sets. Let m be a positive integer and consider a code Cpm , iteratively obtained from C (as in (7) ). Then Cpm
+
+has at least 4mt + 2 n4m−1 − n2m−1 − 4m−13 recovery sets of cardinality 3 in Ri(Gpm ) such that the nodes j and j + n
+
+is contained in 2mtj + 2 m − 1 of these recovery sets. 12 
+
+IV. A LLOCATIONS FOR SERVICE RATES IN Cp AND Cpm
+
+In this subsection, we determine the maximal achievable service rates in service polytope Λ( Gp), in terms of the maximal achievable service rates in service polytope Λ( G). Let ˆλ = ( ˆλ1, ˆλ2, . . . , ˆλk, ˆλk+1 ) denote the achievable service request vector in Λ( Gp). Since Ri(G) ⊆ R i(Gp), for every i ∈ [k], we have Λ( G) ⊆ Λ( Gp).Now, we first analyze the partial hypergraph Γk+1  
+
+> Gp
+
+, for the additional information symbol k + 1 present in Cp, i.e., 
+
+I = {k + 1 }. We construct explicit matching and vertex cover for Γk+1  
+
+> Gp
+
+. By Part (ii) of Theorem 2, there are exactly 
+
+n disjoint hyperedges (recovery sets) of size 2 labeled ek+1 in Γk+1  
+
+> Gp
+
+. In other words, n ≤ ν(Γ k+1  
+
+> Gp
+
+). Now consider the following assignment: 
+
+βv =
+
+(
+
+1 ; if v ∈ [n + 1 , 2n]0 ; if v ∈ [n].
+
+Since any R ∈ R k+1 (Gp) contains at least a node (vertex) v ∈ [n + 1 , 2n], the set [n + 1 , n ] is a valid vertex cover for 
+
+Γk+1  
+
+> Gp
+
+. It is easy to confirm that τ (Γ k+1  
+
+> Gp
+
+) = n. Hence, by (3), 
+
+n = ν(Γ k+1  
+
+> Gp
+
+) = ˆλ∗ 
+
+> k+1
+
+= τ (Γ k+1  
+
+> Gp
+
+). (8) Let i ∈ [k]. Now, if there are t disjoint recovery sets of even cardinality in Ri(G), we have t ≤ ν(Γ i 
+
+> G
+
+) ≤ λ∗ 
+
+> i
+
+. Then by Corollary 2, we have 2t ≤ ν(Γ i 
+
+> Gp
+
+) ≤ ˆλ∗ 
+
+> i
+
+. If G is systematic then 2t + 1 ≤ ˆλ∗ 
+
+> i
+
+.
+
+On the other hand, for the upper bound on service rate, we focus on the vertex cover number for Γi 
+
+> Gp
+
+. Let V be a vertex cover for Γi 
+
+> G
+
+such that |V | = τ (Γ i 
+
+> G
+
+). Define Vp = V ∪ (V + n). We show that Vp forms a valid vertex cover for Γi 
+
+> Gp
+
+. Since each recovery set in Ri(Gp) induces a recovery set in Ri(G) (refer to Theorem 1), a vertex cover of 
+
+Γi 
+
+> Gp
+
+can be constructed by extending a vertex cover of Γi 
+
+> G
+
+. For any Rp ∈ R i(Gp), there exists an R ∈ R i(G) such that 
+
+R ⊆ R(1)  
+
+> p
+
+△R(2)  
+
+> p
+
+. Let R ∩ V = {z}. Since  R(1)  
+
+> p
+
+△(R(2)  
+
+> p
+
++ n) ⊂ Rp, either z ∈ Rp or z + n ∈ RP . In other words, the recovery set Rp is covered by Vp. Therefore, 
+
+ˆλ∗ 
+
+> i
+
+≤ 2|V | for all i ∈ [k].
+
+This idea is generalized for any subset I ⊆ [k], and following the similar steps, it can be verified that for a vertex cover V of ΓG (I), Vp = V ∪ (V + n) is a vertex cover of ΓGp (I). Moreover, it directly follows from the definition of matching that ν(Γ G (I)) ≤ ν(Γ Gp (I)) .
+
+Theorem 9. Let C be an [n, k, d ] binary linear code with a generator matrix G. Let I ⊆ [k], and V be a optimal vertex cover for ΓG (I). Then Vp = V ∪ (V + n) is a vertex cover of ΓGp (I), and 
+
+X
+
+> i∈I
+
+ˆλi ≤ τ (Γ Gp (I)) ≤ 2τ (Γ G (I)) = 2 |V |.
+
+Lemma 3. Let I ⊆ [k], and let δ : [ n] → [0 , 1] be a fractional vertex cover of ΓG (I). Define δp : [2 n] → [0 , 1] by 
+
+δp(j) = δp(j + n) = δ(j), j ∈ [n].
+
+Then δp is a fractional vertex cover of ΓGp (I). Consequently, τf
+
+ ΓGp (I) ≤ 2τf
+
+ ΓG (I).
+
+Proof. Let Rp ∈ R i(Gp) be induced by R ∈ R i(G) for some i ∈ I. By assumption, for each j ∈ R, exactly one of j
+
+and j + n belongs to Rp. Hence, 
+
+X
+
+> v∈Rp
+
+δp(v) = X
+
+> j∈Rp∩[n]
+
+δp(j) + X
+
+> j+n∈Rp∩[2 n]
+
+δp(j) ≥ X
+
+> j∈R
+
+δ(j) ≥ 1.
+
+If there exists a systematic node for the i-th information object in G, then δ(i) = 1 . Then, for all Rp ∈ R i(Gp) with 
+
+i ∈ Rp or i+n ∈ Rp, we have P
+
+> v∈Rp
+
+δp(v) ≥ 1. Thus, every hyperedge in ΓGp (I) is fractionally covered by δp. Moreover, 
+
+X
+
+> v∈[2 n]
+
+δp(v) = X
+
+> j∈[n]
+
+ δp(j) + δp(j + n) = 2 X
+
+> j∈[n]
+
+δ(j).
+
+Taking δ to be an optimal fractional vertex cover of ΓG (I) yields τf
+
+ ΓGp (I) ≤ 2τf
+
+ ΓG (I).13 
+
+Theorem 10. Let C be an [n, k, d ] binary linear code with a generator matrix G. Let I ⊆ [k] and let ˆλ = ( ˆλ1, ˆλ2, . . . , ˆλk, ˆλk+1 ) ∈
+
+Λ( Gp). Then, X
+
+> i∈I
+
+ˆλi ≤ 2τf (Γ G (I)) .
+
+Corollary 5. For λ ∈ Λ( G) and ˆλ ∈ Λ( Gp), we have ˆλ∗ 
+
+> i
+
+≤ 2λ∗ 
+
+> i
+
+for all i ∈ [k].
+
+Theorem 11. Let C be an [n, k, d ] binary linear code with a generator matrix G. Let I ⊆ [k + 1] such that (k + 1) ∈ I ,and let β : [ n] → { 0, 1} be an optimal vertex cover of ΓG (I \ { k + 1 }). Define βp : [2 n] → { 0, 1} by 
+
+βp(j) = 
+
+(
+
+β(j); if j ∈ [n],
+
+1 − β(j − n); if j ∈ [n + 1 , 2n].
+
+Then βp is a vertex cover of ΓGp (I). Consequently, P 
+
+> i∈I
+
+ˆλi ≤ n, and this bound is achievable. Proof. Let Rp ∈ R i(Gp) be induced by R ∈ R i(G) for some i ∈ I. By assumption, for at least one j ∈ R, we have 
+
+β(j) = 1 . Then, X
+
+> v∈Rp
+
+βp(v) = X
+
+> j∈Rp∩[n]
+
+β(j) + X
+
+> j∈Rp∩[2 n]
+
+(1 − β(j − n)) ≥ 1.
+
+Hence, every recovery set in ΓGp (I) is covered by βp. Moreover, 
+
+X
+
+> j∈[2 n]
+
+βp(j) = X
+
+> j∈[n]
+
+ βp(j) + 1 − βp(j + n) = n
+
+Taking β to be an optimal vertex cover of ΓG (I) yields τ  ΓGp (I) ≤ 2τ  ΓG (I). Hence, 
+
+X
+
+> i∈I
+
+ˆλi ≤ n. 
+
+Now it follows from Part (ii) of Theorem 2 that this bound is achievable. 
+
+Example 2. Consider C as given in Example 1. For every I ⊆ [k = 3] , we have ν(Γ G (I)) = τf (Γ G (I)) = 3 .
+
+Consequently, the SRR of C is 
+
+Λ( G) = {(λ1, λ 2, λ 3) ∈ R3 
+
+> ≥0
+
+| λ1 + λ2 + λ3 ≤ 3}.
+
+Now consider Cp. The maximal achievable service rate for x4 is ˆλ∗ 
+
+> 4
+
+= 6 . For all I ⊆ [3] , we have ν(Γ Gp (I)) = 
+
+τf (Γ Gp (I)) = 6 . Consequently, ˆλ∗ 
+
+> i
+
+= 6 , and P
+
+> i∈I
+
+ˆλi ≤ 6. Moreover, in this example, for any I ⊆ [4] , we have P
+
+> i∈I
+
+ˆλi ≤ 6.
+
+Therefore, 
+
+Λ( Gp) = 
+
+n
+
+(ˆλ1, . . . , ˆλ4) ∈ R4 
+
+> ≥0
+
+| ˆλ1 + ˆλ2 + ˆλ3 + ˆλ4 ≤ 6
+
+o
+
+.
+
+Similar results can be inductively proven for the iterated Plotkin-type codes. 
+
+Theorem 12. Let C be an [n, k, d ] binary linear code with a generator matrix G, and Cpm be the iterated Plotkin-type code defined as in (7) . Let I ⊆ [k], and ˆλ ∈ Λ( Gpm ). Then 
+
+X
+
+> i∈I
+
+ˆλi ≤ τf
+
+ ΓGp (I) ≤ 2mτf
+
+ ΓG (I).
+
+Theorem 13. Let C be an [n, k, d ] binary linear code with a generator matrix G, and let Cpm be the iterated Plotkin-type code defined as in (7) . Let I ⊆ [k + 1] such that (k + 1) ∈ I , and ˆλ ∈ Λ( Gpm ). Then P 
+
+> i∈I
+
+ˆλi ≤ n2m−1, and this bound is tight. 14 
+
+A. Application to first-order binary Reed-Muller codes 
+
+The first-order binary Reed-Muller codes R(1 , m ) with parameters [2 m, m + 1 , 2m−1] have the following inductive definition with generator matrix Gm [11]: 
+
+R(1 , m + 1) = {(c, c) : c ∈ R(1 , m )} ∪ { (c, c + 1) : c ∈ R(1 , m )}.
+
+Consider an information vector (x1, x 2) and a generator matrix for R(1 , 1) 
+
+G1 =
+
+1 10 1
+
+
+
+.
+
+The minimal recovery sets and the achievable service rates of the two information symbols are as follows: 
+
+R1(G1) = {(1) }, R2(G1) = {(1 , 2) }, and λ1 ≤ 2, λ 2 ≤ 2.
+
+Then, by Plotkin-type construction, we have R (1 , 2) with the generator matrix G2, information vector (x1, x 2, x 3), and the associated recovery sets as R1 = {(1) , (2 , 3, 4) }, R2 = {(1 , 2) , (3 , 4) }, R3 = {(1 , 3) , (2 , 4) }. Moreover, for each nonempty subset I ⊆ [3] , it follows that P 
+
+> i∈I
+
+λi ≤ ν(Γ G2 (I)) = τf (Γ G2 (I)) = 2 , i.e., 
+
+Λ( G2) = {(λ1, λ 2, λ 3) : 
+
+> 3
+
+X
+
+> i=1
+
+λi ≤ 2}.
+
+Now, following the iterative construction for first-order Reed-Muller codes R( 1, m ), for m ≥ 3, we have ν(Γ i 
+
+> Gpm
+
+) ≥
+
+2m−1 by Corollary 1, and by Theorem 12, τf (Γ i 
+
+> Gpm
+
+) ≤ 2m−1 for all i ∈ [2 , m ] in R( 1, m ). Further, by (8), it follows that τf (Γ k+1  
+
+> Gp
+
+) = 2 m−1. Therefore, we conclude λ∗ 
+
+> i
+
+= 2 m−1 for all i ∈ [2 , m + 1] .The upper bound given in [12] for the maximal achievable service rate gives 
+
+λ∗ 
+
+> 1
+
+≤ 1 + 2m − 13 = 2m + 2 3 .
+
+There is a recovery set of cardinality 3 for x1 in R (1 , 2) . Then by Theorem 8, there are 22m−1−3·2m−1+1 3 recovery sets of cardinality 3 for x1 in R1(Gpm ), and each j ∈ [2 m] is in 2m−1 − 1 of these sets. Assigning requests 1/(2 m−1 − 1) 
+
+to each of recovery sets satisfies all server-capacity constraints, and together with a unit rate from systematic node, we have 
+
+λ∗ 
+
+> 1
+
+≥ 1 + 22m−1 − 3 · 2m−1 + 1 3(2 m−1 − 1) = 2m + 2 3 .
+
+To summarize, the service rate region of first-order binary Reed-Muller codes R( 1, m ), for m ≥ 3, is given as the set of all nonnegative λ = ( λ1, λ 2, . . . , λ m+1 ) satisfying-
+
+
+
+λi ≥ 0 ∀ i ∈ [m + 1] ,λ1 ≤ 2m+2 3 ,λi ≤ 2m−1 ∀ i ∈ [2 , m + 1] ,
+
+P
+
+> i∈I
+
+λi ≤ 2m−1 for I ⊆ [m + 1] .
+
+V. C ONCLUSION 
+
+This work analyzes how standard code construction operators act on the SRR, given that the SRR for the parent code is known. We establish a correspondence between the recovery set structure of a Plotkin-type code Cp and the underlying parent code C, and consequently a correspondence between their achievable service rates. As a consequence of the obtained results, we derive a bound for service rates of iterated Plotkin constructions and subsequently obtain the service rates for the binary first-order Reed–Muller code R (1 , m ), for any m, using a generator matrix for R (1 , 2) . As future work, it would be interesting to examine the relationship of the general (u | u + v) construction with an arbitrary second code, and to extend the analysis to q-ary codes and other code constructions. ACKNOWLEDGMENTS 
+
+The first author is grateful to the University Grants Commission (UGC), Government of India, for the financial support received under the UGC NET-SRF scheme. 15 
+
+REFERENCES [1] Aktas, M.S., Joshi, G., Kadhe, S., Kazemi, F. and Soljanin, E.: Service rate region: A new aspect of coded distributed system design, IEEE Trans. Inf. Theory , 67(12), pp. 7940-7963 (2021). [2] Alfarano, G.N., Kılıc ¸, A. B., Ravagnani, A., and Soljanin, E.: The service rate region polytope, SIAM J. Appl. Algebra Geom. , 8(3), pp. 553-582 (2024). [3] Alfarano, G.N., Kılıc ¸, A.B. and Ravagnani, A.: Service Aspects of LRC and Batch Codes, IEEE BITS the Information Theory Magazine , 3(4), pp. 17-27 (2023). [4] Alfarano, G.N., Ravagnani, A. and Soljanin, E.: Dual-code bounds on multiple concurrent (local) data recovery, IEEE Int. Symp. Inf. Theory (ISIT) , pp. 2613-2618 (2022). [5] Yu, C., Sun, L., and Zhang, Y.: New Results Towards the Characterization of Service Rate Region of Reed-Muller Codes, IEEE Int. Symp. Inf. Theory (ISIT) , pp. 1-6 (2026). [6] Choudhary, P. and Bhaintwal, M.: The Service Rate Region of Hamming Codes, IEEE Trans. Inf. Theory , DOI 10.1109/TIT.2026.3709105 (2025). [7] Di Giusto, A., Ravagnani, A. and Soljanin, E.: The Oval Strikes Back, arXiv:2601.16628 (2026). [8] Huffman, W. C. and Pless, V.: Fundamentals of error-correcting codes , Cambridge Univ. Press, Cambridge, New York, USA (2003). [9] Kazemi, F., Karimi, E., Soljanin, E. and Sprintson, A.: A combinatorial view of the service rates of codes problem, its equivalence to fractional matching and its connection with batch codes, IEEE Int. Symp. Inf. Theory (ISIT) , pp. 646-651 (2020). [10] Kazemi, F., Kurz, S. and Soljanin, E.: A geometric view of the service rates of codes problem and its application to the service rate of the first order Reed-Muller codes, IEEE Int. Symp. Inf. Theory (ISIT) , pp. 66-71 (2020). [11] Ling, S. and Xing, C.: Coding theory: A first course , Cambridge Univ. Press, Cambridge, New York, USA (2004). [12] Ly, H. and Soljanin, E.: Maximal achievable service rates of codes and connections to combinatorial designs, in Proc. 61st Annu. Allerton Conf. Commun., Control, Comput. (2025). [13] Ly, H. and Soljanin, E.: Service rate regions of MDS codes and fractional matchings in quasi-uniform hypergraphs, IEEE Trans. Inf. Theory ,72(4), pp. 2144-2161 (2026). [14] Ly, H., Soljanin, E. and Lalitha, V.: On the service rate region of Reed–Muller codes, IEEE Trans. Inf. Theory , 72(8), pp. 5525-5542 (2026). [15] Choudhary, P., Yadav, M. and Bhaintwal, M.: Maximal achievable service rates of some classes of linear codes, 
+
+https://arxiv.org/abs/2608.05657 (2026). [16] Noori, M., Soljanin, E. and Ardakani, M.: On storage allocation for maximum service rate in distributed storage systems, Proc. IEEE Int. Symp. Inf. Theory (ISIT) , pp. 240-244 (2016). [17] Kazemi, F., Kurz, S., Soljanin, E., and Sprintson, A.: Efficient storage schemes for desired service rate regions, Proc. IEEE Inf. Theory Workshop (ITW) , pp. 1–5 (2021). [18] Kılıc ¸, A.B., Ravagnani, A., and Soljanin, E.: On the parameters of codes for data access, Proc. IEEE Int. Symp. Inf. Theory (ISIT) , pp. 819–824 (2024).

@@ -1,0 +1,39 @@
+{
+  "label": "2026-10-02",
+  "date": "2026-10-02",
+  "generated_at": "2026-10-02T22:35:58",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202610/02/2610.01900v1-recovery-set-structures-and-service-rates-of-codes-obtained-by-the-plotkin-type-construction",
+      "section": "quick",
+      "title_en": "Recovery Set Structures and Service Rates of Codes Obtained by the Plotkin-type Construction",
+      "authors": "Priyanka Choudhary, Maheshanand Bhaintwal",
+      "date": "2026-10-01",
+      "pdf": "https://arxiv.org/pdf/2610.01900v1",
+      "score": "7.0",
+      "evidence": "分布式存储中码的恢复集结构与服务速率",
+      "tldr": "分布式存储中，冗余允许用多个不相交服务器组重建同一数据对象，服务速率区域（SRR）刻画系统可同时支持的对象请求速率组合。本文研究Plotkin型构造所得二进制码的恢复集结构与服务速率。作者证明C_p的信息对象恢复集可诱导底层码C的对应恢复集，并刻画新增恢复集，借助恢复超图给出C_p与迭代码C_{p^m}的SRR界。对一阶二元Reed-Muller码，可由R(1,2)生成矩阵递归推导任意m的R(1,m)恢复结构和服务速率。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "In distributed storage systems, redundancy enables a single data object to be reconstructed using several disjoint groups of servers. The resulting service rate region (SRR) captures all combinations of object request rates that the system can support simultaneously without overloading any individual server. We analyze the SRR of binary codes obtained via the Plotkin-type construction. We demonstrate that each recovery set for an information object of the Plotkin-type code $\\mathcal{C}_p$ induces a corresponding recovery set for the same data object characterized by the underlying code $\\mathcal{C}$. Furthermore, by characterizing the recovery sets structure of $\\mathcal{C}_p$ in terms of the recovery set structure of $\\mathcal{C}$, we identify the additional recovery sets introduced by this construction. Using the associated recovery hypergraphs, we establish bounds on the SRRs of $\\mathcal{C}_p$ and iterated code $\\mathcal{C}_{p^m}$ in terms of the SRR of $\\mathcal{C}$. We consider the family of first-order binary Reed-Muller codes and show how the recovery structure, and consequently, the service rates of R$(1,m)$ for arbitrary $m$ can be recursively derived from a generator matrix of R$(1,2)$ through our results for successive Plotkin-type constructions.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/02/2610.01733v1-asymptotically-unit-rate-storage-codes-from-binary-bch-codes",
+      "section": "quick",
+      "title_en": "Asymptotically unit-rate storage codes from binary BCH codes",
+      "authors": "Aryeh Lev Zabokritskiy",
+      "date": "2026-10-01",
+      "pdf": "https://arxiv.org/pdf/2610.01733v1",
+      "score": "6.0",
+      "evidence": "存储码从邻居恢复符号并纠错",
+      "tldr": "存储码要求图中每个顶点所存符号可由其邻居恢复，而高码率与固定纠错能力兼得的构造长期稀缺。本文聚焦原始BCH码的无三角形陪集图，研究其上二元全奇偶存储码，并把问题转化为相关多项式映射的卷积矩阵二元秩界。低坐标次数迫使表示像的多项式发生消去，秩界再将消去量化为存储码率的渐近估计。结果证明固定纠错能力至少为2时码率趋于1，且在显式增长条件下可支持增长误差预算；对F_{2^m}上双纠错族，存储亏欠为Θ(((1+√5)/4)^m)的精确阶。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "A storage code on a graph assigns a symbol to each vertex so that the symbol can be recovered from its neighbors. We prove that the binary full-parity storage codes on triangle-free coset graphs of primitive BCH codes have rate tending to one for every fixed error-correction capability of at least two. The conclusion also holds for an increasing error budget under an explicit growth condition. The proof bounds the binary rank of convolution matrices associated with polynomial maps. Low coordinate degree forces cancellation in the polynomial representing the image, and a polynomial rank bound converts this cancellation into a quantitative estimate for the storage rate. For the double-error-correcting family over $\\mathbb{F}_{2^m}$, we prove that the storage deficiency is $Θ(((1+\\sqrt{5})/4)^m)$. This refinement follows from an exact Fibonacci formula for a polynomial coefficient rank and a matching exponential lower bound after finite-field evaluation.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
