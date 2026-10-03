@@ -1,0 +1,56 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-03T21:43:54.817546+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.39230v1",
+      "source": "arxiv",
+      "title": "Multi-View Block Distance Distributions and Linear Programming Bounds for Locally Recoverable Codes with Availability",
+      "abstract": "We develop a multi-view linear-programming framework for locally recoverable codes with arbitrary fixed availability $a$. For any retained order $1 \\le s \\le a$, the selected helper sets, the recovered coordinate, and their complement form an $(s+2)$-part partition. Recording the Hamming distance on all blocks preserves both compatibility among the selected repair alternatives and their coupling with the remaining coordinates. The resulting joint distribution satisfies centered counting identities, product-Krawtchouk positivity, and collision inequalities from the local-distance condition; for fixed $s$, these constraints give a polynomial-size relaxation for arbitrary, possibly nonlinear, codes over any finite field. Retaining one view recovers the three-block model of our companion paper. We develop the first genuinely multi-view case, $s=2$, in detail and specialize the exact computations to availability $a=2$. The resulting four-block LP projects to both the one-view three-block model and a globally conditioned two-view relaxation, making explicit the information lost by each coarsening. Exact rational primal-dual certificates together with checked constructions prove $M_{\\max}(2,8,4,2,2,2)=8$, $M_{\\max}(3,7,3,2,2,2)=27$, and $M_{\\max}(4,7,3,2,2,2)=64$; in all three cases the four-block bound is strictly stronger than both coarsenings.",
+      "authors": [
+        "Ming-Hsuan Kang",
+        "Maosheng Xiong",
+        "Yu Hsuan Hsieh",
+        "Po-Wei Lai"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "math.CO"
+      ],
+      "published": "2026-09-30T08:03:57+00:00",
+      "link": "https://arxiv.org/pdf/2609.39230v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "locally recoverable codes with availability for storage repair",
+      "llm_evidence_cn": "用于存储修复的具有可用性的局部可修复码",
+      "llm_evidence": "用于存储修复的具有可用性的局部可修复码",
+      "canonical_evidence": "用于存储修复的具有可用性的局部可修复码",
+      "llm_tldr_en": "Locally recoverable codes are key to cheap repair in erasure-coded distributed storage, but codes with multiple availability lack general distance bounds. The paper builds a multi-view linear-programming framework partitioning helper sets, recovered coordinate and complement, yielding counting identities and collision inequalities that give polynomial-size bounds for arbitrary codes.",
+      "llm_tldr_cn": "局部可修复码是分布式存储中降低修复开销的关键纠删技术，但具有多次可用性的码在距离界方面缺乏通用分析工具。本文提出多视图线性规划框架，对任意固定可用性a，将助手集、被修复坐标与其余坐标构成分区，并记录各块汉明距离以保持修复兼容性。由此得到中心计数恒等式、Krawtchouk正性与碰撞不等式，对固定s给出多项式规模松弛。该框架适用于任意（可能非线性）码，为存储修复码的界分析提供了统一方法。",
+      "llm_tldr": "局部可修复码是分布式存储中降低修复开销的关键纠删技术，但具有多次可用性的码在距离界方面缺乏通用分析工具。本文提出多视图线性规划框架，对任意固定可用性a，将助手集、被修复坐标与其余坐标构成分区，并记录各块汉明距离以保持修复兼容性。由此得到中心计数恒等式、Krawtchouk正性与碰撞不等式，对固定s给出多项式规模松弛。该框架适用于任意（可能非线性）码，为存储修复码的界分析提供了统一方法。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "data reconstruction and recovery in erasure-coded storage",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

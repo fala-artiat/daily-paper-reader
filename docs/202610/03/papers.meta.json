@@ -1,0 +1,24 @@
+{
+  "label": "2026-10-03",
+  "date": "2026-10-03",
+  "generated_at": "2026-10-03T21:44:18",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202610/03/2609.39230v1-multi-view-block-distance-distributions-and-linear-programming-bounds-for-locally-recoverable-codes-with-availability",
+      "section": "quick",
+      "title_en": "Multi-View Block Distance Distributions and Linear Programming Bounds for Locally Recoverable Codes with Availability",
+      "authors": "Ming-Hsuan Kang, Maosheng Xiong, Yu Hsuan Hsieh, Po-Wei Lai",
+      "date": "2026-09-30",
+      "pdf": "https://arxiv.org/pdf/2609.39230v1",
+      "score": "7.0",
+      "evidence": "用于存储修复的具有可用性的局部可修复码",
+      "tldr": "针对具有可用性的局部可恢复码，本文提出多视图分块距离分布与线性规划上界框架。对保留阶数s，将辅助集、恢复坐标及补集构成s+2部划分，并在各块上记录汉明距离，以保持修复方案兼容性及其与其余坐标的耦合。所得联合分布满足中心计数恒等式、乘积Krawtchouk正性与碰撞不等式，形成固定s下多项式规模松弛。首次详析s=2并针对a=2导出四块LP，精确证书证明三个码参数上界，且严格强于两种粗化模型。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "We develop a multi-view linear-programming framework for locally recoverable codes with arbitrary fixed availability $a$. For any retained order $1 \\le s \\le a$, the selected helper sets, the recovered coordinate, and their complement form an $(s+2)$-part partition. Recording the Hamming distance on all blocks preserves both compatibility among the selected repair alternatives and their coupling with the remaining coordinates. The resulting joint distribution satisfies centered counting identities, product-Krawtchouk positivity, and collision inequalities from the local-distance condition; for fixed $s$, these constraints give a polynomial-size relaxation for arbitrary, possibly nonlinear, codes over any finite field. Retaining one view recovers the three-block model of our companion paper. We develop the first genuinely multi-view case, $s=2$, in detail and specialize the exact computations to availability $a=2$. The resulting four-block LP projects to both the one-view three-block model and a globally conditioned two-view relaxation, making explicit the information lost by each coarsening. Exact rational primal-dual certificates together with checked constructions prove $M_{\\max}(2,8,4,2,2,2)=8$, $M_{\\max}(3,7,3,2,2,2)=27$, and $M_{\\max}(4,7,3,2,2,2)=64$; in all three cases the four-block bound is strictly stronger than both coarsenings.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

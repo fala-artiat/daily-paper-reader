@@ -1,0 +1,647 @@
+Title: Multi-View Block Distance Distributions and Linear Programming Bounds for Locally Recoverable Codes with Availability
+
+URL Source: https://arxiv.org/pdf/2609.39230v1
+
+Published Time: Thu, 01 Oct 2026 01:12:20 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+# Multi-View Block Distance Distributions and Linear Programming Bounds for Locally Recoverable Codes with Availability 
+
+## Ming-Hsuan Kang, Maosheng Xiong, Yu Hsuan Hsieh, Po-Wei Lai 
+
+Abstract 
+
+We develop a multi-view linear-programming framework for locally recoverable codes with arbitrary fixed availability a. For any retained order 1 ≤ s ≤ a,the selected helper sets, the recovered coordinate, and their complement form an s + 2 -part partition. Recording the Hamming distance on all blocks pre-serves both compatibility among the selected repair alternatives and their coupling with the remaining coordinates. The resulting joint distribution sat-isfies centered counting identities, product-Krawtchouk positivity, and collision inequalities from the local-distance condition; for fixed s, these constraints give a polynomial-size relaxation for arbitrary, possibly nonlinear, codes over any finite field. Retaining one view recovers the three-block model of our compan-ion paper. We develop the first genuinely multi-view case, s = 2, in detail and specialize the exact computations to availability a = 2. The resulting four-block LP projects to both the one-view three-block model and a globally conditioned two-view relaxation, making explicit the information lost by each coarsening. Exact rational primal–dual certificates together with checked con-structions prove Mmax (2 , 8, 4, 2, 2, 2) = 8 , Mmax (3 , 7, 3, 2, 2, 2) = 27 , and 
+
+Mmax (4 , 7, 3, 2, 2, 2) = 64 ; in all three cases the four-block bound is strictly stronger than both coarsenings. 
+
+Keywords: locally recoverable codes, availability, multi-view block distance distributions, four-block distance distributions, linear programming bounds, Krawtchouk polynomials, Delsarte method 
+
+MSC Classification: 94B05 , 90C05 , 05E30 
+
+# 1 Introduction 
+
+Locally recoverable codes (LRCs) reduce repair cost by reconstructing an erased coor-dinate from a small local view [1, 2]. In the classical availability model, a coordinate has ( r, t )-availability if it can be reconstructed from t pairwise disjoint helper sets, 1arXiv:2609.39230v1 [cs.IT] 30 Sep 2026 each of size at most r [3, 4]. This model has led to rate and distance bounds, shorten-ing and recovery-graph arguments, parity-check and generalized-weight methods, and many explicit constructions [5–8]. The code class studied here combines availability with the local-distance form of locality introduced in [2]. Each selected view Ti,h = {i} ˙∪ Si,h has length at most 
+
+r + δ − 1 and the projected code C| Ti,h has minimum distance at least δ. Hence every selected view is itself a local code that corrects up to δ − 1 erasures. This hypothesis implies functional availability but is generally stronger even when δ = 2: standard availability only requires the distinguished coordinate to be determined by its helpers, whereas local distance two requires the entire local projection to correct one erasure. Multiple available views protected by local codes of prescribed distance have also been studied, for example in the information-symbol setting of Kadiyam and Das [9]. Our earlier work introduced the three-block distance distribution attached to a single recovery view [10]. The present paper places that construction in a multi-view hierarchy. For a code with availability a, one may retain any ordered number s of disjoint repair views with 1 ≤ s ≤ a. The corresponding s + 2-block statistic records the Hamming distance on the s helper sets, the recovered coordinate, and their com-plement. Taking s = a retains all available repair views, while s = 1 is exactly the three-block model of [10]. For fixed s, centered counting, coordinate-partition Fourier positivity, and local collision arguments give a polynomial-size relaxation; before symmetry reduction its local state space has size at most O(nR 2s 
+
+> 0
+
+), where 
+
+R0 = min {n, r + δ − 1}.We develop the first genuinely multi-view case, s = 2, in detail and specialize the exact computations to availability a = 2. This case already contains the two interac-tions that the method is designed to retain. Treating two repair views independently forgets whether their local distance patterns arise from the same ordered pair of code-words. Recording only their union preserves that compatibility but forgets how each local Fourier sector extends across the coordinates outside the two views. The resulting four-block distribution retains both pieces of information while keeping the notation and exact computation manageable. Fix a recovered coordinate i, choose two disjoint helper sets Si, 1 and Si, 2, and let 
+
+Oi be the complement of the selected union. Then 
+
+Si, 1, Si, 2, {i}, Oi
+
+partition [ n]. For each ordered triple ( x, y, i ), we record the Hamming distance on each block. The resulting distribution has three layers. First, centered counting identi-ties recover the global distance distribution. Second, the product-Hamming character transform is nonnegative in all four spectral degrees; the positive degrees on Oi record how the two local views extend globally. Third, local distance gives collision inequali-ties for each local view and for the punctured helper union. Together these constraints define the four-block LP. The comparison with coarser bounds is built into the same object. Merging one helper block with Oi returns exactly to the one-view three-block LP introduced in our earlier work [10]. Keeping both helper distances and the total distance, but discard-ing positive spectral degrees on Oi, gives a conditioned two-view relaxation. These 2are projections of the four-block distribution, not parallel theories. The comparison theorem therefore identifies which information each coarsening discards. The main contributions are as follows. (i) We formulate the multi-view hierarchy through a retained order 1 ≤ s ≤ a. The resulting s + 2-block statistic contains the three-block model of [10] at s = 1 and remains polynomial-size for every fixed s.(ii) We develop s = 2 in detail. For the resulting four-block distribution we derive the centered identities, full product-Krawtchouk positivity, and local collision inequal-ities, and prove objective-preserving projections to both the one-view three-block LP and the conditioned two-view relaxation. The formulation uses O(nr 4) local variables for fixed δ.(iii) Exact rational primal–dual certificates and independently checked constructions determine three availability-two maxima over F2, F3, F4, and in each case the four-block optimum is strictly smaller than both coarsened optima. This framework is complementary to existing availability bounds. Classical avail-ability work primarily controls rate, dimension, or minimum distance by shortening, recovery graphs, parity-check incidence, or generalized Hamming weights [4, 6, 8]. Here the target is an alphabet-dependent finite-length bound on Mmax (q, n, d, r, δ, a ), valid for arbitrary, possibly nonlinear, codes satisfying the stronger local-distance avail-ability condition. The LP retains the joint block-distance pattern of several repair alternatives for the same ordered codeword pair and recovered coordinate, together with its coupling to the coordinates outside the selected views. Among locality-aware LP bounds, Agarwal et al. use a product association scheme for a partition into uniform disjoint repair groups [11]. The refined dual-distribution LP of Gruica, Jany, and Ravagnani is support-sensitive and linear [12], while the moment-based LP of Li, Wei, and Xiong uses higher local moments and applies to general linear and nonlinear r, δ -LRCs [13]. These methods encode locality through different state spaces from the same-coordinate multi-view distribution studied here. Maximally recoverable availability codes impose a prescribed topology and a stronger erasure-correction requirement [14]; they form a different code class. Section 2 fixes the code class and the global Delsarte layer. Section 3 develops the retained-order s = 2 case, namely the four-block distribution, its positivity and collision constraints, and the projection hierarchy. Section 4 gives the certified exact bounds and the broader numerical landscape. Section 5 concludes with the scope of the relaxation. 
+
+# 2 Code class and preliminaries 
+
+Let q be a prime power and let C ⊆ Fnq be a code of size M ≥ 2 and minimum Hamming distance at least d. Linearity is not assumed. Write [ m] = {1, . . . , m }, let 
+
+C| E denote projection on E ⊆ [n], and write dE (x, y ) for restricted Hamming distance. Throughout, r ≥ 1, δ ≥ 2, and a ≥ 1. A projection with fewer than two distinct words is assigned minimum distance zero. 3Definition 2.1 (all-symbol local-distance availability) The code C has all-symbol local-distance ( r, δ, a )-availability if, for every i ∈ [n], one can select ordered local views 
+
+Ti,h = {i} ˙∪ Si,h , h = 1 , . . . , a, 
+
+such that 
+
+|Ti,h | ≤ r + δ − 1, d(C| Ti,h ) ≥ δ, 
+
+and Si, 1, . . . , S i,a ⊆ [n] \ { i} are pairwise disjoint for fixed i.
+
+No disjointness is required between recovery sets attached to different recovered coordinates. The parameter δ here is the minimum distance of each local projection, following the r, δ -locality convention of [2]. This should not be confused with the notation ( r, δ )c of Wang and Zhang [15], where δ − 1 counts alternative repair options rather than the distance of a local code. 
+
+Remark 2.2 (retained order and the general multi-view construction) Fix 1 ≤ s ≤ a and retain the first s selected views. With 
+
+O(s) 
+
+> i
+
+= [ n] \
+
+
+
+{i} ˙∪ Si, 1 ˙∪ · · · ˙∪ Si,s 
+
+
+
+,
+
+the natural joint statistic is 
+
+ dSi, 1 (x, y ), . . . , d Si,s (x, y ), 1{xi̸ =yi}, d O(s)
+
+> i
+
+(x, y ).
+
+Its distribution is the s + 2-block distance distribution. The centered identities and product-Krawtchouk positivity follow blockwise exactly as below. Each retained local view gives a complete-view collision inequality. For a union of at least two helper sets, if the recovered coordinates agree, any changed helper block already contributes at least δ differences; if they disagree, every selected helper set contributes at least δ − 1, so the punctured union has distance at least 2( δ − 1) ≥ δ. Thus every such subset gives the corresponding punctured helper-union inequality. Taking s = a retains all available repair views, while s = 1 is the three-block model of [10]. We write out only s = 2 below; the exact extremal computations further specialize to a = 2. 
+
+For the detailed four-block model we now assume a ≥ 2, fix one admissible ordered selection, and retain its first two views. Put 
+
+th = |Ti,h |, R0 = min {n, r + δ − 1}, h = 1 , 2.
+
+Then 
+
+δ ≤ th ≤ R0, t1 + t2 − 1 ≤ n. 
+
+Let Mmax (q, n, d, r, δ, a ) denote the largest size of a code in Definition 2.1. Since every code with a ≥ 2 has two selected views, the four-block relaxation below is valid uniformly for all a ≥ 2. We use it as the complete retained-order s = 2 model; the exact extremal results in Section 4 specialize to a = 2. The local condition forces every nonzero codeword difference to have weight at least δ: choose a coordinate i on which the pair differs and use d(C| Ti,h ) ≥ δ. We therefore use the effective threshold 
+
+d⋆ = max {d, δ }.
+
+4Define the normalized global distance distribution 
+
+Aℓ = 1
+
+M |{ (x, y ) ∈ C 2 : dH (x, y ) = ℓ}| , 0 ≤ ℓ ≤ n. 
+
+Thus 
+
+A0 = 1 ,
+
+> n
+
+X
+
+> ℓ=0
+
+Aℓ = M, Aℓ = 0 (1 ≤ ℓ < d ⋆).
+
+For 0 ≤ p, j ≤ N , let 
+
+Kp(j; N, q ) = 
+
+> p
+
+X
+
+> u=0
+
+(−1) u(q − 1) p−u
+
+ju
+
+ N − jp − u
+
+
+
+be the q-ary Krawtchouk polynomial. The Delsarte character-energy identity gives 
+
+Bw =
+
+> n
+
+X
+
+> ℓ=0
+
+AℓKw(ℓ; n, q ) ≥ 0, 0 ≤ w ≤ n
+
+[17]. These mass, distance, and transform constraints form the global layer of the four-block LP. For comparison, let U3blk denote the optimum of the known one-view three-block LP [10], which retains the partition Si ˙∪ { i} ˙∪ Oi. We do not repeat that formulation. The second comparison bound will arise directly as a coarsening of the four-block distribution in Section 3. 
+
+# 3 The retained-order s = 2 case: the four-block linear program 
+
+The four-block construction is designed to keep two kinds of information at once: com-patibility between the two local views for the same ordered pair, and the extension of that local pattern to the coordinates outside the selected views. The LP is obtained in three steps. We first record the exact four-block distances and their centered rela-tion to the global distance distribution. We then impose the full product-Krawtchouk spectrum, including the outside spectral degree. Finally, local distance yields collision inequalities on the two local views and their punctured helper union. The resulting LP admits two natural projections, making the information discarded by each comparison bound explicit. Fix the first two selected local views at each recovered coordinate i. Write 
+
+Oi = [ n] \  Si, 1 ˙∪ Si, 2 ˙∪ { i}, u(t1, t 2) = t1 + t2 − 1.
+
+Thus [n] = Si, 1 ˙∪ Si, 2 ˙∪ { i} ˙∪ Oi. (1) 5The admissible length pairs form 
+
+T2 = {(t1, t 2) : δ ≤ t1, t 2 ≤ R0, u (t1, t 2) ≤ n}.
+
+## 3.1 The four-block distribution and centered identities 
+
+For ( t1, t 2) ∈ T 2, 0 ≤ j < t 1, 0 ≤ k < t 2, 0 ≤ c ≤ n − u(t1, t 2), and b ∈ { 0, 1}, define 
+
+Zt1,t 2;j,k,c,b = 1
+
+nM 
+
+(x, y, i ) : 
+
+|Ti, 1| = t1, |Ti, 2| = t2,dSi, 1 (x, y ) = j, dSi, 2 (x, y ) = k, dOi (x, y ) = c, 1{xi̸ =yi} = b
+
+ . (2) Every cell records the global distance intrinsically: 
+
+ℓ = j + k + c + b. (3) Thus global-distance conditioning is already built into the four-block array; no separate conditioned array is needed in the main formulation. Counting, at each global distance ℓ, the recovered coordinates on which an ordered pair agrees or differs gives 
+
+X
+
+> t1,t 2,j,k,c j+k+c=ℓ
+
+Zt1,t 2;j,k,c, 0 = n − ℓn Aℓ, (4) 
+
+X
+
+> t1,t 2,j,k,c j+k+c+1= ℓ
+
+Zt1,t 2;j,k,c, 1 = ℓn Aℓ. (5) Local and global minimum distance imply 
+
+Zt1,t 2;j,k,c,b = 0 if 1 ≤ j + b < δ or 1 ≤ k + b < δ, (6) 
+
+Zt1,t 2;j,k,c,b = 0 if 1 ≤ j + k + c + b < d ⋆. (7) No additional zero constraint on the selected union is needed. Indeed, 1 ≤ j +k +b < δ 
+
+already forces one of the two local zero conditions in (6). Thus the four-block array contains the global distance conditioning without introducing a second conditioned variable. 
+
+## 3.2 Product-Krawtchouk positivity 
+
+The Fourier constraint is a direct blockwise form of the Delsarte character-energy identity. We record it because this formulation makes two features used later trans-parent: it applies to nonlinear codes, and every block carries its own spectral degree. Fix a nontrivial additive character χ of Fq and write χα(x) = χ(α · x). 6Lemma 3.1 (block character-energy identity) Let P1 ˙∪ · · · ˙∪ Ps = [ n], with |Pv | = mv , and define 
+
+Dj1,...,j s = 1
+
+M {(x, y ) ∈ C 2 : dPv (x, y ) = jv for all v} .
+
+For 0 ≤ wv ≤ mv , let Ωw = {α ∈ Fnq : wt( α|Pv ) = wv for all v}. Then 
+
+X
+
+> j1,...,j s
+
+Dj1,...,j s
+
+> s
+
+Y
+
+> v=1
+
+Kwv (jv ; mv , q ) = 1
+
+M
+
+X
+
+> α∈Ωw
+
+X
+
+> x∈C
+
+χα(x)
+
+> 2
+
+≥ 0. (8) 
+
+Proof Expand the squared character sums and interchange the sums over α and ( x, y ). On block Pv , summing characters of weight wv gives 
+
+X
+
+> β∈FPv q
+> wt( β)= wv
+
+χ(β · (x − y)|Pv ) = Kwv (dPv (x, y ); mv , q ) ,
+
+since a zero coordinate contributes q −1 and a nonzero coordinate contributes −1. The blocks are disjoint, so these factors multiply. □
+
+For 0 ≤ p1 < t 1, 0 ≤ p2 < t 2, 0 ≤ η ≤ n − u(t1, t 2), and e ∈ { 0, 1}, put Φt1,t 2;p1,p 2,η,e = X
+
+> j,k,c,b
+
+Zt1,t 2;j,k,c,b Kp1 (j; t1 − 1, q )Kp2 (k; t2 − 1, q )
+
+× Kη (c; n − u(t1, t 2), q )Ke(b; 1 , q ). (9) 
+
+Theorem 3.2 (four-block positivity) For every q-ary code, not necessarily linear, and every selected two-view configuration, we have 
+
+Φt1,t 2;p1,p 2,η,e ≥ 0
+
+on the natural index ranges. Proof Fix a recovered coordinate i with length pair ( t1, t 2). Applied to (1), Lemma 3.1 identifies the product-Krawtchouk transform of its four-block distance distribution with a sum of squared character energies, hence with a nonnegative quantity. By (2), Zt1,t 2;j,k,c,b is 1/n times the sum of these normalized coordinate distributions over all i with that ordered length pair. Therefore Φ t1,t 2;p1,p 2,η,e is the same 1 /n -weighted sum of nonnegative character energies. □
+
+The spectral degree η on Oi is the feature that distinguishes the four-block model from a union-only two-view model. Setting η = 0 keeps the joint spectrum on the selected union, whereas η > 0 records how that local sector extends to a global character. The same character-energy picture shows exactly how the global spectrum splits according to whether the character is nonzero at the recovered coordinate. Define 
+
+S(1)  
+
+> w
+
+= X
+
+> t1,t 2
+
+X
+
+> p1+p2+η=w−1
+
+Φt1,t 2;p1,p 2,η, 1, 1 ≤ w ≤ n, (10) 7S(0)  
+
+> w
+
+= X
+
+> t1,t 2
+
+X
+
+> p1+p2+η=w
+
+Φt1,t 2;p1,p 2,η, 0, 0 ≤ w < n. (11) 
+
+Proposition 3.3 (global spectral splitting) The four-block spectrum satisfies 
+
+S(1)  
+
+> w
+
+= wn Bw, S(0)  
+
+> w
+
+= n − wn Bw (12) 
+
+on the respective ranges. Proof For α ∈ Fnq , write 
+
+EC (α) = 1
+
+M
+
+X
+
+> x∈C
+
+χα(x)
+
+> 2
+
+.
+
+The global character-energy identity gives 
+
+Bw = X
+
+> wt( α)= w
+
+EC (α).
+
+On the other hand, the proof of Theorem 3.2 shows that, after summing over length pairs and all block degrees of total weight w, the sector e = 1 is 1
+
+n
+
+> n
+
+X
+
+> i=1
+
+X 
+
+> wt( α)= wαi̸=0
+
+EC (α).
+
+A character of weight w occurs in the inner sum for exactly w coordinates i, giving S(1)  
+
+> w
+
+=(w/n )Bw. The sector e = 0 counts the complementary n − w coordinates and gives S(0)  
+
+> w
+
+=(( n − w)/n )Bw. □
+
+Because every four-block spectral term is nonnegative, the outside-degree-zero sec-tor retained by the conditioned benchmark is a sub-sum of S(1)  
+
+> w
+
+or S(0)  
+
+> w
+
+. Thus the exact splitting above yields the character-charge inequalities used in the comparison projection below. 
+
+## 3.3 Local collision inequalities 
+
+For a fixed length pair set 
+
+mt1,t 2 = X
+
+> j,k,c,b
+
+Zt1,t 2;j,k,c,b .
+
+Each local projection has minimum distance at least δ. The punctured union has the same property. 
+
+Lemma 3.4 (punctured helper-union distance) The set of distinct projections of C on Si, 1 ˙∪
+
+Si, 2 has minimum distance at least δ.
+
+8Proof Take two codewords with distinct projections on the helper union. If their symbols at 
+
+i agree, at least one selected local view differs and contributes at least δ helper differences. If their symbols at i differ, both local views differ and each helper block contributes at least 
+
+δ − 1 differences. Their disjoint union therefore contributes at least 2( δ − 1) ≥ δ. □
+
+The two complete local views Ti, 1 and Ti, 2, together with the punctured helper union Si, 1 ˙∪ Si, 2, give the three collision constraints used in the LP. The common mechanism is worth making explicit. Suppose a projection has length L, minimum distance at least δ, distinct projected words z1, . . . , z N , and fiber sizes f1, . . . , f N .Singleton gives N ≤ qL−δ+1 , while Cauchy–Schwarz gives 1
+
+M
+
+> N
+
+X
+
+> u=1
+
+f 2 
+
+> u
+
+≥ MN ≥ M q −(L−δ+1) .
+
+The left side is exactly the normalized number of ordered codeword pairs that collide under the projection. Applying this to Ti, 1, Ti, 2, and Si, 1 ˙∪ Si, 2, and then averaging coordinates with a fixed length pair, gives 
+
+qt1−δ+1 X
+
+> k,c
+
+Zt1,t 2;0 ,k,c, 0 ≥ mt1,t 2 , (13) 
+
+qt2−δ+1 X
+
+> j,c
+
+Zt1,t 2;j, 0,c, 0 ≥ mt1,t 2 , (14) 
+
+qt1+t2−δ−1 X
+
+> c
+
+Zt1,t 2;0 ,0,c, 0 ≥ mt1,t 2 . (15) The last exponent is ( t1 + t2 − 2) − δ + 1, reflecting the length of the punctured helper union. This is the extra collision information obtained by keeping the two repair views simultaneously. 
+
+## 3.4 The LP and projection hierarchy 
+
+The four-block LP is now the intersection of the three layers above. It maximizes 
+
+M =
+
+> n
+
+X
+
+> ℓ=0
+
+Aℓ
+
+over the global Delsarte variables A and nonnegative four-block variables Z, subject to the centered and support constraints (4)–(7), the positivity constraints of Theorem 3.2, and the collision rows (13)–(15). Denote its optimum by U4blk .To isolate what is lost when positive outside spectral degrees are discarded, we define the conditioned coarsening explicitly. For ( t1, t 2) ∈ T 2, retain nonnegative variables 
+
+Yℓ;t1,t 2;j,k,b ,
+
+where 0 ≤ j < t 1, 0 ≤ k < t 2, b ∈ { 0, 1}, and 
+
+j + k + b ≤ ℓ ≤ j + k + b + n − u(t1, t 2). (16) 9The variable Y records the same cell as Z, with the outside distance replaced by the total distance; for a code-induced point, 
+
+Yℓ;t1,t 2;j,k,b = Zt1,t 2;j,k,ℓ −j−k−b,b . (17) The centered identities become 
+
+X
+
+> t1,t 2,j,k
+
+Yℓ;t1,t 2;j,k, 0 = n − ℓn Aℓ, (18) 
+
+X
+
+> t1,t 2,j,k
+
+Yℓ;t1,t 2;j,k, 1 = ℓn Aℓ. (19) We retain the local support zeros 
+
+Yℓ;t1,t 2;j,k,b = 0 if 1 ≤ j + b < δ or 1 ≤ k + b < δ. 
+
+Together with the global support of A, the centered identities also eliminate every cell with 1 ≤ ℓ < d ⋆.The spectral part of this coarsening keeps only the outside-degree-zero sector. Define Ψt1,t 2;p1,p 2,e = X
+
+> ℓ,j,k,b
+
+Yℓ;t1,t 2;j,k,b Kp1 (j; t1 − 1, q )Kp2 (k; t2 − 1, q )Ke(b; 1 , q ), (20) for the natural degree ranges, and impose Ψt1,t 2;p1,p 2,e ≥ 0. (21) Thus Ψ is precisely the η = 0 slice of the four-block spectrum. For 1 ≤ w ≤ n and 1 ≤ w < n , respectively, define 
+
+Q(1)  
+
+> w
+
+= X
+
+> t1,t 2
+
+X
+
+> p1+p2=w−1
+
+Ψt1,t 2;p1,p 2,1, (22) 
+
+Q(0)  
+
+> w
+
+= X
+
+> t1,t 2
+
+X
+
+> p1+p2=w
+
+Ψt1,t 2;p1,p 2,0, (23) and retain the global character-charge bounds 
+
+Q(1)  
+
+> w
+
+≤ wn Bw, 1 ≤ w ≤ n, (24) 
+
+Q(0)  
+
+> w
+
+≤ n − wn Bw, 1 ≤ w < n. (25) These inequalities are the part of the full spectral splitting visible when all positive outside degrees are discarded. 10 Finally, with 
+
+mCond  
+
+> t1,t 2
+
+= X
+
+> ℓ,j,k,b
+
+Yℓ;t1,t 2;j,k,b ,
+
+we retain all three collision rows, including the punctured helper-union constraint: 
+
+qt1−δ+1 X
+
+> ℓ,k
+
+Yℓ;t1,t 2;0 ,k, 0 ≥ mCond  
+
+> t1,t 2
+
+, (26) 
+
+qt2−δ+1 X
+
+> ℓ,j
+
+Yℓ;t1,t 2;j, 0,0 ≥ mCond  
+
+> t1,t 2
+
+, (27) 
+
+qt1+t2−δ−1 X
+
+> ℓ
+
+Yℓ;t1,t 2;0 ,0,0 ≥ mCond  
+
+> t1,t 2
+
+. (28) The conditioned LP maximizes the same objective M = P 
+
+> ℓ
+
+Aℓ over A and Y , subject to the global Delsarte layer and the constraints above. Denote its optimum by UCond .It is used only as a benchmark for the information carried by positive spectral degrees on Oi.
+
+Theorem 3.5 (validity and comparison projections) Every code with all-symbol local-distance (r, δ, a )-availability, a ≥ 2, induces a feasible four-block point of objective |C| .Moreover: 
+
+(i) merging either helper block with Oi gives a feasible point of the one-view three-block LP of [10]; 
+
+(ii) assigning each cell to ℓ = j +k +c+b gives a feasible point of the conditioned coarsening. Consequently, 
+
+Mmax (q, n, d, r, δ, a ) ≤ U4blk ≤ min {UCond , U 3blk }. (29) 
+
+Proof The preceding identities construct a feasible four-block point from any code once two views are selected; none of them uses linearity. For (i), retain one helper distance and replace the outside distance by the sum of c and the omitted helper distance. Krawtchouk convolution writes each transform on this merged block as a sum of nonnegative four-block transforms, using 
+
+Ks(x + y; m1 + m2, q ) = X
+
+> ρ+η=s
+
+Kρ(x; m1, q )Kη (y; m2, q ).
+
+The centered, support, and collision rows project by summation. For (ii), use the reindexing (17). Equation (3) gives (16), while (4)–(5) give (18)–(19). The local zero conditions are unchanged. Moreover, Ψt1,t 2;p1,p 2,e = Φ t1,t 2;p1,p 2,0,e ,
+
+so (21) follows from four-block positivity. All three collision rows project directly, including the punctured helper-union constraint (28). For the charge bounds, Q(1)  
+
+> w
+
+and Q(0)  
+
+> w
+
+are the η = 0 sub-sums of S(1)  
+
+> w
+
+and S(0)  
+
+> w
+
+, respec-tively. All four-block spectral terms are nonnegative, so Proposition 3.3 gives (24)–(25). The objective is unchanged in both projections, proving (29). □
+
+11 The two projections lose different information. The one-view projection keeps the full outside spectrum but forgets one helper block as a separate local view. The condi-tioned projection keeps both helper distances and the exact total distance but forgets every positive spectral degree on Oi. Thus the two comparison projections can lose different sources of strength. The number of four-block local variables is 
+
+NZ = 2 X
+
+> (t1,t 2)∈T 2
+
+(n − t1 − t2 + 2) t1t2 = O(nr 4) (30) for fixed δ. Since ℓ = j + k + c + b is a reindexing of the outside distance c, the conditioned coarsening has exactly the same number of local variables. 
+
+# 4 Exact bounds for availability a = 2 
+
+The theorem-level claims in this section use exact arithmetic throughout. For every certified parameter set, the three displayed LPs are reconstructed independently; rational primal and dual solutions are checked constraint by constraint, and their objectives agree exactly. The attaining construction is then checked directly against Definition 2.1 and against the induced four-block constraints. The LP upper bounds do not assume linearity; linearity is used only to describe the attaining constructions compactly. Floating-point computations are reported separately in Section 4.1 and are not used as proofs. 
+
+Theorem 4.1 For all-symbol local-distance availability a = 2 ,
+
+Mmax (2 , 8, 4, 2, 2, 2) = 8 , Mmax (3 , 7, 3, 2, 2, 2) = 27 ,Mmax (4 , 7, 3, 2, 2, 2) = 64 .
+
+For each parameter set, the four-block LP is strictly stronger than both comparison relaxations. 
+
+The certified LP values and matching construction sizes are summarized in Table 4.1.  
+
+> Table 4.1 Certified availability-two bounds and matching constructions.
+
+(q, n, d, r, δ, a ) U3blk UCond U4blk Witness (2 , 8, 4, 2, 2, 2) 10 3508 /337 8 8(3 , 7, 3, 2, 2, 2) 8991 /137 2817 /71 27 27 (4 , 7, 3, 2, 2, 2) 4864 /23 112 64 64 
+
+Proof The exact four-block dual certificates give the three upper bounds 8, 27, and 64. For the matching lower bounds, in the binary case take the linear code whose generator matrix 
+
+12 has columns (001) , (001) , (010) , (010) , (100) , (101) , (110) , (111) .
+
+For the ternary case use (001) , (001) , (010) , (011) , (100) , (101) , (111) .
+
+For the quaternary case, regard the seven Fano columns (001) , (010) , (011) , (100) , (101) , (110) , (111) as columns over F4. Every Fano line gives a length-three local projection of distance two, and two distinct lines through a recovered point give disjoint helper pairs. Their row spaces have sizes 8, 27, and 64, respectively, and minimum distances 4, 3, and 4. An independent exact checker records two disjoint admissible helper sets at every coordinate, forms the induced Zt1,t 2;j,k,c,b -array, and verifies the centered, spectral, and collision constraints. Thus these constructions attain the certified four-block upper bounds. 
+
+□
+
+In particular, 
+
+U4blk < min {UCond , U 3blk }
+
+in all three rows. Hence the four-block LP is strictly stronger than either coarsening in these examples, rather than merely a different parameterization of the same relaxation. The reproducibility repository contains implementation-independent builders and checkers for the displayed LPs, exact rational primal–dual certificates for the certified entries, and independent construction checks for Theorem 4.1. 
+
+## 4.1 Broader numerical landscape 
+
+The exact rows above do not indicate how often the outside spectrum changes the conditioned relaxation. In the exploratory scan underlying this paper, the numerical four-block optimum is strictly smaller than the conditioned optimum in all 20 tested rows. Table 4.2 shows representative cases across three alphabet sizes, including the two currently open rows. These values are floating-point HiGHS outputs, not certi-fied upper bounds. Conditioned values are rounded to four decimal places; four-block outputs numerically equal to an integer are displayed as that integer.    
+
+> Table 4.2 Representative availability-two computations, with a= 2 throughout. A match is numerical evidence of sharpness, not a theorem.
+
+(q, n, d, r, δ ) U num Cond U num 4blk Recorded size Status (2 , 7, 2, 2, 2) 9.7391 8 8 match (2 , 9, 4, 3, 2) 22.1277 16 16 match (2 , 13 , 5, 2, 2) 32.7805 32 — open (2 , 12 , 5, 3, 2) 39.6800 32 — open (3 , 8, 4, 2, 2) 41.2105 27 27 match (4 , 8, 4, 2, 2) 120.2892 64 64 match 
+
+13 The complete exploratory scan is stored in the reproducibility repository. These values are numerical only; promotion to a theorem requires an exact rational primal– dual certificate and an independently checked construction. 
+
+# 5 Conclusion 
+
+The multi-view construction organizes locality information by retained order s. At 
+
+s = 1 it is the three-block model of [10]; at s = 2 it becomes the four-block model developed here; taking s = a retains all available repair views. The exact binary, ternary, and quaternary examples in Theorem 4.1 show that, already at s = 2, both sources of information loss can matter: the one-view projection forgets one helper block as a separate local view, while the conditioned projection forgets the positive outside spectrum. The detailed development focuses on s = 2 for exposition and computation. Larger retained order gives a valid polynomial-size hierarchy for fixed s, but with a rapidly growing local state space and a larger family of collision constraints. Determining which of those higher-order constraints are computationally effective is a natural next step. The hierarchy remains a two-codeword relaxation. It does not retain intersec-tions between repair sets attached to different recovered coordinates, coordinate labels within a helper set, or compatibility among local configurations at different coordi-nates. Retaining such data may strengthen the bound, but it leads to a different and substantially larger optimization problem. 
+
+## Funding 
+
+The work of Ming-Hsuan Kang was supported by the National Science and Technology Council, Taiwan, under Grant NSTC 115-2115-M-A49-010. The work of Maosheng Xiong was supported by the Research Grants Council (RGC) of Hong Kong under Grant No. 16307524. 
+
+# Data and code availability 
+
+The reproducibility repository contains the LP builders, exact rational primal–dual certificates, construction witnesses and independent checkers, regression tests, and the complete exploratory scans used in this paper. Theorem-level certificates are separated from floating-point discovery computations. 
+
+# References 
+
+[1] Gopalan, P., Huang, C., Simitci, H., Yekhanin, S.: On the locality of codeword symbols. IEEE Transactions on Information Theory 58 (11), 6925–6934 (2012) https://doi.org/10.1109/TIT.2012.2208937 [2] Prakash, N., Kamath, G.M., Lalitha, V., Kumar, P.V.: Optimal linear codes with a local-error-correction property. In: 2012 IEEE International Symposium 14 on Information Theory Proceedings, pp. 2776–2780 (2012). https://doi.org/10. 1109/ISIT.2012.6284028 [3] Rawat, A.S., Papailiopoulos, D.S., Dimakis, A.G., Vishwanath, S.: Locality and availability in distributed storage. IEEE Transactions on Information Theory 
+
+62 (8), 4481–4493 (2016) https://doi.org/10.1109/TIT.2016.2524510 [4] Tamo, I., Barg, A., Frolov, A.: Bounds on the parameters of locally recoverable codes. IEEE Transactions on Information Theory 62 (6), 3070–3083 (2016) https: //doi.org/10.1109/TIT.2016.2518663 [5] Wang, A., Zhang, Z., Liu, M.: Achieving arbitrary locality and availability in binary codes. In: 2015 IEEE International Symposium on Information Theory, pp. 1866–1870 (2015). https://doi.org/10.1109/ISIT.2015.7282779 [6] Balaji, S.B., Kumar, P.V.: Bounds on the rate and minimum distance of codes with availability. In: 2017 IEEE International Symposium on Information Theory, pp. 3155–3159 (2017). https://doi.org/10.1109/ISIT.2017.8007111 [7] Kruglik, S., Frolov, A.: Bounds and constructions of codes with all-symbol locality and availability. In: 2017 IEEE International Symposium on Information Theory, pp. 1023–1027 (2017). https://doi.org/10.1109/ISIT.2017.8006683 [8] Kruglik, S., Nazirkhanova, K., Frolov, A.: New bounds and generalizations of locally recoverable codes with availability. IEEE Transactions on Information Theory 65 (7), 4156–4166 (2019) https://doi.org/10.1109/TIT.2019.2897705 [9] Kadiyam, U.D., Das, S.: A class of codes with availability and multiple local-erasures correction. IEEE Communications Letters 24 (10), 2087–2091 (2020) https://doi.org/10.1109/LCOMM.2020.3004757 [10] Kang, M.-H., Xiong, M.: Linear Programming Bounds for Locally Recovery Codes II. arXiv:2609.16044 (2026) https://doi.org/10.48550/arXiv.2609.16044 [11] Agarwal, A., Barg, A., Hu, S., Mazumdar, A., Tamo, I.: Combinatorial alphabet-dependent bounds for locally recoverable codes. IEEE Transactions on Informa-tion Theory 64 (5), 3481–3492 (2018) https://doi.org/10.1109/TIT.2018.2800042 [12] Gruica, A., Jany, B., Ravagnani, A.: LRCs: Duality, LP bounds, and field size. Designs, Codes and Cryptography 94 , 100 (2026) https://doi.org/10.1007/ s10623-026-01829-7 [13] Li, S., Wei, H., Xiong, M.: Moment-Based Linear Programming Bounds for Locally Recoverable Codes. arXiv:2608.05758v1 (2026). https://doi.org/10. 48550/arXiv.2608.05758 [14] Mart´ ınez-Pe˜ nas, U., Lalitha, V.: Maximally recoverable codes with locality and availability. IEEE Transactions on Information Theory (2026) https://doi.org/ 10.1109/TIT.2026.3694571 . Early access; arXiv:2505.24573v2 [15] Wang, A., Zhang, Z.: Repair locality with multiple erasure tolerance. IEEE Transactions on Information Theory 60 (11), 6979–6987 (2014) https://doi.org/ 10.1109/TIT.2014.2351404 15 [16] Westerb¨ ack, T., Freij-Hollanti, R., Hollanti, C.: Applications of polymatroid theory to distributed storage systems. In: 2015 53rd Annual Allerton Confer-ence on Communication, Control, and Computing, pp. 231–237 (2015). https: //doi.org/10.1109/ALLERTON.2015.7447009 [17] Delsarte, P.: An Algebraic Approach to the Association Schemes of Cod-ing Theory. Philips Research Reports Supplements, vol. 10. Philips Research Laboratories, Eindhoven (1973) 16

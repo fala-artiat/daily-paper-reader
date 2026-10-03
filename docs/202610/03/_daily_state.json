@@ -1,0 +1,25 @@
+{
+  "date": "20261003",
+  "date_label": "",
+  "generated_at": "2026-10-03 21:44:16 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.39230v1",
+      "route": "202610/03/2609.39230v1-multi-view-block-distance-distributions-and-linear-programming-bounds-for-locally-recoverable-codes-with-availability",
+      "title": "Multi-View Block Distance Distributions and Linear Programming Bounds for Locally Recoverable Codes with Availability",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "用于存储修复的具有可用性的局部可修复码",
+      "first_seen_at": "2026-10-03 21:44:16 UTC",
+      "updated_at": "2026-10-03 21:44:16 UTC"
+    }
+  ]
+}
