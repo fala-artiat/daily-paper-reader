@@ -1,0 +1,25 @@
+{
+  "date": "20261007",
+  "date_label": "",
+  "generated_at": "2026-10-07 23:45:29 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.08349v1",
+      "route": "202610/07/2610.08349v1-optimal-conversion-bandwidth-for-mds-convertible-codes-in-the-split-regime-with-rfkfri",
+      "title": "Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with $r^F<k^F<r^I$",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "分布式存储中用于容错与降低存储开销的纠删码",
+      "first_seen_at": "2026-10-07 23:45:29 UTC",
+      "updated_at": "2026-10-07 23:45:29 UTC"
+    }
+  ]
+}

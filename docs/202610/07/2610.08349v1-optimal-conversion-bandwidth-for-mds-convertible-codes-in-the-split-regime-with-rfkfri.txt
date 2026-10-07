@@ -1,0 +1,1540 @@
+Title: Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with r^F<k^F<r^I
+
+URL Source: https://arxiv.org/pdf/2610.08349v1
+
+Published Time: Wed, 07 Oct 2026 01:32:38 GMT
+
+Number of Pages: 21
+
+Markdown Content:
+# Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with rF < k F < r I
+
+Lewen Wang Sihuang Hu ∗
+
+Abstract 
+
+Erasure codes are widely used in distributed storage systems to provide fault tolerance. An [n, k ] erasure code encodes k data symbols into n coded symbols and distributes them across n
+
+storage nodes. Once the code parameters are fixed, the achievable fault tolerance is also fixed. However, the failure rates of storage nodes may vary over time, and dynamically adapting the code parameters to these variations can substantially reduce storage overhead. Motivated by this observation, Maturana and Rashmi introduced convertible codes, which allow an [ nI , k I ]initial code with redundancy rI = nI − kI to be transformed into an [ nF , k F ] final code with redundancy rF = nF − kF , while preserving the required code properties. Convertible codes whose initial and final codes are both MDS codes are called MDS convertible codes. They are of particular interest because MDS codes provide the maximum erasure tolerance for a given amount of storage overhead. Several works have established lower bounds and constructions for the bandwidth cost of MDS convertible codes in the split regime. However, the tight bound in the parameter range 
+
+rF < k F < r I remains unknown. In this work, we establish a family of new rank inequalities for stable MDS convertible codes with linear conversion procedures and derive an improved lower bound on the bandwidth cost consisting of three cases for this remaining range. We prove that the bound is tight by presenting three explicit constructions, one for each case. 
+
+# 1 Introduction 
+
+Erasure coding has become a fundamental technique for protecting data against device failures in distributed storage systems. In this setting, an [ n, k ] erasure code over a finite field Fq encodes 
+
+k data symbols into n coded symbols, which are then stored on n distinct storage nodes. Once the code parameters n and k are fixed, the fault-tolerance capability of the system is also fixed. In practice, however, the failure rates of storage devices may vary over time. In particular, the failure rate may follow a bathtub curve over the device lifetime. It is relatively high during an early-failure period, becomes lower and relatively stable during the useful-life period, and increases again during the wear-out period. Prior work by Kadekodi et al. has shown that adapting the code parameters to changes in device reliability can substantially reduce storage overhead while maintaining a prescribed reliability level [1]. Therefore, it is desirable to dynamically adjust the code parameters as the fault-tolerance requirements of the system change. A straightforward approach is to decode and re-encode all stored data, which incurs significant I/O and communication costs. To reduce these costs, Maturana and Rashmi introduced the framework of convertible codes , which enables efficient conversion from an initial code to a final code with different parameters while preserving desired code properties [2–4]. When additional 
+
+> ∗The authors are with the School of Cyber Science and Technology, Shandong University, Qingdao, Shandong 266237, China. Email: lewenwang3@gmail.com, husihuang@sdu.edu.cn.
+
+1arXiv:2610.08349v1 [cs.IT] 6 Oct 2026 structural properties are required, convertible codes can be designed to preserve those properties during conversion. In particular, MDS codes are of special interest due to their widespread use in distributed storage and their optimal erasure tolerance. A convertible code whose initial and final codes are both MDS codes is called an MDS convertible code . The framework has subsequently been extended to other classes of codes, including locally repairable codes [5–7] and minimum storage regenerating(MSR) codes [8]. There are two basic regimes in code conversion. The first is the merge regime , where several initial codewords are converted into a single final codeword. The second is the split regime , where one initial codeword is converted into several final codewords. These two regimes serve as fundamental building blocks for more general code conversions. The efficiency of code conversion is commonly measured by two metrics. The first is the access cost , namely, the total amount of store data accessed during conversion. Maturana and Rashmi established fundamental lower bounds on the access cost of MDS convertible codes and provided optimal constructions for both the merge and split regimes [2, 3, 9]. Subsequent work studied, among other directions, low-field-size constructions [10], irregular and generalized conversions [11–13], and extensions to locally repairable and regenerating codes [5–8, 14]. The second metric is the bandwidth cost , namely, the amount of data transferred during conversion. For the merge regime, Maturana and Rashmi established a tight lower bound and constructed optimal MDS convertible codes achieving this bound [15]. Recent work has extended the study of the merge regime to more general code settings and constructions [11–13, 16, 17]. In contrast, the bandwidth problem in the split regime remains less understood. Maturana and Rashmi derived an information-flow lower bound and proposed explicit constructions based on the piggybacking framework [18]. Their results characterize the optimal bandwidth when rF ≥ kF or rI ≤ rF . For the remaining range, their stronger bound relies on an additional conjecture. More recently, Wang and Hu [19] and Singhvi et al. [20] improved the bandwidth lower bounds using algebraic and information-theoretic approaches, respectively. Both works established tight bounds when rF ≥ kF
+
+or rI ≤ kF . However, the tightness of the lower bounds for rF < k F < r I remained open. In this paper, we resolve the remaining regime rF < k F < r I for stable MDS convertible codes with linear conversion procedures. We strengthen the lower bound in this regime and provide explicit constructions attaining the resulting bounds. Our main contributions are summarized as follows. 
+
+• An improved lower bound for rF < k F < r I . Building on coordinate projections of the associated column spaces of the initial and final codes, we derive a family of rank inequalities for the read bandwidth from unchanged and retired nodes. These inequalities include the constraints used in [19] as special cases. In particular, when rF < k F and rI ≤ kF , all additional inequalities are redundant, and the resulting linear program reduces to the two constraints used in [19]. Hence, it recovers the previous lower bound in this regime, which is tight as it is matched by the constructions of Maturana and Rashmi [18]. For the remaining range rF < k F < r I , the new inequalities impose additional constraints that strengthen the lower bound. By solving the resulting linear program, we obtain an improved lower bound on the read bandwidth for the remaining range rF < k F < r I . The bound consists of three cases and is formally stated in Theorem 1. 
+
+• Explicit constructions for the three cases. We provide three explicit constructions corresponding to the three cases of the lower bound. For Cases I and II, we select suitable rows of the final parity matrix, referred to as anchor rows , and use an invertible transformation to map the corresponding anchor-row matrix to a Cauchy submatrix of the initial parity matrix. This simultaneously yields the required column-space relation for conversion and ensures the MDS property. For Case III, we construct a two-layer auxiliary MDS array code: the first 2layer is based on structured polynomial evaluations, while the second layer is based on a Reed–Solomon code. This realizes the required column-space inclusion while preserving the MDS property. 
+
+• Tightness in the stable linear conversion model. The three constructions attain the corresponding lower bounds whenever the required integrality conditions are satisfied. These conditions can always be met by choosing the subpacketization ℓ appropriately, with 
+
+ℓ polynomial in the initial code length nI . Cases I and II can be realized over fields of size 
+
+q = O (kI + rI )ℓ, while for Case III it suffices to take q = O (( kI + rI )ℓ)L0
+
+ for some absolute constant L0. Hence, our lower bound is tight throughout the range rF < k F < r I within the stable linear conversion model. Since the write bandwidth is fixed for stable conversion, this also determines the minimum total conversion bandwidth in this regime. The remainder of this paper is organized as follows. Section 2 introduces the necessary definitions and notation. Section 3 derives improved lower bounds on the read bandwidth for the regime 
+
+rF < k F < r I . Section 4 presents explicit constructions attaining these lower bounds and analyzes their field-size and subpacketization requirements. Finally, Section 5 concludes the paper. 
+
+# 2 Preliminaries 
+
+In this section, we introduce the basic definitions and notation used throughout the paper. For a positive integer a, let [ a] := {0, 1, . . . , a − 1}. For a matrix A ∈ Fr×sq , we index its rows by [ r] and its columns by [ s]. For S ⊆ [r] and T ⊆ [s], let A[S; T ] denote the submatrix formed by the rows indexed by S and the columns indexed by T , both taken in increasing order unless otherwise specified. In particular, A[S; :] and A[:; T ] denote the submatrices formed by the rows in 
+
+S and the columns in T , respectively. The same notation is used for block matrices, in which case 
+
+S and T index block rows and block columns. For a positive integer s and matrices A1, . . . , A s, let diag( A1, . . . , A s) denote the block diagonal matrix with diagonal blocks A1, . . . , A s.Let Fq be a finite field with q elements. An [ n, k, ℓ ] array code C over Fq is a kℓ -dimensional subspace of Fnℓ q . A codeword c = ( c0, . . . , cn−1) ∈ C consists of n symbols ci = ( ci, 0, . . . , c i,ℓ −1) ∈ Fℓq
+
+for i ∈ [n], and each scalar ci,j is referred to as a subsymbol . An [ n, k, ℓ ] array code is MDS if any 
+
+k out of its n symbols suffice to recover the entire codeword. A generator matrix G of C has size 
+
+kℓ × nℓ , and its rows form a basis of C. For a message vector m ∈ Fkℓ q , the encoding function of C is 
+
+C(m) = mG.We next recall the definition of MDS convertible codes in the split regime. 
+
+Definition 1 (MDS Convertible Codes [3]) . Let λ ≥ 2 be an integer. An [nI , k I = λk F ; nF , k F ; ℓ]
+
+MDS convertible code over Fq consists of 
+
+• A pair of codes (CI , CF ) where CI is an initial MDS array code with parameter [nI , k I , ℓ ] and 
+
+CF a final MDS array code with parameter [nF , k F , ℓ ].
+
+• A conversion procedure T with input {C I (m) : m = ( m0, · · · , mλ−1)} and output {C F (mi) : 
+
+i ∈ [λ]} for all mi ∈ FkF ℓq .
+
+Throughout the paper, let rI = nI − kI and rF = nF − kF denote the numbers of initial and final parity symbols, respectively. Throughout this paper, we consider conversion procedures that read subsymbols directly from the initial nodes. A conversion procedure is called linear if each subsymbol of a new symbol is computed as an Fq-linear combination of the subsymbols read from the initial codeword. This focus is without loss of generality for practical purposes, as to the best of 3our knowledge, virtually all existing constructions of convertible codes employ linear conversion procedures. Each symbol involved in the conversion belongs to one of three categories: (1) Unchanged symbols, which appear in both the initial and final codewords; (2) Retired symbols, which appear only in the initial codeword; (3) New symbols, which appear only in the final codewords. For i ∈ [λ], let Ni denote the set of indices of new symbols in the i-th final codeword. For each initial symbol i ∈ [nI ], let Di ⊆ [ℓ] be the set of subsymbol coordinates read from the 
+
+i-th initial symbol during conversion, and define βi = |Di|. The read, write, and total bandwidth costs are, respectively, 
+
+• The read bandwidth cost is R = nI −1P
+
+> i=0
+
+βi.
+
+• The write bandwidth cost is W = ( λ−1P
+
+> i=0
+
+|Ni|)ℓ.
+
+• The total bandwidth cost is R + W .A stable conversion maximizes the number of unchanged symbols and hence minimizes the write bandwidth for the given code parameters. 
+
+Definition 2 (Stable convertible code [3]) . An [nI , k I ; nF , k F ; ℓ] MDS convertible code is called 
+
+stable if it uses the maximum number of unchanged symbols among all MDS convertible codes with the same parameters. 
+
+For an [ nI , k I = λk F ; nF , k F ; ℓ] MDS convertible code in the split regime, at most kI initial symbols can remain unchanged, and this bound can be achieved by straightforward re-encoding [19]. As in previous work [18–20], we focus on stable convertible codes. In this case, the conversion has exactly kI unchanged symbols, so each final codeword contains kF unchanged symbols and rF new symbols. Hence, W = λr F ℓ. Therefore, minimizing the total conversion bandwidth is equivalent to minimizing the read bandwidth R.The following lemma establishes a systematic representation for generator matrices of the initial and final codes. 
+
+Lemma 1 (Systematic representation) . Consider a stable [nI , k I = λk F ; nF , k F ; ℓ] linear MDS convertible code in the split regime. After suitable node permutations and invertible changes of message coordinates, we may take the first kI symbols of the initial code to be the unchanged systematic symbols, partitioned into λ groups of kF symbols corresponding to the λ final codewords. The generator matrices of the initial code and the final code for each group then have the systematic forms 
+
+GI = [ IkI ℓ | B], GFt = [ IkF ℓ | Ct], t ∈ [λ].
+
+Write B = ( Bi,j )i∈[kI ], j ∈[rI ], and Ct = ( Ct;( i,j ))i∈[kF ], j ∈[rF ], where all blocks have size ℓ × ℓ. Moreover, matrices B and Ct are block superregular: every square block submatrix is nonsingular. Proof. Let G1 and G2 be the original initial and final generator matrices, respectively. For each 
+
+t ∈ [λ], let U Ft be the set of the kF unchanged node positions in the t-th final codeword, and let 
+
+U Ft = [ nF ] \ U Ft . Let Pt be the block permutation matrix that places the positions in U Ft first, followed by those in U Ft , each in increasing order. Write 
+
+G2Pt = [ At | Ht], where At = G2[:; U Ft ], and Ht = G2[:; U Ft ].
+
+4Since the final code is MDS, each At is nonsingular. Let U I be the set of the kI unchanged initial node positions. Order these positions by their corresponding final codewords, consistently with the chosen orderings of U F 
+
+> 0
+
+, . . . , U Fλ−1. Let P be the block permutation matrix placing U I first in this order, followed by its complement U I = [ nI ] \ U I
+
+in increasing order. Set A = diag( A0, . . . , A λ−1). By the unchanged-node correspondence, 
+
+mG1[:; U I ] = mA for every m = ( m0, . . . , mλ−1) ∈ FkI ℓq .
+
+Consequently, G1[:; U I ] = A. Applying the corresponding invertible row transformations gives 
+
+GI = A−1G1P = [ IkI ℓ | B], B = A−1G1[:; U I ],GFt = A−1 
+
+> t
+
+G2Pt = [ IkF ℓ | Ct], Ct = A−1 
+
+> t
+
+Ht, t ∈ [λ].
+
+The row transformations correspond to the changes of message coordinates bmt = mtAt and bm = mA.Together with the consistent node permutations, they preserve the unchanged-node correspondence and both bandwidth costs. Moreover, invertible row transformations and node permutations preserve the MDS property, so B and each Ct are block superregular. This can be viewed as a block-matrix extension of the superregular matrices defined in Section II.B of [3]. 
+
+Remark 1. The matrices Ct need not coincide, since different final codewords may have different unchanged node positions. However, they are not chosen independently: each is obtained from the same final generator matrix G2 through Ct = A−1 
+
+> t
+
+Ht. In [19], although the matrices Ct are assumed to coincide, the lower-bound arguments remain valid when they differ, since these arguments use only the block-superregular property of each Ct.
+
+Define x = PkI −1 
+
+> i=0
+
+βi, and y = PnI −1 
+
+> i=kI
+
+βi. Thus, x and y are the total amounts of data read from the unchanged and retired symbols, respectively, and we have the read bandwidth cost R = x + y. 
+
+We next recall a characterization of linear conversion established in [19]. For E ⊆ [ℓ], let 
+
+E = [ ℓ] \ E be its complementary set. For each t ∈ [λ], define C(t) =  Ct;( i,j )[Dtk F +i; :]    
+
+> i∈[kF], j ∈[rF]
+
+.
+
+and eC = diag  C(0) , C (1) , . . . , C (λ−1) . Let eB =  Bi,j [Di; DkI +j ]  
+
+> i∈[kI],j ∈[rI]
+
+.
+
+Lemma 2 (Linear-conversion characterization) . Let (CI , CF ) be a stable [nI , k I = λk F ; nF , k F ; ℓ]
+
+MDS convertible code with systematic representations GI and GFt , t ∈ [λ], as described in Lemma 1. For any Di ⊆ [ℓ], i ∈ [nI ], there exists a linear stable conversion from CI to CF using only the subsymbols specified by the sets Di if and only if 
+
+col( eC) ⊆ col( eB). (1) 
+
+Moreover, such a conversion can be performed with read bandwidth x + rank( eB). In particular, if the linear conversion procedure minimizes the read bandwidth, then eB may be assumed to have full column rank. 
+
+The necessity of (1) and the full-column-rank property follow by the same arguments as in [19, Lemma 2], while the converse follows by the argument in [19, Remark 1]. These arguments do not require the matrices Ct to coincide. We will use the following form of Linnik’s theorem in Section 4.3.3. 
+
+Lemma 3 (Linnik’s theorem [21]) . There exist absolute constants c, L > 0 such that, for every integer d ≥ 2 and every integer a satisfying 1 ≤ a < d and gcd( a, d ) = 1 , the least prime p with 
+
+p ≡ a (mod d) satisfies 
+
+p ≤ cd L.
+
+53 A Family of Rank Inequalities and Improved Lower Bounds 
+
+In this section, we derive a family of rank inequalities for stable MDS convertible codes with linear conversion procedures in the split regime, and use them to obtain improved lower bounds on the read bandwidth. For rF ≥ kF , the minimum read bandwidth is already known to be kI ℓ, achieved by full re-encoding [18–20]. Therefore, throughout this section, we focus on the nontrivial case 
+
+rF < k F .
+
+3.1 A Family of Rank Inequalities 
+
+For each t ∈ [λ], define xt = P(t+1) kF −1 
+
+> j=tk F
+
+βj . Thus, xt is the total amount of data read from the kF
+
+unchanged symbols associated with the t-th final codeword, and x = P 
+
+> t∈[λ]
+
+xt.
+
+Consider a linear conversion procedure that minimizes the read bandwidth. By Lemma 2, col( eC) ⊆ col( eB), and eB has full column rank. Since eB has y = PnI −1 
+
+> j=kI
+
+βj columns, it follows that rank( eB) = y. 
+
+We first derive a lower bound on the rank of each diagonal block C(t) of eC. For any U ⊆ [kF ]with |U | = rF , the rF × rF block submatrix Ct[U ; :] is nonsingular since Ct is block superregular. Deleting the rows indexed by Dtk F +i within each block row i ∈ U decreases the rank by at most P 
+
+> i∈U
+
+βtk F +i. The resulting matrix is a submatrix of C(t). Therefore, rank( C(t)) ≥ rF ℓ − X
+
+> i∈U
+
+βtk F +i.
+
+Averaging over all rF -subsets U ⊆ [kF ] gives rank( C(t)) ≥ rF ℓ− rF 
+
+> kF
+
+xt. Since eC = diag  C(0) , . . . , C (λ−1) ,
+
+summing over t ∈ [λ] yields rank( eC) ≥ λr F ℓ − rF
+
+kF x. (2) We next derive additional rank constraints by applying coordinate projections to the column spaces of the initial and final codes. 
+
+Lemma 4. For every s ∈ [λ], define qs := min {sk F , r I }. Then the read amounts x and y satisfy 
+
+qs + ( λ − s)rF
+
+kI x +
+
+
+
+1 − qs
+
+rI
+
+
+
+y ≥ (λ − s)rF ℓ. (3) 
+
+Proof. We first consider 1 ≤ s ≤ λ − 1. Fix a subset S ⊆ [λ] with |S| = s, let IS = S 
+
+> t∈S
+
+{tk F , tk F +1, . . . , (t + 1) kF − 1}, and xS := P 
+
+> t∈S
+
+xt. Let eBS and eCS be obtained from eB and eC, respectively, by retaining the block rows indexed by IS . Since eC is block diagonal, rank( eCS ) = X
+
+> t∈S
+
+rank( C(t)). (4) Let πS denote the coordinate projection that retains the block rows indexed by IS , then we have col( eBS ) = πS
+
+ col( eB) and col( eCS ) = πS
+
+ col( eC). Since col( eC) ⊆ col( eB), we have 
+
+
+
+col( eC) ∩ ker πS
+
+
+
+⊆
+
+
+
+col( eB) ∩ ker πS
+
+
+
+. By rank-nullity, rank( eBS ) − rank( eCS ) = rank( eB) − rank( eC)
+
+−
+
+
+
+dim 
+
+
+
+col( eB) ∩ ker πS
+
+
+
+− dim 
+
+
+
+col( eC) ∩ ker πS
+
+ 
+
+≤ rank( eB) − rank( eC)=y − rank( eC).
+
+(5) 6We now lower bound rank( eBS ). Let H ⊆ I S , J ⊆ [rI ], and |H| = |J| = qs. Since B is block superregular, the qs × qs block submatrix B[H; J] is nonsingular. Restricting each block column indexed by j ∈ J to the downloaded coordinates DkI +j preserves the linear independence of the selected columns. Deleting the rows indexed by Di, i ∈ H, can decrease the rank by at most P 
+
+> i∈H
+
+βi. Therefore, rank( eBS ) ≥ X
+
+> j∈J
+
+βkI +j − X
+
+> i∈H
+
+βi. (6) Summing (6) over all qs-subsets J ⊆ [rI ] and all qs-subsets H ⊆ I S gives 
+
+sk F
+
+qs
+
+ rI
+
+qs
+
+
+
+rank( eBS ) ≥
+
+sk F
+
+qs
+
+ rI − 1
+
+qs − 1
+
+ X 
+
+> j∈[rI]
+
+βkI +j −
+
+sk F − 1
+
+qs − 1
+
+ rI
+
+qs
+
+
+
+xS .
+
+By averaging all qs-subsets J ⊆ [rI ] and all qs-subsets, we have rank( eBS ) ≥ qs
+
+rI y − qs
+
+sk F xS . (7) Averaging (5) and (7) over all S ⊆ [λ] with |S| = s, we have 1
+
+ λs
+
+ X
+
+> S⊆[λ]
+> |S|=s
+
+rank( eBS ) − sλ rank( eC) ≤ y − rank( eC) (8) 1
+
+ λs
+
+ X
+
+> S⊆[λ]
+> |S|=s
+
+rank( eBS ) ≥ qs
+
+rI y − qs
+
+kI x. (9) Combining (8) and (9), we obtain 
+
+qs
+
+kI x +
+
+
+
+1 − qs
+
+rI
+
+
+
+y ≥ λ − sλ rank( eC). (10) Using (2) and kI = λk F gives 
+
+qs + ( λ − s)rF
+
+kI x +
+
+
+
+1 − qs
+
+rI
+
+
+
+y ≥ (λ − s)rF ℓ, 
+
+which proves (3) for 1 ≤ s ≤ λ − 1. For s = 0, we have q0 = 0. Since rank( eC) ≤ rank( eB) = y, together with (2), we obtain  
+
+> rF
+> kF
+
+x + y ≥ λr F ℓ, which is equivalent to (3) for s = 0. 
+
+Remark 2. The proof of Lemma 4 uses only the block-superregular property of each Ct and does not require the final codes to coincide or be equivalent. Hence, the rank inequalities also hold for stable linear conversions from one [nI , k I = λk F , ℓ ] MDS array code to λ different [nF , k F , ℓ ] MDS array codes. 
+
+Lemma 4 gives a family of rank inequalities satisfied by the optimal linear conversion, which includes the constraints used in [19] as special cases. When rI ≤ kF and rF < k F , the constraint corresponding to s = 0 recovers the first constraint used in the proof of Theorem 2 of [19]. Moreover, for every 1 ≤ s ≤ λ − 1, we have qs = rI , and (3) reduces to x ≥ kI (λ−s)rF  
+
+> rI+( λ−s)rF
+
+ℓ. Since the right-hand side decreases with s, the constraint corresponding 7to s = 1 is the strongest among all s ≥ 1. Hence, all inequalities with s ≥ 2 are redundant, and the resulting LP reduces exactly to the two constraints used in Theorem 2 of [19]. Moreover, this lower bound is tight in the regime rI ≤ kF and rF < k F , as it is matched by the construction of Maturana and Rashmi [18]. When rF < k F < r I , the constraints corresponding to s = 0 and s = 1 coincide with the two constraints underlying Theorem 3 of [19], while the constraints with s ≥ 2 provide additional constraints that can strengthen the resulting lower bound. 
+
+3.2 Improved Lower Bounds for rF < k F < r I
+
+We now use the family of rank inequalities in Lemma 4 to derive improved lower bounds for the remaining regime rF < k F < r I .
+
+Theorem 1. For every stable MDS [nI , k I = λk F ; nF , k F ; ℓ] convertible code with a linear conversion procedure satisfying rF < k F < r I , define m =
+
+j rI −1
+
+> kF
+
+k
+
+, δ = rI − mk F , and h = λ − m. Further, let 
+
+∆ := rI (kF − rF ) + kI rF , T := rI + ( h − 1) rF , and define Γ = rI (mk F +hr F )  
+
+> kIδ
+
+. Then the read bandwidth cost satisfies 
+
+R ≥
+
+
+
+λ r F ℓ, if kI ≤ rI ,  
+
+> (kI)2rF
+> ∆
+
+ℓ, if kI > r I , Γ ≥ 1,
+
+ kI (h − 1) rF
+
+T + rI rF (mk F + hδ )
+
+δT 
+
+
+
+ℓ, if kI > r I , Γ < 1.
+
+Proof. It suffices to consider a linear conversion procedure that minimizes the read bandwidth. By Lemma 4, for every s ∈ [λ], we have 
+
+qs + ( λ − s)rF
+
+kI x +
+
+
+
+1 − qs
+
+rI
+
+
+
+y ≥ (λ − s)rF ℓ, (11) where qs = min {sk F , r I }. We consider the linear program minimize R = x + y
+
+subject to (11) ,
+
+0 ≤ x ≤ kI ℓ, 0 ≤ y ≤ rI ℓ. 
+
+(12) The optimal value of this LP provides a lower bound on the read bandwidth. We first consider the case kI ≤ rI . Taking s = 0 in (11) gives rF 
+
+> kF
+
+x + y ≥ λr F ℓ. Since rF < k F
+
+and x ≥ 0, we have 
+
+R = x + y =
+
+ rF
+
+kF x + y
+
+
+
++
+
+
+
+1 − rF
+
+kF
+
+
+
+x ≥ λr F ℓ. 
+
+Moreover, the point ( x, y ) = (0 , λr F ℓ) is feasible for (12). More specifically, for s = 0, equality holds in (11). For 1 ≤ s ≤ λ − 1, we have qs = sk F , and substituting this point into (11) gives 
+
+
+
+1 − sk F
+
+rI
+
+
+
+λr F ℓ ≥ (λ − s)rF ℓ. 
+
+This inequality is equivalent to λk F ≤ rI ,which holds by assumption. The variable bounds are also satisfied since 0 < λr F ℓ < k I ℓ ≤ rI ℓ. Thus, the optimal value of (12) is λr F ℓ, proving the first case. 8We next consider kI > r I . Since kF < r I < k I = λk F , by the definition m =
+
+j rI −1
+
+> kF
+
+k
+
+we have 1 ≤ m ≤ λ − 1 and mk F < r I ≤ (m + 1) kF . Recall that rI = mk F + δ and h = λ − m. We now simplify the constraints in (11). For 0 ≤ s ≤ m, we have qs = sk F , and (11) becomes 
+
+sk F + ( λ − s)rF
+
+kI x + rI − sk F
+
+rI y ≥ (λ − s)rF ℓ. (13) Let Fs(x, y ) = sk F +( λ−s)rF 
+
+> kI
+
+x+ rI −sk F 
+
+> rI
+
+y −(λ−s)rF ℓ. Since Fs(x, y ) = F0(x, y )+ s(F1(x, y )−F0(x, y )), all equality lines Fs(x, y ) = 0 where 0 ≤ s ≤ m, pass through the common intersection of F0(x, y ) = 0 and F1(x, y ) = 0. A direct calculation gives this point as 
+
+P = ( xint , y int ) = 
+
+ kI rF (kI − rI )∆ ℓ, kI rF rI
+
+∆ ℓ
+
+
+
+.
+
+For 0 ≤ s ≤ m, write the equality line in (13) as y = ϕs(x). Its slope is γs = − rI
+
+ sk F +( λ−s)rF
+
+    
+
+> kI(rI−sk F)
+
+. For 0 ≤ s ≤ m − 1, 
+
+γs+1 − γs = − rI  λk F rF + rI (kF − rF )
+
+kI (rI − sk F )( rI − (s + 1) kF ) < 0.
+
+Thus the slopes are strictly decreasing: γ0 > γ 1 > · · · > γ m. Since all these lines pass through P , it follows that max  
+
+> 0≤s≤m
+
+ϕs(x) = 
+
+(
+
+ϕm(x), x ≤ xint ,ϕ0(x), x ≥ xint . (14) For m + 1 ≤ s ≤ λ − 1, we have qs = rI , and (11) reduces to x ≥ kI (λ−s)rF  
+
+> rI+( λ−s)rF
+
+ℓ. The right-hand side is decreasing in s. Hence, if the range m+1 ≤ s ≤ λ−1 is nonempty, its strongest constraint is obtained at s = m + 1. Together with x ≥ 0, all saturated constraints are equivalent to x ≥ xv = kI (h−1) rF 
+
+> T
+
+ℓ, 
+
+When m = λ − 1, we have h = 1, and hence xv = 0. A direct calculation yields 
+
+xint − xv = kI rI rF (kF − δ)∆T ℓ ≥ 0, (15) where the last inequality follows from 1 ≤ δ ≤ kF . Consequently, the constraints in (12) are equivalent to xv ≤ x ≤ kI ℓ, 0 ≤ y ≤ rI ℓ, together with 
+
+y ≥
+
+(
+
+ϕm(x), xv ≤ x ≤ xint ,ϕ0(x), x ≥ xint .
+
+The two relevant slopes are 
+
+γm = − rI (mk F + hr F )
+
+kI δ = −Γ, γ0 = − λr F
+
+kI = − rF
+
+kF . (16) Since rF < k F , we have −1 < γ 0 < 0. The level lines of the objective x + y have slope −1. We now distinguish two cases. If Γ ≥ 1, then γm ≤ − 1 < γ 0. Moreover, we have xint   
+
+> kIℓ
+
+= rF (kI −rI )∆ <
+
+1, and yint   
+
+> rIℓ
+
+= kI rF 
+
+> ∆
+
+< 1. Thus, the point P = ( xint , y int ) lies in the feasible region. Hence, as illustrated in Figure 1a, the minimum of x + y is attained at P = ( xint , y int ) = 
+
+ kI rF (kI −rI )∆ ℓ, kI rF rI 
+
+> ∆
+
+ℓ
+
+
+
+.
+
+9xyrI ℓλr F ℓxv xint kI ℓ    
+
+> L0
+> Lm
+> x+y=R⋆
+> P
+
+(a) Γ ≥ 1.          
+
+> xyrIℓλr Fℓxvxint kIℓ
+> L0
+> Lm
+> x+y=R⋆
+> PQ
+
+(b) Γ < 1. 
+
+Figure 1: Geometric interpretation of the linear program in Theorem 1. The lines L0 and Lm are the equality boundaries corresponding to s = 0 and s = m, respectively. The dashed lines represent 
+
+x + y = R⋆, where R⋆ is the optimal objective value. Therefore, 
+
+R ≥ xint + yint 
+
+= kI rF (kI − rI ) + kI rF rI
+
+∆ ℓ
+
+= (kI )2rF
+
+∆ ℓ, 
+
+which proves the second case. If Γ < 1, then −1 < γ m < γ 0 < 0. We first note that xv  
+
+> kIℓ
+
+= (h−1) rF 
+
+> T
+
+< 1. Moreover, Γ < 1 implies 
+
+δ > r F . Indeed, if δ ≤ rF , then 
+
+rI (mk F + hr F ) ≥ (mk F + δ)( mk F + hδ ) > λk F δ = kI δ, 
+
+contradicting Γ < 1. Hence δT −rF (mk F +hδ ) = rI (δ−rF ) > 0, and therefore yv  
+
+> rIℓ
+
+= rF (mk F +hδ ) 
+
+> δT
+
+< 1.
+
+Thus, the point Q = ( xv, y v) lies in the feasible region. Hence, as illustrated in Figure 1b, the minimum is attained at the leftmost feasible point 
+
+Q = ( xv, y v) = 
+
+ kI (h − 1) rF
+
+T ℓ, rI rF (mk F + hδ )
+
+δT ℓ
+
+
+
+.
+
+It follows that 
+
+R ≥ xv + yv =
+
+ kI (h − 1) rF
+
+T + rI rF (mk F + hδ )
+
+δT 
+
+
+
+ℓ, 
+
+which proves the third case. 10 Remark 3. The proof of Theorem 1 also identifies an optimal solution (x∗, y ∗) to the LP (12) ,given by 
+
+(x∗, y ∗) = 
+
+ 0, λr F ℓ, kI ≤ rI ,
+
+ kI rF (kI − rI )∆ ℓ, kI rF rI
+
+∆ ℓ
+
+
+
+, kF < r I < k I , Γ ≥ 1,
+
+ kI (h − 1) rF
+
+T ℓ, rI rF (mk F + hδ )
+
+δT ℓ
+
+
+
+, kF < r I < k I , Γ < 1.
+
+These three cases will be used in Section 4 to construct matching convertible codes. 
+
+# 4 Explicit Constructions Attaining the Lower Bounds 
+
+In this section, we present explicit constructions attaining the lower bounds derived in Theorem 1. For each construction, we choose the subpacketization ℓ so that the prescribed number of subsymbols read from each node is an integer. In each construction, all λ final codewords use the same systematic generator matrix. Specifically, we construct 
+
+GI = [ IkI ℓ | B], G Ft = GF = [ IkF ℓ | C] for t ∈ [λ],
+
+where B = ( Bi,j )i∈[kI ],j ∈[rI ] and C = ( Ci,j )i∈[kF ],j ∈[rF ] with Bi,j , C i,j ∈ Fℓ×ℓq . Thus, the matrices Ct
+
+in Lemma 1 all equal C. For each construction, we establish the block-superregular property of B
+
+and C, ensuring that both codes are MDS, and describe a linear conversion procedure that preserves all kI systematic symbols and attains the corresponding lower bound on the read bandwidth. 
+
+4.1 Case I: rI ≥ kI
+
+In this case, the optimal read bandwidth is R = λr F ℓ. We attain this bound by downloading subsymbols only from the retired parity nodes. Choose ℓ such that rI | λr F ℓ, and set σ = λr F ℓrI ,
+
+τ = ℓ − σ. Since rF < k F and rI ≥ kI = λk F , we have 0 < σ < ℓ . Each retired parity node contributes σ subsymbols, while no systematic subsymbol is read. 
+
+4.1.1 Construction of the final code CF
+
+Choose a scalar Cauchy matrix C ∈ FkF ℓ×rF ℓq , and partition it as C = Ci,j 
+
+  
+
+> i∈[kF],j ∈[rF]
+
+, where 
+
+Ci,j ∈ Fℓ×ℓq . Every square block submatrix of C is a square submatrix of a scalar Cauchy matrix and is therefore nonsingular. Thus, GF = [ IkF ℓ | C] generates an MDS array code. Define F = Iλ ⊗ C ∈ FkI ℓ×rI σq , where rI σ = λr F ℓ. Then F is the block-diagonal replication of the final parity transform across the λ final groups. For i ∈ [kF ], let Ci = ( Ci,j )j∈[rF ] denote the 
+
+i-th block row of C. Let S = [ σ] and S = [ ℓ]\[σ]. We designate the first σ rows of each Ci as anchor rows and define 
+
+A0 =
+
+
+
+C0[S; :] ...
+
+CkF −1[S; :] 
+
+ ∈ FkF σ×rF ℓq , M0 =
+
+
+
+C0[S; :] ...
+
+CkF −1[S; :] 
+
+ ∈ FkF τ ×rF ℓq .
+
+Since kF σ = λk F rF ℓrI ≤ rF ℓ and every square submatrix of C is nonsingular, A0 has full row rank. Let A = Iλ ⊗ A0 ∈ FkI σ×rI σq and M = Iλ ⊗ M0 ∈ FkI τ ×rI σq . Then rank A = kI σ. 
+
+11 4.1.2 Construction of the initial code CI
+
+Choose a scalar Cauchy matrix E ∈ FkI σ×rI σq , and partition it into kI ×rI blocks E = ( Ei,j )i∈[kI ],j ∈[rI ],where Ei,j ∈ Fσ×σq . Both A and E have full row rank. Complete their rows to bases of FrI σq ,obtaining invertible matrices bA and bE whose first kI σ rows are A and E, respectively. Then 
+
+L = bA−1 bE ∈ GL rI σ(Fq) satisfies AL = E. Set Z = M L and D = F L , and partition them as 
+
+Z = ( Zi,j )i∈[kI ], j ∈[rI ], D = ( Di,j )i∈[kI ], j ∈[rI ],
+
+where Zi,j ∈ Fτ ×σq and Di,j ∈ Fℓ×σq . Since A and M are obtained by selecting, respectively, the first σ rows and the remaining τ rows from each of the kI block rows of F , each containing ℓ
+
+rows, we have Di,j =
+
+Ei,j 
+
+Zi,j 
+
+
+
+. Choose a scalar Cauchy matrix Q ∈ FkI τ ×rI τq , and partition it as 
+
+Q = ( Qi,j )i∈[kI ],j ∈[rI ], where Qi,j ∈ Fτ ×τq . Define 
+
+Bi,j =
+
+Ei,j 0
+
+Zi,j Qi,j 
+
+
+
+, (17) and let B = ( Bi,j )i∈[kI ], j ∈[rI ]. The initial code is generated by GI = [ IkI ℓ | B]. Figure 2 illustrates the construction, and the same block-triangular structure is also used, up to coordinate permutations, in Cases II and III. To verify the MDS property, let I ⊆ [kI ] and J ⊆ [rI ] satisfy |I| = |J| ≥ 1. After permuting its rows and columns to group the first σ coordinates of each selected block before the remaining τ
+
+coordinates, B[I; J] becomes 
+
+E[I; J] 0
+
+Z[I; J] Q[I; J]
+
+
+
+. Both E[I; J] and Q[I; J] are square submatrices of scalar Cauchy matrices and are therefore nonsingular. Thus, B[I; J] is nonsingular, so B is block superregular and the initial code is MDS. 
+
+4.1.3 Conversion and field size 
+
+Download the first σ coordinates from each retired parity node and read no systematic subsymbol. The matrices in Lemma 2 then satisfy eC = F and eB = D = F L. Since L is invertible, col( eC) = col( F ) = col( F L ) = col( eB).
+
+Hence, Lemma 2 ensures that these downloads permit a linear conversion preserving all kI systematic symbols. Its read bandwidth is R = rI σ = λr F ℓ, which attains the Case I lower bound. To construct the scalar Cauchy matrices C, E, and Q, it suffices to choose a prime power q
+
+satisfying 
+
+q > max (kF + rF )ℓ, (kI + rI )σ, (kI + rI )τ .
+
+Hence one may take q = O (kI + rI )ℓ.
+
+4.2 Case II: kF < r I < k I and Γ ≥ 1
+
+Recall that ∆ = rI (kF − rF ) + kI rF . In this case, the optimal read bandwidth is R = (kI )2rF 
+
+> ∆
+
+ℓ.Choose ℓ such that ∆ | ℓ, and set β = rF (kI −rI )∆ ℓ, σ = kI rF 
+
+> ∆
+
+ℓ. Each unchanged systematic node contributes β subsymbols, while each retired parity node contributes σ subsymbols. Define 
+
+u = ℓ − β = rI kF
+
+∆ ℓ, w = σ − β = rF rI
+
+∆ ℓ, τ = ℓ − σ = rI (kF − rF )∆ ℓ. 
+
+12 C = ( Ci)i∈[kF ]                                      
+
+> Ci= ( Ci,j )j∈[rF]
+> Cis a Cauchy matrix
+> F=Iλ⊗CA0=
+> 
+> C0[S; :] ...
+> CkF−1[S; :]
+> A=Iλ⊗A0
+> E=AL
+> = ( Ei,j )
+> Eis a Cauchy matrix
+> M0=
+> 
+> C0[S; :] ...
+> CkF−1[S; :]
+> M=Iλ⊗M0
+> Z=M L
+> = ( Zi,j )
+> D=F L
+> = ( Di,j ), Di,j =
+> Ei,j
+> Zi,j
+> 
+> Bi,j =
+> Ei,j 0
+> Zi,j Qi,j
+> 
+> Q= ( Qi,j ) is a Cauchy matrix
+> LL
+> anchor rows remaining rows
+
+Figure 2: Construction of the initial parity blocks in Case I. The matrices C, E, and Q are scalar Cauchy matrices. An invertible matrix L satisfying AL = E gives Z = M L and D = F L . The blocks of D are then completed with those of Q to form Bi,j .Since rF < k F and rI < k I , we have 0 < β < σ < ℓ and 0 < w < u . The parameters satisfy 
+
+u = w + τ, σ = w + β, kF w = rF u, kI w = rI σ. 
+
+In particular, λr F u = rI σ.
+
+4.2.1 Construction of the final code CF
+
+Choose a scalar Cauchy matrix N = ( ni,j )i∈[kF ],j ∈[rF ] ∈ FkF ×rF 
+
+> q
+
+, and set bC = N ⊗ Iℓ. For any 
+
+I ⊆ [kF ] and J ⊆ [rF ] with |I| = |J| ≥ 1, the matrix bC[I; J] = N [I; J] ⊗ Iℓ is nonsingular. Thus, bC
+
+is block superregular. Before reordering the rows, designate the last β coordinates in each systematic block as read coordinates. Restricting each block row of bC to its first u rows and deleting the resulting last β zero columns from each block column gives 
+
+H = N ⊗ Iu =
+
+
+
+H0
+
+...
+
+HkF −1
+
+ , where Hi = ni, 0Iu · · · ni,r F −1Iu
+
+ ∈ Fu×rF uq .
+
+We select w anchor rows from each Hi by defining Si = {iw, iw + 1 , . . . , (i + 1) w − 1} (mod u), and 
+
+Si := [ u] \ Si. Since w < u , the integers iw, . . . , (i + 1) w − 1 have distinct remainders modulo u.Hence |Si| = w and |Si| = u − w = τ . Set 
+
+A0 =
+
+
+
+H0[S0; :] ...
+
+HkF −1[SkF −1; :] 
+
+ ∈ FkF w×rF uq , M 0 =
+
+
+
+H0[S0; :] ...
+
+HkF −1[SkF −1; :] 
+
+ ∈ FkF τ ×rF uq .
+
+To show that A0 is nonsingular, for each v ∈ [u] define Tv := {i ∈ [kF ] : v ∈ Si}. The integers iw + a,with i ∈ [kF ] and a ∈ [w], range over [ kF w] = [ rF u]. Each residue modulo u therefore occurs exactly 
+
+rF times, in distinct block rows because w < u . Hence |Tv| = rF . The v-th row of Hi is supported on the v-th coordinate of each block column, with entries ni, 0, . . . , n i,r F −1. Grouping the selected rows and columns by their coordinate index therefore transforms A0 into diag  N [T0; :] , . . . , N [Tu−1; :] .
+
+Each diagonal block is a square submatrix of the Cauchy matrix N and is therefore nonsingular. Thus, A0 ∈ GL rF u(Fq). For each i ∈ [kF ], let Π i be the permutation matrix that orders the rows of the i-th block row of bC according to Si, [ ℓ] \ [u], and Si, with each set taken in increasing order. Define Π := diag(Π 0, . . . , ΠkF −1), and C = Π bC. The rows in each systematic block are now ordered as w
+
+13 N = ( ni,j )i∈[kF ]                                                                   
+
+> j∈[rF]
+> Nis a Cauchy matrix
+> bC=N⊗IℓH=N⊗Iu=
+> 
+> H0
+> ...
+> HkF−1
+> 
+> restrict to [ u] rows A0=
+> 
+> H0[S0; :] ...
+> HkF−1[SkF−1; :]
+> 
+> M0=
+> 
+> H0[S0; :] ...
+> HkF−1[SkF−1; :]
+> 
+> anchor rows Si
+> remaining rows Si
+> C= Π bCGF= [ IkFℓ|C]Reorder each block as
+> Si, [ ℓ]\[u], Si
+> eH=
+> 
+> H0[S0; :]
+> H0[S0; :] ...
+> HkF−1[SkF−1; :]
+> HkF−1[SkF−1; :]
+> 
+> restrict to unread rows
+> A=Iλ⊗A0
+> M=Iλ⊗M0
+> F=Iλ⊗eHE= ( Ei,j )
+> Ei,j =
+> Ean
+> i,j
+> Erd
+> i,j
+> 
+> Eis a Cauchy matrix
+> Ean = Ean
+> i,j
+> 
+> Z=M L
+> = ( Zi,j )
+> D=F L Di,j =
+> Ean
+> i,j
+> Zi,j
+> 
+> LLLBi,j =
+> 
+> Ean
+> i,j 0
+> Erd
+> i,j 0
+> Zi,j Qi,j
+> 
+> Q= ( Qi,j ) is a Cauchy matrix
+
+Figure 3: Construction of the initial and final codes in Case II. The matrices N , E, and Q are scalar Cauchy matrices. The row permutation Π orders each systematic block as anchor, read, and remaining unread coordinates. Setting L = A−1Ean gives Z = M L and D = F L , from which the initial parity blocks are formed as in (18). anchor coordinates, β read coordinates, and τ remaining unread coordinates. In particular, the read coordinates occupy [ σ] \ [w]. Since Π acts by an invertible row permutation within each block row, 
+
+C remains block superregular. Thus, GF = [ IkF ℓ | C] generates an MDS array code. Deleting the read rows from each block row of C and the resulting zero columns gives 
+
+eH =
+
+
+
+H0[S0; :] 
+
+H0[S0; :] ...
+
+HkF −1[SkF −1; :] 
+
+HkF −1[SkF −1; :] 
+
+
+
+∈ FkF u×rF uq .
+
+Collecting the first w rows from each u-row block of eH gives A0, while collecting the remaining τ rows gives M0. Define F = Iλ ⊗ eH ∈ FkI u×rI σq , A = Iλ ⊗ A0 ∈ GL rI σ(Fq), and M := Iλ ⊗ M0 ∈ FkI τ ×rI σq .These matrices will be used in the construction of the initial code. 
+
+4.2.2 Construction of the initial code CI
+
+Choose a scalar Cauchy matrix E ∈ FkI σ×rI σq , and partition it into kI ×rI blocks E = ( Ei,j )i∈[kI ],j ∈[rI ],where Ei,j ∈ Fσ×σq . Since σ = w + β, write 
+
+Ei,j =
+
+Ean 
+
+i,j 
+
+Erd 
+
+i,j 
+
+
+
+,
+
+where Ean 
+
+i,j ∈ Fw×σq , Erd 
+
+i,j ∈ Fβ×σq . Let Ean be the matrix obtained by retaining the first w rows of each block row of E. Since kI w = rI σ, it is a square submatrix of the scalar Cauchy matrix E
+
+and is therefore nonsingular. Set L = A−1Ean , Z = M L and D = F L. Then L is invertible and 
+
+AL = Ean . Partition Z and D as Z = ( Zi,j )i∈[kI ],j ∈[rI ], D = ( Di,j )i∈[kI ],j ∈[rI ], where Zi,j ∈ Fτ ×σq
+
+and Di,j ∈ Fu×σq . Since A and M collect the first w and the remaining τ rows from each of the kI
+
+block rows of F , respectively, we have 
+
+Di,j =
+
+Ean 
+
+i,j 
+
+Zi,j 
+
+
+
+.
+
+14 Choose a scalar Cauchy matrix Q ∈ FkI τ ×rI τq and partition it as Q = ( Qi,j )i∈[kI ],j ∈[rI ], where 
+
+Qi,j ∈ Fτ ×τq . For each i ∈ [kI ] and j ∈ [rI ], define 
+
+Bi,j := 
+
+
+
+Ean  
+
+> i,j
+
+0
+
+Erd  
+
+> i,j
+
+0
+
+Zi,j Qi,j 
+
+ =
+
+Ei,j 0
+
+Zi,j Qi,j 
+
+
+
+, (18) and let B = ( Bi,j )i∈[kI ], j ∈[rI ]. The initial code CI is generated by GI = [ IkI ℓ | B]. Since E and Q
+
+are scalar Cauchy matrices, the same block-triangular argument as in Case I shows that B is block superregular and the initial code is MDS. Figure 3 illustrates the constructions of the initial and final codes. 
+
+4.2.3 Conversion and field size 
+
+Read the β coordinates indexed by [ σ] \ [w] from every unchanged systematic node, and download the first σ coordinates from every retired parity node. Deleting the read rows and retaining the downloaded parity columns in B gives eB = D = F L. On the final-code side, deleting the zero columns of eC gives F , so col( eC) = col( F ). Since L is invertible, col( eC) = col( F ) = col( F L ) = col( eB).
+
+Thus, Lemma 2 ensures that these downloads permit a linear conversion preserving all kI systematic symbols. Its read bandwidth is R = kI β + rI σ = (kI )2rF 
+
+> ∆
+
+ℓ, which attains the Case II lower bound. To construct the scalar Cauchy matrices N , E, and Q, it suffices to choose a prime power q
+
+satisfying q > max kF + rF , (kI + rI )σ, (kI + rI )τ . Hence one may take q = O (kI + rI )ℓ.
+
+4.3 Case III: kF < r I < k I and Γ < 1
+
+Recall that m =
+
+j rI −1
+
+> kF
+
+k
+
+, δ = rI − mk F , h = λ − m, and T = rI + ( h − 1) rF . Choose ℓ such that 
+
+δT | ℓ, and set β = (h−1) rF 
+
+> T
+
+ℓ, σ = rF (mk F +hδ ) 
+
+> δT
+
+ℓ. Each unchanged systematic node contributes β
+
+subsymbols, while each retired parity node contributes σ subsymbols. These read amounts attain the Case III lower bound once the conversion is established. Define u = ℓ − β = rI 
+
+> T
+
+ℓ, w = σ − β = rF 
+
+> δ
+
+u, 
+
+and τ = ℓ − σ = u − w. The condition Γ < 1 implies h ≥ 2 and rF < δ ≤ kF , so 0 < β < σ < ℓ .The following identities will be used below: 
+
+δw = rF u, rI β = ( h − 1) δw, rI σ = ( mk F + hδ )w. 
+
+4.3.1 Construction of the final code CF
+
+Set n0 = kF w, d 0 = δw = rF u. Then d0 ≤ n0. Choose a multiplicative subgroup H of Fq of size n0,and partition it as 
+
+H = H0 ˙∪ · · · ˙∪ H kF −1, where |H i| = w for i ∈ [kF ].
+
+Choose two disjoint subsets U, V ⊂ Fq \ H with |U| = kF τ and |V| = d0, and partition them as 
+
+U = U0 ˙∪ · · · ˙∪ U kF −1, where |U i| = τ for i ∈ [kF ],
+
+V = V0 ˙∪ · · · ˙∪ V rF −1, where |V j | = u for j ∈ [rF ].
+
+For i ∈ [kF ], j ∈ [rF ], define Wi,j = ( 1 
+
+> a−b
+
+)a∈H i∪U i, b ∈V j ∈ Fu×uq , using fixed orderings within each set and placing the rows indexed by Hi before those indexed by Ui. Then W = ( Wi,j )i∈[kF ],j ∈[rF ] ∈
+
+15 FkF u×rF uq is a scalar Cauchy matrix. Choose another scalar Cauchy matrix QF ∈ FkF β×rF βq ,
+
+and partition it into kF × rF blocks QF = ( QFi,j )i∈[kF ],j ∈[rF ]. Define Ci,j =
+
+Wi,j 00 QFi,j 
+
+
+
+, and let 
+
+C = ( Ci,j )i∈[kF ],j ∈[rF ]. After row and column permutations, every square block submatrix of C
+
+becomes block diagonal, with diagonal blocks that are square submatrices of W and QF . Since both diagonal blocks are nonsingular, C is block superregular, and GF = [ IkF ℓ | C] generates an MDS array code. For each i ∈ [kF ], let the rows of Wi,j indexed by Hi be its w anchor rows. Let Wan =(Wi,j [Hi; :]) i∈[kF ],j ∈[rF ] ∈ FkF w×d0 
+
+> q
+
+be the matrix formed by all anchor rows, and let Wlo = ( Wi,j [Ui; : ]) i∈[kF ],j ∈[rF ] ∈ FkF τ ×d0 
+
+> q
+
+be the matrix formed by the remaining rows. We next express col( Wan ) in terms of polynomial evaluations. Define QV (X) = Q 
+
+> b∈V
+
+(X − b). For each b ∈ V , the column of Wan 
+
+corresponding to b can be written as 
+
+
+
+QV (x)−1
+
+ QV (x)
+
+> x−b
+
+ 
+
+> x∈H
+
+. The polynomials 
+
+n QV (X) 
+
+> X−b
+
+: b ∈ V 
+
+o
+
+are linearly independent. Otherwise, if P 
+
+> b∈V
+
+cb QV (X) 
+
+> X−b
+
+= 0 , then evaluating at X = b0 ∈ V gives 
+
+cb0
+
+Q b∈V 
+
+> b̸=b0
+
+(b0 − b) = 0 , and hence cb0 = 0. Since these d0 polynomials all have degree less than d0,they form a basis of the polynomial space of degree less than d0. Therefore, we have col( Wan ) = 
+
+n QV (x)−1p(x) 
+
+> x∈H
+
+: deg p < d 0
+
+o
+
+. (19) After the last β read coordinates are removed, the residual final parity transform for one final group is W . Define F = Iλ ⊗ W, F an = Iλ ⊗ Wan , and Flo = Iλ ⊗ Wlo . Then Fan and Flo are respectively the anchor-row and remaining-row restrictions of F .
+
+4.3.2 Construction of the initial code CI
+
+We first construct an auxiliary [ kI + rI , r I , σ ] MDS array code E. Its systematic representation will provide a block superregular matrix E whose first w rows in each block row form a matrix 
+
+Ean satisfying col( Fan ) ⊆ col( Ean ). Choose λ distinct cosets ζ0H, . . . , ζ λ−1H in F× 
+
+> q
+
+, and define 
+
+g(X) := Xn0 , and θt = ζn0 
+
+> t
+
+for t ∈ [λ]. For every x ∈ H , we have 
+
+g(ζtx) = ( ζtx)n0 = ζn0 
+
+> t
+
+= θt.
+
+Thus g is constant on each coset ζtH. Moreover, the values θ0, . . . , θ λ−1 are pairwise distinct. This is because H = {x ∈ F× 
+
+> q
+
+: xn0 = 1 } for |H| = n0. Thus θs = θt would imply ζs/ζ t ∈ H , contradicting the choice of distinct cosets. Define the polynomial space 
+
+P := 
+
+nm−1X
+
+> j=0
+
+g(X)j pj (X) + 
+
+> m+h−1
+
+X
+
+> j=m
+
+g(X)j qj (X) : deg pj < n 0, deg qj < d 0
+
+o
+
+. (20) Since g(X) = Xn0 and d0 ≤ n0, the monomials in different summands of (20) have distinct degrees. Therefore, dim P = mn 0 + hd 0 = ( mk F + hδ )w = rI σ. 
+
+Moreover, every polynomial in P has degree at most (λ − 1) n0 + d0 − 1 < λn 0 = kI w. 
+
+We now use P to construct the auxiliary code E. For a message f ∈ P , each auxiliary node stores 
+
+σ = w + β subsymbols in two layers. In the first layer, node sk F + t, for s ∈ [λ] and t ∈ [kF ], stores 16  QV (x)−1f (ζsx) 
+
+> x∈H t
+
+for s ∈ [λ], t ∈ [kF ] (f (x)) x∈F i for i ∈ [rI ][( kI + rI )β, r I β] Reed–Solomon code 
+
+kI rI
+
+wβ
+
+Figure 4: Encoding scheme of the [ kI + rI , r I , σ ] MDS array code E in Case III, where f ∈ P . The first layer consists of weighted evaluations on the first kI auxiliary nodes and ordinary evaluations on the last rI auxiliary nodes, while the second layer is a Reed–Solomon encoding of dimension rI β.
+
+ QV (x)−1f (ζsx) 
+
+> x∈H t
+
+. The coordinates follow the ordering of Ht used in W . The first kI auxiliary nodes therefore use kI w distinct evaluation points. All multipliers are nonzero because H ∩ V = ∅.For the last rI auxiliary nodes, choose rI w distinct elements 
+
+F = F0 ˙∪ · · · ˙∪ F rI −1 ⊆ Fq \ [
+
+> s∈[λ]
+
+ζsH,
+
+where |F i| = w for i ∈ [rI ]. Node kI + i stores ( f (x)) x∈F i in its first layer, using a fixed ordering of 
+
+Fi. Thus, all ( kI + rI )w first-layer evaluation points are distinct. For the second layer, collect the coefficients of X0, . . . , X d0−1 in each of qm+1 , . . . , q m+h−1. There are ( h − 1) d0 = ( h − 1) δw = rI β such coefficients. Encode them using a scalar [( kI + rI )β, r I β]Reed–Solomon code and place β encoded symbols in each auxiliary node. Together, the two layers give σ subsymbols per node, as illustrated in Figure 4. To verify the MDS property of E, consider any rI auxiliary nodes. Their rI β second-layer symbols recover qm+1 , . . . , q m+h−1. Subtracting the corresponding contributions from the first-layer symbols and dividing by the nonzero evaluation multipliers gives evaluations of 
+
+f0(X) = 
+
+> m−1
+
+X
+
+> j=0
+
+Xjn 0 pj (X) + Xmn 0 qm(X).
+
+Since deg f0 < mn 0 + d0 = ( mk F + δ)w = rI w, 
+
+the rI w distinct evaluation points supplied by these rI nodes uniquely determine f0. Hence any 
+
+rI nodes recover f , proving that E is an [ kI + rI , r I , σ ] MDS array code. Use the last rI auxiliary nodes as an information set and write the systematic encoding matrix in column form as 
+
+ME =
+
+ EIrI σ
+
+
+
+, E ∈ FkI σ×rI σq .
+
+For m ∈ FrI σq , the corresponding auxiliary codeword, written as a column vector, is ME m. The MDS property implies that E is block superregular with σ × σ blocks. Let Ean ∈ FkI w×rI σq be obtained by retaining the first w rows of each block row of E. By construction, the column space col( Ean ) consists of the weighted evaluation vectors of polynomials 17 in P on the first kI auxiliary nodes. Consequently, col( Ean ) is the space of first-layer evaluation vectors on the first kI auxiliary nodes. Since every polynomial in P has degree less than kI w,evaluation on the kI w distinct points of the first kI nodes is injective. Therefore rank Ean = rI σ. 
+
+We next show that col( Fan ) ⊆ col( Ean ). For t ∈ [λ], define the Lagrange polynomial 
+
+Lt(Y ) := Y
+
+> s∈[λ]
+> s̸=t
+
+Y − θs
+
+θt − θs
+
+.
+
+For every polynomial p with deg p < d 0, define ft,p (X) = Lt(g(X)) p(X/ζ t). Expanding Lt shows that ft,p is a linear combination of g(X)j p(X/ζ t), j ∈ [λ]. Since d0 ≤ n0, each term satisfies the degree conditions in (20); hence ft,p ∈ P . For x ∈ H , we have 
+
+ft,p (ζsx) = 
+
+(
+
+p(x), s = t, 
+
+0, s̸ = t. 
+
+By (19), the corresponding weighted evaluation vectors range over col( Wan ) on the t-th coset and vanish on all other cosets. Varying t and taking linear combinations gives col( Fan ) ⊆ col( Ean ).
+
+This inclusion and the full column rank of Ean imply that there is a unique matrix J ∈ FrI σ×λd 0
+
+> q
+
+satisfying Ean J = Fan . Since Fan has full column rank, so does J. Choose a left inverse K ∈ Fλd 0×rI σq
+
+satisfying KJ = Iλd 0 , and define Z = Flo K ∈ FkI τ ×rI σq . Then we have ZJ = Flo . The matrices 
+
+J and K can be computed by Gaussian elimination. Partition E and Z into kI × rI blocks and write E = ( Ei,j )i∈[kI ],j ∈[rI ], where Ei,j ∈ Fσ×σq , and Z = ( Zi,j )i∈[kI ],j ∈[rI ], where Zi,j ∈ Fτ ×σq . Write 
+
+Ei,j =
+
+Ean 
+
+> i,j
+
+Erd 
+
+> i,j
+
+
+
+, where Ean  
+
+> i,j
+
+∈ Fw×σq , and Erd  
+
+> i,j
+
+∈ Fβ×σq . Choose a scalar Cauchy matrix QI ∈ FkI τ ×rI τq ,
+
+and partition it into kI × rI blocks as QI = ( QIi,j )i∈[kI ],j ∈[rI ], where QIi,j ∈ Fτ ×τq . For i ∈ [kI ] and 
+
+j ∈ [rI ], define 
+
+Bi,j =
+
+
+
+Ean  
+
+> i,j
+
+0
+
+Zi,j QIi,j 
+
+Erd  
+
+> i,j
+
+0
+
+ , (21) and let B = ( Bi,j )i∈[kI ], j ∈[rI ]. The initial code CI is generated by GI = [ IkI ℓ | B].
+
+Moving the last β rows of each block row immediately after its first w rows gives blocks of the form Ei,j 0
+
+Zi,j QIi,j 
+
+
+
+.
+
+Since E is block superregular and QI is a scalar Cauchy matrix, the block-triangular argument from Case I proves that B is block superregular. Thus, the initial code is MDS. 
+
+4.3.3 Conversion and field size 
+
+Read the last β coordinates from every unchanged systematic node and download the first σ
+
+coordinates from every retired parity node. For these read sets, the matrix eC in Lemma 2 reduces to F after its zero columns are deleted. Hence col( eC) = col( F ). Let P be the row permutation matrix that places all anchor rows before the remaining unread rows, preserving their relative order within each part. Then 
+
+P eB =
+
+Ean 
+
+Z
+
+
+
+, P F =
+
+Fan 
+
+Flo 
+
+
+
+.
+
+18 Since Ean J = Fan and ZJ = Flo , we have P eBJ = P F , and hence eBJ = F . Therefore, col( eC) = col( F ) ⊆ col( eB). By Lemma 2, these downloads permit a linear conversion preserving all kI
+
+systematic symbols. Its read bandwidth is 
+
+R = kI β + rI σ
+
+=
+
+ kI (h − 1) rF
+
+T + rI rF (mk F + hδ )
+
+δT 
+
+
+
+ℓ, 
+
+which attains the Case III lower bound. For the field size, it suffices to choose a prime power q satisfying kF w | (q −1) and q > M III , where 
+
+MIII = max (kI + rI )w, (kF + rF )u, (kI + rI )β, (kI + rI )τ . These conditions ensure the existence of H and enough distinct cosets, evaluation points, and Cauchy parameters for the construction. To obtain an unconditional polynomial field-size bound, set N0 = kF w
+
+l MIII +1  
+
+> kFw
+
+m
+
+. By Lemma 3, there exists a prime q ≡ 1 (mod N0) with q = O(N L0 
+
+> 0
+
+) for an absolute constant L0. Since kF w | N0
+
+and q > N 0 > M III , this prime satisfies the required field conditions. Moreover, N0 = O(( kI + rI )ℓ), so one may take q = O (( kI + rI )ℓ)L0
+
+ .
+
+# 5 Conclusion 
+
+In this paper, we studied the bandwidth cost of stable MDS convertible codes with linear conversion procedures in the split regime for the remaining parameter range rF < k F < r I .
+
+By considering coordinate projections of the associated column spaces of the initial and final codes onto different groups of coordinates, we derive a family of rank inequalities involving the amounts of data read from the unchanged and retired nodes. These inequalities recover the previous lower bounds for the regime rI ≤ kF with rF < k F . When rF < k F < r I , the inequalities impose further constraints that strengthen the resulting lower bound. By solving the corresponding linear program, we obtain an improved lower bound for this remaining regime, consisting of three cases. To establish the tightness of the lower bound, we presented three explicit constructions. The constructions for Cases I and II are based on selecting suitable anchor rows of the final parity matrix, and choosing an invertible transformation that maps the corresponding anchor-row matrix to a Cauchy submatrix of the initial parity matrix. This yields the required column-space relation for conversion, while the resulting Cauchy structure guarantees the MDS property. For Case III, to realize the required column-space inclusion for conversion while preserving the MDS property, we construct an auxiliary MDS array code with two layers: the first layer is based on structured polynomial evaluations, and the second layer is based on a Reed–Solomon code. The three constructions attain the corresponding lower bounds. The required integrality conditions can always be satisfied by choosing the subpacketization ℓ appropriately, with ℓ polynomial in the the initial code length nI .The constructions for Cases I and II can be realized over fields of size q = O (kI + rI )ℓ, whereas for Case III it suffices to take q = O (( kI + rI )ℓ)L0
+
+ for some absolute constant L0. Consequently, our lower bound is tight throughout the regime rF < k F < r I within the stable linear conversion model. Since the write bandwidth is fixed for stable conversion, our results determine the minimum total conversion bandwidth in this regime. Several questions remain for future work. It would be desirable to reduce the field size required by all three constructions to be linear in the code length. Another direction is to determine the exact optimum for a prescribed subpacketization when the LP-optimal read amounts are nonintegral, without enlarging ℓ.19 References 
+
+[1] S. Kadekodi, K. V. Rashmi, and G. R. Ganger, “Cluster storage systems gotta have HeART: Improving storage efficiency by exploiting disk-reliability heterogeneity,” in 17th USENIX Conference on File and Storage Technologies (FAST 19) , 2019, pp. 345–358. [2] F. Maturana and K. V. Rashmi, “Convertible codes: New class of codes for efficient conversion of coded data in distributed storage,” in 11th Innovations in Theoretical Computer Science Conference (ITCS 2020) , vol. 151, 2020, pp. 66:1–66:26. [3] ——, “Convertible codes: Enabling efficient conversion of coded data in distributed storage,” 
+
+IEEE Transactions on Information Theory , vol. 68, no. 7, pp. 4392–4407, 2022. [4] ——, “Code conversions in storage systems,” IEEE BITS the Information Theory Magazine ,vol. 3, no. 4, pp. 28–38, 2023. [5] ——, “Locally repairable convertible codes: Erasure codes for efficient repair and conversion,” in 2023 IEEE International Symposium on Information Theory (ISIT) , 2023, pp. 2033–2038. [6] X. Kong, “Locally repairable convertible codes with optimal access costs,” IEEE Transactions on Information Theory , vol. 70, no. 9, pp. 6239–6257, 2024. [7] S. Ge, H. Cai, and X. Tang, “Locally repairable convertible codes: Improved lower bound and general construction,” IEEE Transactions on Information Theory , vol. 72, no. 5, pp. 2915–2930, 2026. [8] Y. Yang, S. Ge, H. Cai, and X. Tang, “Convertible minimum storage regenerating codes,” in 
+
+2026 IEEE International Symposium on Information Theory (ISIT) , 2026, pp. 1–6. [9] F. Maturana, V. S. C. Mukka, and K. V. Rashmi, “Access-optimal linear MDS convertible codes for all parameters,” in 2020 IEEE International Symposium on Information Theory (ISIT) , 2020, pp. 577–582. [10] S. Chopra, F. Maturana, and K. V. Rashmi, “On low field size constructions of access-optimal convertible codes,” in 2024 IEEE International Symposium on Information Theory (ISIT) ,2024, pp. 1456–1461. [11] S. Ge, H. Cai, and X. Tang, “MDS irregular convertible code,” IEEE Transactions on Informa-tion Theory , vol. 72, no. 9, pp. 6422–6434, 2026. [12] V. Ramkumar, X. Kong, G. Y. Sai, M. Vajha, and M. N. Krishnan, “On MDS convertible codes in the merge regime,” IEEE Transactions on Information Theory , vol. 72, no. 5, pp. 2963–2977, 2026. [13] J. Wang, X. Yu, X. Guan, and H. Hou, “Explicit construction of generalized merge-convertible MDS array codes,” in 2026 IEEE International Symposium on Information Theory (ISIT) ,2026, pp. 1–5. [14] H. Shi, W. Fang, and Y. Gao, “Bounds and optimal constructions of generalized merge-convertible codes for code conversion into LRCs,” IEEE Transactions on Information Theory ,vol. 72, no. 5, pp. 2841–2860, 2026. 20 [15] F. Maturana and K. V. Rashmi, “Bandwidth cost of code conversions in distributed storage: Fundamental limits and optimal constructions,” IEEE Transactions on Information Theory ,vol. 69, no. 8, pp. 4993–5008, 2023. [16] S. Ge, H. Cai, and X. Tang, “Convertible codes: A polynomial evaluation view,” in 2026 IEEE International Symposium on Information Theory (ISIT) , 2026, pp. 1–6. [17] M. Vajha, X. Kong, M. N. Krishnan, and V. Ramkumar, “Cooperative conversion of MDS codes in the merge regime,” unpublished manuscript. [Online]. Available: https://people.iith.ac.in/mynav/pdfs/CooperativeConversion.pdf [18] F. Maturana and K. V. Rashmi, “Bandwidth cost of code conversions in the split regime,” in 
+
+2022 IEEE International Symposium on Information Theory (ISIT) , 2022, pp. 3262–3267. [19] L. Wang and S. Hu, “Lower bounds on conversion bandwidth for MDS convertible codes in split regime,” IEEE Transactions on Information Theory , vol. 72, no. 7, pp. 4850–4859, 2026. [20] S. Singhvi, S. Chopra, and K. V. Rashmi, “Lower bounds on code conversion bandwidth via a novel information-theoretic approach,” IEEE Transactions on Information Theory , 2026, early access. [21] U. V. Linnik, “On the least prime in an arithmetic progression. I. The basic theorem,” 
+
+Rec. Math. [Mat. Sbornik] N.S. , vol. 15(57), no. 2, pp. 139–178, 1944. [Online]. Available: https://www.mathnet.ru/eng/sm6196 21

@@ -1,0 +1,24 @@
+{
+  "label": "2026-10-07",
+  "date": "2026-10-07",
+  "generated_at": "2026-10-07T23:45:31",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202610/07/2610.08349v1-optimal-conversion-bandwidth-for-mds-convertible-codes-in-the-split-regime-with-rfkfri",
+      "section": "deep",
+      "title_en": "Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with $r^F<k^F<r^I$",
+      "authors": "Lewen Wang, Sihuang Hu",
+      "date": "2026-10-06",
+      "pdf": "https://arxiv.org/pdf/2610.08349v1",
+      "score": "9.0",
+      "evidence": "分布式存储中用于容错与降低存储开销的纠删码",
+      "tldr": "分布式存储用纠删码提供容错，但节点失效率变化时需动态调整码参数。MDS可转换码可在保持MDS性质下由初始码转换为最终码，以降低存储开销；分裂机制下 r^F<k^F<r^I 区间的转换带宽紧界仍未知。本文针对线性转换的稳定MDS可转换码建立新秩不等式，导出分三种情形的改进下界。并通过三种显式构造逐一证明该下界可达，从而补齐该参数区间的带宽最优性。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "Erasure codes are widely used in distributed storage systems to provide fault tolerance. An $[n,k]$ erasure code encodes $k$ data symbols into $n$ coded symbols and distributes them across $n$ storage nodes. Once the code parameters are fixed, the achievable fault tolerance is also fixed. However, the failure rates of storage nodes may vary over time, and dynamically adapting the code parameters to these variations can substantially reduce storage overhead. Motivated by this observation, Maturana and Rashmi introduced convertible codes, which allow an $[n^I,k^I]$ initial code with redundancy $r^I=n^I-k^I$ to be transformed into an $[n^F,k^F]$ final code with redundancy $r^F=n^F-k^F$, while preserving the required code properties. Convertible codes whose initial and final codes are both MDS codes are called MDS convertible codes. They are of particular interest because MDS codes provide the maximum erasure tolerance for a given amount of storage overhead.   Several works have established lower bounds and constructions for the bandwidth cost of MDS convertible codes in the split regime. However, the tight bound in the parameter range $r^F<k^F<r^I$ remains unknown. In this work, we establish a family of new rank inequalities for stable MDS convertible codes with linear conversion procedures and derive an improved lower bound on the bandwidth cost consisting of three cases for this remaining range. We prove that the bound is tight by presenting three explicit constructions, one for each case.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

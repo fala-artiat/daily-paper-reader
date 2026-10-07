@@ -1,0 +1,52 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-07T23:43:41.671447+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 0,
+    "quick_skim_target": 11,
+    "quick_selected": 0
+  },
+  "deep_dive": [
+    {
+      "id": "2610.08349v1",
+      "source": "arxiv",
+      "title": "Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with $r^F<k^F<r^I$",
+      "abstract": "Erasure codes are widely used in distributed storage systems to provide fault tolerance. An $[n,k]$ erasure code encodes $k$ data symbols into $n$ coded symbols and distributes them across $n$ storage nodes. Once the code parameters are fixed, the achievable fault tolerance is also fixed. However, the failure rates of storage nodes may vary over time, and dynamically adapting the code parameters to these variations can substantially reduce storage overhead. Motivated by this observation, Maturana and Rashmi introduced convertible codes, which allow an $[n^I,k^I]$ initial code with redundancy $r^I=n^I-k^I$ to be transformed into an $[n^F,k^F]$ final code with redundancy $r^F=n^F-k^F$, while preserving the required code properties. Convertible codes whose initial and final codes are both MDS codes are called MDS convertible codes. They are of particular interest because MDS codes provide the maximum erasure tolerance for a given amount of storage overhead.   Several works have established lower bounds and constructions for the bandwidth cost of MDS convertible codes in the split regime. However, the tight bound in the parameter range $r^F<k^F<r^I$ remains unknown. In this work, we establish a family of new rank inequalities for stable MDS convertible codes with linear conversion procedures and derive an improved lower bound on the bandwidth cost consisting of three cases for this remaining range. We prove that the bound is tight by presenting three explicit constructions, one for each case.",
+      "authors": [
+        "Lewen Wang",
+        "Sihuang Hu"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT"
+      ],
+      "published": "2026-10-06T13:40:43+00:00",
+      "link": "https://arxiv.org/pdf/2610.08349v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "erasure codes for fault tolerance and reducing storage overhead in distributed storage",
+      "llm_evidence_cn": "分布式存储中用于容错与降低存储开销的纠删码",
+      "llm_evidence": "分布式存储中用于容错与降低存储开销的纠删码",
+      "canonical_evidence": "分布式存储中用于容错与降低存储开销的纠删码",
+      "llm_tldr_en": "Erasure codes in distributed storage fix fault tolerance once parameters are set, wasting overhead as node failure rates vary. This work studies MDS convertible codes in the split regime, deriving optimal conversion bandwidth for transforming an initial code into a final code with different redundancy.",
+      "llm_tldr_cn": "分布式存储广泛使用纠删码提供容错，但码参数一旦固定其容错能力也随之固定，而节点失效速率随时间变化，动态调整参数可显著降低存储开销。论文研究分裂区间下MDS可转换码，分析将初始码转换为不同冗余度终码所需的最优转换带宽。结果给出了该区间内转换带宽的最优界，为随失效速率动态调整纠删码参数、降低存储开销提供了理论支撑。",
+      "llm_tldr": "分布式存储广泛使用纠删码提供容错，但码参数一旦固定其容错能力也随之固定，而节点失效速率随时间变化，动态调整参数可显著降低存储开销。论文研究分裂区间下MDS可转换码，分析将初始码转换为不同冗余度终码所需的最优转换带宽。结果给出了该区间内转换带宽的最优界，为随失效速率动态调整纠删码参数、降低存储开销提供了理论支撑。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "erasure coding techniques for data storage and recovery",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": []
+}
