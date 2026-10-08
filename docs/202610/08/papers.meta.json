@@ -1,0 +1,24 @@
+{
+  "label": "2026-10-08",
+  "date": "2026-10-08",
+  "generated_at": "2026-10-08T23:33:56",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202610/08/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage",
+      "section": "quick",
+      "title_en": "The Coverage Depth Problem in Distributed DNA Data Storage",
+      "authors": "Xiangliang Kong, Ohad Elishco, Chen Wang, Tolga M. Duman",
+      "date": "2026-10-02",
+      "pdf": "https://arxiv.org/pdf/2610.02931v1",
+      "score": "6.0",
+      "evidence": "利用MDS码实现分布式存储中的编码数据恢复",
+      "tldr": "分布式DNA存储中，随机测序会重复读取链，增加恢复延迟与测序成本。本文在无噪声均匀采样下研究多容器分布存储的覆盖深度问题，每轮从各容器独立有放回抽一条链，针对任意线性码与有序划分推导完整消息恢复时间分布与期望的精确公式。证明MDS码对固定划分最优，给出总读取成本下界及等号条件，并刻画何时分布采样仅提升并行度、何时真正降低测序成本。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "Random sampling in DNA sequencing produces repeated reads, increasing retrieval latency and sequencing cost. We study the coverage-depth problem for full-message recovery in distributed DNA storage under noiseless uniform sampling, where strands are partitioned among $M$ containers and one strand is independently sampled with replacement from each container per round. For arbitrary linear codes and ordered partitions, we derive exact formulas for the recovery-time distribution and expectation. We prove that MDS codes, whenever they exist, are optimal for every fixed partition, and establish a universal lower bound on the expected total read cost together with its equality conditions. For MDS codes, we identify container-size regimes that yield genuine savings in total reads and regimes that provide only parallelism without changing the asymptotic sequencing cost. For simplex codes, we prove that the $q$-ary simplex code is, up to isomorphism, the unique single-container minimizer among codes with the same parameters, resolving a recent conjecture by Bertuzzo, Ravagnani, and Yaakobi. We further construct a partition attaining the minimum total read cost and derive bounds for intermediate and balanced partitions. These results clarify when distributed sampling reduces latency alone and when it also reduces sequencing cost.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

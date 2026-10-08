@@ -1,0 +1,56 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-08T23:33:31.030225+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.02931v1",
+      "source": "arxiv",
+      "title": "The Coverage Depth Problem in Distributed DNA Data Storage",
+      "abstract": "Random sampling in DNA sequencing produces repeated reads, increasing retrieval latency and sequencing cost. We study the coverage-depth problem for full-message recovery in distributed DNA storage under noiseless uniform sampling, where strands are partitioned among $M$ containers and one strand is independently sampled with replacement from each container per round. For arbitrary linear codes and ordered partitions, we derive exact formulas for the recovery-time distribution and expectation. We prove that MDS codes, whenever they exist, are optimal for every fixed partition, and establish a universal lower bound on the expected total read cost together with its equality conditions. For MDS codes, we identify container-size regimes that yield genuine savings in total reads and regimes that provide only parallelism without changing the asymptotic sequencing cost. For simplex codes, we prove that the $q$-ary simplex code is, up to isomorphism, the unique single-container minimizer among codes with the same parameters, resolving a recent conjecture by Bertuzzo, Ravagnani, and Yaakobi. We further construct a partition attaining the minimum total read cost and derive bounds for intermediate and balanced partitions. These results clarify when distributed sampling reduces latency alone and when it also reduces sequencing cost.",
+      "authors": [
+        "Xiangliang Kong",
+        "Ohad Elishco",
+        "Chen Wang",
+        "Tolga M. Duman"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "math.CO"
+      ],
+      "published": "2026-10-02T07:22:38+00:00",
+      "link": "https://arxiv.org/pdf/2610.02931v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "recovery of coded data in distributed storage using MDS codes",
+      "llm_evidence_cn": "利用MDS码实现分布式存储中的编码数据恢复",
+      "llm_evidence": "利用MDS码实现分布式存储中的编码数据恢复",
+      "canonical_evidence": "利用MDS码实现分布式存储中的编码数据恢复",
+      "llm_tldr_en": "DNA sequencing produces repeated reads that raise retrieval latency and cost. The paper derives exact recovery-time distributions for coded distributed DNA storage and proves MDS codes optimal for full-message recovery under fixed partitions.",
+      "llm_tldr_cn": "DNA测序随机采样会产生重复读取，推高检索延迟与测序成本，而全覆盖恢复所需的覆盖深度此前缺乏分析。本文在无噪声均匀采样模型下，对任意线性码与有序分区推导恢复时间分布与期望的精确公式。结果证明MDS码在任意固定分区下最优，并给出期望总读取成本的普适下界及其取等条件。该工作为分布式DNA存储的编码选择与读取成本优化提供了理论依据。",
+      "llm_tldr": "DNA测序随机采样会产生重复读取，推高检索延迟与测序成本，而全覆盖恢复所需的覆盖深度此前缺乏分析。本文在无噪声均匀采样模型下，对任意线性码与有序分区推导恢复时间分布与期望的精确公式。结果证明MDS码在任意固定分区下最优，并给出期望总读取成本的普适下界及其取等条件。该工作为分布式DNA存储的编码选择与读取成本优化提供了理论依据。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "data reconstruction and recovery in erasure-coded storage",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

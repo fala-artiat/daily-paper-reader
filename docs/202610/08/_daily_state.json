@@ -1,0 +1,25 @@
+{
+  "date": "20261008",
+  "date_label": "",
+  "generated_at": "2026-10-08 23:33:54 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.02931v1",
+      "route": "202610/08/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage",
+      "title": "The Coverage Depth Problem in Distributed DNA Data Storage",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "利用MDS码实现分布式存储中的编码数据恢复",
+      "first_seen_at": "2026-10-08 23:33:54 UTC",
+      "updated_at": "2026-10-08 23:33:54 UTC"
+    }
+  ]
+}

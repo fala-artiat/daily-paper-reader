@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-10-08 <!--dpr-date:20261008-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/08/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage" data-sidebar-item="{&quot;title&quot;: &quot;The Coverage Depth Problem in Distributed DNA Data Storage&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;利用MDS码实现分布式存储中的编码数据恢复&quot;}">The Coverage Depth Problem in Distributed DNA Data Storage</a>
   * 2026-10-07 <!--dpr-date:20261007-->
     * 精读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/07/2610.08349v1-optimal-conversion-bandwidth-for-mds-convertible-codes-in-the-split-regime-with-rfkfri" data-sidebar-item="{&quot;title&quot;: &quot;Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with $r^F&lt;k^F&lt;r^I$&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.08349v1-optimal-conversion-bandwidth-for-mds-convertible-codes-in-the-split-regime-with-rfkfri&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;分布式存储中用于容错与降低存储开销的纠删码&quot;}">Optimal Conversion Bandwidth for MDS Convertible Codes in the Split Regime with $r^F&lt;k^F&lt;r^I$</a>

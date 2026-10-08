@@ -1,0 +1,3827 @@
+Title: The Coverage Depth Problem in Distributed DNA Data Storage
+
+URL Source: https://arxiv.org/pdf/2610.02931v1
+
+Published Time: Mon, 05 Oct 2026 00:47:12 GMT
+
+Number of Pages: 33
+
+Markdown Content:
+> 1
+
+# The Coverage Depth Problem in Distributed DNA Data Storage 
+
+Xiangliang Kong, Ohad Elishco, Chen Wang, and Tolga M. Duman 
+
+Abstract 
+
+Random sampling in DNA sequencing produces repeated reads, increasing retrieval latency and sequencing cost. We study the coverage-depth problem for full-message recovery in distributed DNA storage under noiseless uniform sampling, where strands are partitioned among M containers and one strand is independently sampled with replacement from each container per round. For arbitrary linear codes and ordered partitions, we derive exact formulas for the recovery-time distribution and expectation. We prove that MDS codes, whenever they exist, are optimal for every fixed partition, and establish a universal lower bound on the expected total read cost together with its equality conditions. For MDS codes, we identify container-size regimes that yield genuine savings in total reads and regimes that provide only parallelism without changing the asymptotic sequencing cost. For simplex codes, we prove that the q-ary simplex code is, up to isomorphism, the unique single-container minimizer among codes with the same parameters, resolving a recent conjecture by Bertuzzo, Ravagnani, and Yaakobi. We further construct a partition attaining the minimum total read cost and derive bounds for intermediate and balanced partitions. These results clarify when distributed sampling reduces latency alone and when it also reduces sequencing cost. 
+
+I. I NTRODUCTION 
+
+DNA-based data storage has emerged as a promising technology for long-term digital archiving. DNA offers extremely high information density, long-term chemical stability, and low maintenance requirements, and a number of proof-of-concept systems have demonstrated the feasibility of storing and retrieving digital information using synthetic DNA molecules [1]–[4]. The coding-theoretic and information-theoretic challenges arising in such systems have consequently attracted much attention, for example, see the surveys [5], [6] and the references therein. A typical DNA storage pipeline consists of encoding, synthesis, physical storage, sequencing, and decoding. The user data are first encoded into a collection of short DNA sequences, commonly referred to as oligos or strands .These designed strands are synthesized, amplified into many physical copies, and stored together in one or more containers. To retrieve the information, DNA molecules are sampled and sequenced, producing an unordered multiset of reads. Indices embedded in the strands may identify the designed strand from which a read originates, but they do not make the molecules directly addressable: the sequencing process still samples molecules from the physical pool, and repeated observations of the same designed strand are unavoidable. This random-sampling feature distinguishes DNA storage from conventional storage devices. Even in an idealized noiseless model, a sequencer may repeatedly return strands that have already been observed, while other strands remain unseen. Consequently, the number of reads required for decoding can be substantially larger than the number of information strands from the message. In physical terms, the coverage depth is the number of sequenced reads normalized by the number of designed strands [7]. Since the number of designed strands is fixed for a given code, minimizing coverage depth is equivalent to minimizing the total number of reads. The latter is directly related to both sequencing cost and recovery latency. The resulting sampling problem is closely connected to the classical coupon collector problem [8]–[11]. In the uncoded setting, every designed strand is a coupon type, and decoding requires observing all coupon types. Error-correcting codes change the stopping condition: rather than observing every coded strand, it is enough to observe 
+
+This work was supported in part by the National Key R&D Program of China under Grant 2025YFA1017200 and by the ERC Advanced Grant 101054904: TRANCIDS. Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Research Council Executive Agency. Neither the European Union nor the granting authority can be held responsible for them. The research of C. Wang was supported in part at the Technion by a fellowship from the Lady Davis Foundation. This research was partially supported by the Israel Science Foundation (Grant No. 1789/23). X. Kong (rongxlkong@gmail.com) is with the State Key Laboratory of Mathematical Sciences, Academy of Mathematics and Systems Science, Chinese Academy of Sciences, Beijing 100190, China. O. Elishco (elishco@gmail.com) is with the School of Electrical and Computer Engineering, Ben-Gurion University of the Negev, Beer Sheva 8410501, Israel. C. Wang (cwang@campus.technion.ac.il) is with the Department of Computer Science, Technion – Israel Institute of Technology, Haifa 3200003, Israel. Tolga M. Duman (duman@ee.bilkent.edu.tr) is with the Department of Electrical and Electronics Engineering, Bilkent University, Ankara 06800, Turkey. arXiv:2610.02931v1 [cs.IT] 2 Oct 2026 2
+
+a subset that determines the original message. Thus, coding replaces the coupon collector’s “collect all coupons” criterion by a decodability criterion. More precisely, consider a k-dimensional linear code C ⊆ Fnq with a rank-k generator matrix G. Each column of G corresponds to one coded DNA strand. In the single-container noiseless model, a read selects one column uniformly at random with replacement, and the message can be fully recovered when the sampled columns span Fkq .Bar-Lev et al. [12] initiated the systematic theoretical study of this stopping time, referred to as the coverage-depth problem in DNA data storage . They investigated its dependence on the sampling distribution, the outer code, and the strand-retrieval procedure. In particular, for uniform noiseless sampling, they proved that an [n, k ]q MDS code, whenever it exists, minimizes the expected number of reads among [n, k ]q linear codes. 
+
+A. Related Work 
+
+Several extensions of the coverage-depth problem in DNA data storage have recently been investigated. Besides full-message recovery, Bar-Lev et al. [12] introduced the singleton random-access problem, in which the user requests one prescribed information strand rather than the entire message. The combinatorial and geometric aspects of random access have subsequently been studied in [13]–[15], which showed that code optimality for full-message recovery does not imply optimality for random-access objectives. Other related models include recovering groups of strands representing a common information unit [16], opti-mizing the trade-off between synthesis and sequencing costs through practical coding architectures [17], analyzing sequencing coverage in combinatorial shortmer-based storage systems [18], and studying coverage and decoding probabilities for composite DNA letters [19]. These models modify either the physical representation of information or the decoding objective, and therefore lead to stopping rules different from the full-rank condition considered in this paper. When MDS codes do not exist over the prescribed field, the performance of structured small-field codes becomes a central question. Bertuzzo, Ravagnani, and Yaakobi [20] developed algebraic and combinatorial methods for computing the single-container coverage depth through information-set enumeration, duality and weight distributions. They obtained explicit formulas for several classical code families, including simplex, Hamming, ternary Golay, extended ternary Golay, and first-order Reed–Muller codes. Based on the resulting formula for simplex codes and computational evidence, they conjectured that the q-ary simplex code minimizes the coverage depth among all codes having the same length and dimension. One of the results of the present paper resolves this conjecture in the affirmative and establishes the corresponding uniqueness statement. 
+
+B. Distributed Full-Message Recovery 
+
+Physical separation of coded data across multiple storage units is a standard mechanism for providing parallel access and fault tolerance. In classical distributed storage systems, a file is encoded across several nodes, and a central question is how much information must be downloaded from the surviving nodes to repair a failed one. The repair-bandwidth problem was introduced by Dimakis et al. [21] and has since developed into an extensive theory of regenerating and related storage codes; see [22] for a survey. DNA containers, however, are passive physical objects rather than computational nodes. A container cannot evaluate a prescribed function of its contents and transmit the result. Instead, information is obtained by sequencing, and every read returns a randomly sampled strand from the container. Thus, even if the same erasure code is used, the download process in DNA storage is fundamentally different from that in a conventional distributed storage system. Levy, Con, Yaakobi, and Kiah [23] recently initiated the study of DNA-based distributed storage from the viewpoint of container failures. Their goal is to reconstruct the contents of a failed container by sequencing the surviving containers, and they analyzed the associated recovery time for scalar MDS and MDS array codes. The objective of the present paper is complementary. We consider the problem of recovering the entire message 
+
+when the coded strands are distributed among several containers. This question arises even in the absence of container failures and remains necessary after a failed container has been repaired: the ultimate readout operation must still accumulate enough information to decode the complete message. The two problems also have different stopping rules. Failed-container recovery asks whether a prescribed missing block is determined by the observations from the surviving containers, whereas full-message recovery asks whether all observed coded strands jointly span the entire k-dimensional message space. 3
+
+Specifically, we partition the n columns of G into M labeled containers according to an ordered partition P. In every sequencing round, one column is sampled independently and uniformly, with replacement across rounds, from each container. Let τ (G, P) be the first round in which the sampled columns span Fkq . Since parallel sequencing can reduce latency without increasing the total number of reads, we distinguish two performance metrics and consider them separately: the expected recovery time in rounds, E[τ (G, P)] , and the expected total number of reads, M E[τ (G, P)] .This formulation gives rise to the distributed coverage depth problem , which consists of the following three interconnected questions: (1) For a fixed ordered M -partition, which code minimizes the expected recovery time? (2) For a fixed code and fixed M , how to partition its columns to achieve the smallest expected recovery time? (3) Under practical capacity constraints (such as balanced container sizes), which codes have a genuine reduction in the total sequencing cost (total number of reads), rather than only a reduction in latency (measured in recovery rounds)? In this paper, we address the three questions listed above. We study the expected recovery time for both general linear codes and specific code families, providing explicit estimations of the expected recovery rounds. Furthermore, we analyze the extent to which single-container overhead can be reduced in distributed settings. 
+
+C. Main Contributions 
+
+The principal contributions of this work are summarized below.  
+
+> •
+
+By decomposing the recovery process into successive stages and using q-binomial M¨ obius inversion on the subspaces of Fkq , we derive an exact formula for E[τ (G, P)] for an arbitrary rank-k linear code with generator matrix G and an arbitrary ordered partition P. 
+
+> •
+
+We show that whenever an [n, k ]q MDS code exists, it is optimal for every fixed partition, both in terms of expected recovery time and total read cost. Furthermore, we establish a general lower bound on the expected number of recovery rounds, hence on the expected total number of reads, and we characterize exactly when 
+
+τ (G, P) = 1 a.s. In particular, for M = k the bound is attained by the staircase partition of any linear code, so that min M, P M E[τ (G, P)] = k for every [n, k ]q code. We then exhibit one-round-perfect layouts with additional structure for MDS, Hamming, first-order Reed-Muller and simplex codes.  
+
+> •
+
+We consider the distributed coverage depth problem for MDS codes. When every container has a fixed size s,we identify explicit parameter regimes in which the recovery time concentrates on an integer r. Within part of this regime, the resulting total read cost is lower than that of the single-container case by a quantity linear in k. For containers of size kε with 0 < ε < 1, we derive asymptotic formulas for both the expected recovery time and the total number of reads, showing that distribution provides parallel access without changing the asymptotic sequencing cost.  
+
+> •
+
+We also consider the distributed coverage depth problem for simplex codes. We first show that the q-ary simplex code is, up to isomorphism, the unique length-[k]q , dimension-k code that minimizes the single-container coverage depth, thereby resolving [20, Conjecture 3.2]. Then, we provide an explicit k-partition that achieves the optimal total number of reads for recovery. Moreover, for 1 < M < k we show that an intermediate number of containers cannot reduce the total read cost whenever M ∤ k and M ∤ k + 1 , and also whenever M | k + 1 provided q ⩾ 3 or k = 3 . The remaining regimes, namely M | k for every q, and 
+
+M | k + 1 for q = 2 and k ⩾ 4, are settled for cases (q, k, M ) = (2 , 5, 2) and (3 , 4, 2) .Taken together, these results reveal that distributed sampling has two fundamentally distinct effects: parallelism reduces recovery latency, whereas a reduction in total sequencing cost requires the layout (G, P) to suppress repeated or rank-deficient observations. The former effect is largely architectural; the latter depends delicately on the interaction between the algebraic properties of the code and the combinatorial structure of the partition. 
+
+D. Organization 
+
+The remainder of this paper is organized as follows. Section II introduces the distributed coverage depth model along with its metrics and foundational notions; it derives exact formulas for E[τ (G, P)] , proves the optimality of MDS codes, and develops general lower bounds on the total number of reads and the theory of one-round-perfect layouts. Section III specializes this framework to MDS codes and investigates the associated distributed coupon-collector problem in constant-size, polynomial-size, and two-container regimes. Section IV focuses on simplex codes, establishing their unique single-container optimality and analyzing staircase, balanced, and random balanced layouts. Finally, Section V concludes the paper and outlines several open questions. 4
+
+II. P ROBLEM SETTING AND GENERAL RESULTS 
+
+A. Distributed Coverage-Depth Problem for DNA Storage 
+
+Let q be a prime power, Fq be the field of order q, and k ⩾ 2. For two spaces U and V , we write U ⩽ V if U
+
+is a subspace of V , and U ⪇ V if U is a proper subspace of V .We first recall the coverage depth problem introduced in [12]. 
+
+Problem 1 (The DNA data coverage depth problem, [12]) . Let C ⊆ Fnq be a k-dimensional code of length n defined by a rank-k generator matrix G ∈ Fk×nq with no zero columns, whose columns g1, . . . , gn form a multiset of n
+
+vectors. Suppose we draw columns independently and uniformly with replacement. Let 
+
+τ ≜ min t ∈ Z+ : dim(Span( gj1 , . . . , gjt )) = k , (1) where gj1 , . . . , gjt are the columns drawn in rounds 1, . . . , t . Then, the coverage depth problem is to determine the value of E[τ ].Next, we define the coverage depth problem in distributed DNA data storage .Given k different information DNA strands (x1, x 2, . . . , x k), they are encoded into n coded DNA strands 
+
+(c1, c 2, . . . , c n) using a code C with generator matrix G ∈ Fk×nq , and stored in M different containers according to an ordered M -partition P = ( P1, P 2, . . . , P M ) of [n] with non-empty parts. Unless explicitly stated otherwise, 
+
+k ⩾ 2, the generator matrix G has rank k and no zero columns. Moreover, repeated columns and nonzero scalar multiples of columns are allowed and are counted with their coordinate multiplicities. Write G in column-wise form as 
+
+G = ( g1, g2, . . . , gn),
+
+where gi ∈ Fkq denotes the i-th column. Let ni = |Pi| for each 1 ⩽ i ⩽ M , so that P  
+
+> i∈[M]
+
+ni = n. For each 
+
+i ∈ [M ], define 
+
+Gi ≜ G|Pi ,
+
+where G|Pi denotes the k × ni submatrix of G obtained by restricting G to the columns indexed by Pi. Then, 
+
+ci = ( x1, . . . , x k) · Gi = ( ci, 1, . . . , c i,n i )
+
+denotes the vector of coded strands stored in the i-th container. 
+
+Problem 2 (The Coverage Depth Problem in Distributed DNA Data Storage) . Let the code C with generator matrix 
+
+G and the ordered partition P be as defined above. In each round, one column is drawn independently and uniformly at random with replacement from each submatrix Gi. For each i ∈ [M ], let ji,t denote the index of the column drawn from the i-th container at round t, and define the set of distinct column indices observed by the end of round 
+
+t as 
+
+Jt ≜ {ji,s : i ∈ [M ], 1 ⩽ s ⩽ t}, (2) with J0 ≜ ∅. Let 
+
+Vt ≜ Span {gj : j ∈ Jt}. (3) with V0 ≜ {0}. Define the stopping time 
+
+τ (G, P) ≜ min t ∈ Z+ : span ( {gj : j ∈ Jt}) = Fkq . (4) The distributed coverage depth problem associated with the pair (G, P) is then to determine the expected value 
+
+E [τ (G, P)] .
+
+Remark II.1. The model is synchronous: exactly one read is taken from every container in every round, and the final round is charged M reads even if a single read would have sufficed to complete the span. Hence, M E[τ (G, P)] ⩾
+
+M ⌈k/M ⌉, and part of the measure overhead is an artifact of this accounting rather than of the sampling. An asynchronous variant, in which a total read budget is allocated is discussed as an open problem in Section V. 
+
+Throughout the paper, for the single-container layout P(1) ≜ ([ n]) , we write τ (1) (G) ≜ τ (G, P(1) ) for simplicity. Moreover, by [20, Proposition 2.1], for any linear code C, the expectation E[τ (1) (G)] is invariant to the choice of the generator matrix G. Hence, we will use the notations E[τ (1) (G)] and E[C] interchangeably. Note that in DNA storage, the sequencing cost depends primarily on the total number of reads required during the information recovery process. In the single-container model ( M = 1 ), where one read is performed per round, 5
+
+the total number of reads simply equals the number of rounds needed for recovery. However, in the distributed model with M ⩾ 2, this value equals the number of containers times the number of rounds. In this paper, beyond determining E [τ (G, P)] for various codes and partitions, we also evaluate the expected total number of reads, 
+
+M E [τ (G, P)] , during the recovery process. According to its definition, the ordered partition P can exert a substantial influence on the value of E[τ (G, P)] for fixed G and M . Moreover, among all possible partitions, the case where all parts have the same size is of particular interest to storage system engineers, since the corresponding containers consequently have identical capacities and can be treated uniformly in the system. We call such a partition balanced and present its formal definition as follows. 
+
+Definition II.1 (Balanced M -Partition) . An ordered M -partition P = ( P1, . . . , P M ) is called balanced if |P1| =
+
+· · · = |PM | = n/M , which requires that M | n.Note that τ (G, P) ⩾ 1 holds for every rank-k matrix G and every ordered M -partition P for any integer M . To characterize one of the extremal cases where τ (G, P) = 1 a.s. (almost surely), we introduce the following notion. 
+
+Definition II.2 (One-Round Decodability and One-Round Perfection) . A coded layout (G, P), where G is a generator matrix of an [n, k ]q linear code and P is an ordered M -partition of [n], is called one-round-decodable if every M -tuple (gi1 , gi2 , . . . , giM ) with ij ∈ Pj for all j ∈ [M ] spans Fkq , or equivalently, if τ (G, P) = 1 a.s. If, in addition, M = k, then the layout (G, P) (or simply P, when G is clear from context) is called one-round-perfect .To characterize the advantages of distributed storage, we introduce the following notions. 
+
+Definition II.3 (Overhead and Distributed Saving) . We define the single-container recovery overhead for an [n, k ]q
+
+linear code C with generator matrix G as 
+
+Ov( C) ≜ E[C] − k. (5) The saving of an M -container layout (G, P) relative to the single-container model, in terms of the expected total number of reads, is defined as E[τ (1) (G)] − M E[τ (G, P)] . The layout achieves full saving if E[τ (1) (G)] −
+
+M E[τ (G, P)] = Ov( C), or equivalently, if M E[τ (G, P)] = k.
+
+B. Exact Formulas for Distributed Coverage Depth 
+
+For an integer m ⩾ 0, write [m]q = qm−1 
+
+> q−1
+
+= Pmi=1 qi−1 (with [0] q = 0 ) for the number of points in the 
+
+(m − 1) -dimensional projective space PG( m − 1, q ), and write 
+
+mj
+
+
+
+> q
+
+=
+
+> j−1
+
+Y
+
+> i=0
+
+qm−i − 1
+
+qj−i − 1
+
+for the number of j-dimensional subspaces of Fmq . Let P ≜ PG( k − 1, q ) denote the set of projective points in Fkq .For a subspace U ⩽ Fkq , a generator matrix G ∈ Fk×nq , and an ordered M -partition P of [n], let mUi = |Gi ∩ U |
+
+for each i ∈ [M ], and define 
+
+ρU =
+
+> M
+
+Y
+
+> i=1
+
+mUi
+
+ni
+
+, (6) where Gi ∩ U denotes the set of columns in Gi that lie in U . Because columns are drawn independently across different containers and uniformly within each container, ρU is the probability that all M columns sampled in a single round lie in U . Moreover, when M = 1 , we simply write π(U ) = mU 
+
+> 1
+
+/n instead of ρU .We next establish the exact formula for E[τ (G, P)] given general G and P. To this end, we first present the following lemma, which is a standard consequence of the M¨ obius inversion formula. 
+
+Lemma II.2. For any A ⊆ Fkq , we have 
+
+X
+
+> c⩾1
+
+(−1) c−1q(c
+
+> 2
+
+) {U ⩽ Fkq : codim( U ) = c, A ⊆ U } = 1[Span( A)̸=Fkq ].
+
+Proof: Let a = dim(Span( A)) . Clearly, a subspace U contains A if and only if it contains Span( A).Instead of counting in the space Fkq , we count in the quotient space Fkq / Span( A), which has dimension k−a. The subspaces of Fkq of codimension c that contain Span( A) are in one-to-one correspondence with the codimension-c6
+
+subspaces of this quotient space. The number of such subspaces is k−ac
+
+ 
+
+> q
+
+. Therefore, the sum in the statement can be rewritten as 
+
+X
+
+> c⩾1
+
+(−1) c−1q(c
+
+> 2
+
+) {U ⩽ Fkq : codim( U ) = c, A ⊆ U } = X
+
+> c⩾1
+
+(−1) c−1q(c
+
+> 2
+
+)
+
+k − ac
+
+
+
+> q
+
+. (7) To evaluate the right-hand side, we use the q-binomial theorem [24, Chapter 3] in the form 
+
+X
+
+> c⩾0
+
+(−1) cq(c
+
+> 2
+
+)
+
+k − ac
+
+
+
+> q
+
+=
+
+> k−a−1
+
+Y
+
+> i=0
+
+(1 − qi).
+
+We now evaluate this product according to whether A spans the full space.  
+
+> •
+
+If a < k , i.e., Span( A)̸ = Fkq , then the factor corresponding to i = 0 appears in the product. Since 1 − q0 = 0 ,the product is zero.  
+
+> •
+
+If a = k, i.e., Span( A) = Fkq , then the product is empty and hence equals 1.Thus, X
+
+> c⩾0
+
+(−1) cq(c
+
+> 2
+
+)
+
+k − ac
+
+
+
+> q
+
+= 1[Span( A)= Fkq ].
+
+Separating the c = 0 term, which equals 1, and subtracting it from both sides of the above equation gives 
+
+X
+
+> c⩾1
+
+(−1) cq(c
+
+> 2
+
+)
+
+k − ac
+
+
+
+> q
+
+= 1[Span( A)= Fkq ] − 1 = −1[Span( A)̸=Fkq ].
+
+Multiplying both sides by −1 and using (7) proves the claim. Using Lemma II.2, we now present the exact formula of E[τ (G, P)] 
+
+Theorem II.3. Let Vt be the space defined in (3) , i.e., the space spanned by the columns drawn by round t. Let 
+
+{0} = V0 ⪇ V1 ⪇ · · · ⪇ VL = Fkq be the chain of subspaces obtained from (Vt)0⩽t⩽τ (G,P) by deleting repeated consecutive subspaces. Then, L ⩽ k a.s. and 
+
+E[τ (G, P)] = E
+
+"L−1X
+
+> ℓ=0
+
+11 − ρVℓ
+
+#
+
+. (8) 
+
+Moreover, for every integer t ⩾ 0,
+
+Pr  τ (G, P) > t  = X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 )ρtU , (9) 
+
+where we set x0 = 1 when x = 0 . Consequently, 
+
+E[τ (G, P)] = X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 ) 11 − ρU
+
+. (10) 
+
+Proof: We first note that ρU < 1 for every U ⪇ F kq . Indeed, if ρU = 1 , then every factor mi(U )/n i must equal one. This means every column stored in every container lies in U , contradicting rank( G) = k.Let Ft be the σ-algebra generated by the samples collected in the first t rounds. Set σ0 ≜ 0, and, as long as 
+
+Vσℓ̸ = Fkq , define σℓ+1 ≜ min {t > σ ℓ : Vt ⊋ Vσℓ }. Then Vℓ = Vσℓ , and for 0 ⩽ ℓ < L , the holding time at Vℓ
+
+is denoted as Hℓ ≜ σℓ+1 − σℓ. Since ρU < 1, the sampled columns will leave U in finite time a.s. Hence, the chain of subspaces will reach Fkq in finite time a.s. Moreover, since the span increases strictly between consecutive subspaces in the chain, we have L ⩽ k a.s. Fix 0 ⩽ ℓ < L and condition on the history up to time σℓ. If Vℓ = U , then the span remains equal to U after the next round if and only if all M newly sampled columns lie in U . This event has probability ρU . Since different rounds are independent, we have Pr  Hℓ = h | F σℓ
+
+ = ρh−1 
+
+> U
+
+(1 − ρU ) for integer h ⩾ 1. Hence, we have 
+
+EHℓ | F σℓ
+
+ = 11 − ρVℓ
+
+.7
+
+Because τ (G, P) = σL = PL−1 
+
+> ℓ=0
+
+Hℓ and L ⩽ k, the tower property yields 
+
+E[τ (G, P)] = E
+
+"L−1X
+
+> ℓ=0
+
+11 − ρVℓ
+
+#
+
+,
+
+which proves (8). For t ⩾ 0, let At ≜ {gj : j ∈ Jt} and A0 ≜ ∅, where Jt is defined by (2). Then, we have τ (G, P) > t if and only if Span( At)̸ = Fkq . Applying Lemma II.2 to each realization of At gives 
+
+1{Span( At)̸ = Fkq } = X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 )1{At ⊆ U }.
+
+For a fixed subspace U , all samples collected during one round lie in U with probability ρU . Independence across rounds therefore implies Pr( At ⊆ U ) = ρtU . Taking expectations in the preceding indicator identity proves (9). Finally, using the tail-sum formula and the fact that the subspace lattice is finite, we obtain 
+
+E[τ (G, P)] = 
+
+> ∞
+
+X
+
+> t=0
+
+Pr  τ (G, P) > t 
+
+= X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 ) ∞X
+
+> t=0
+
+ρtU
+
+= X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 ) 11 − ρU
+
+.
+
+This proves (10). For the single-container case, where M = 1 , by definition, we have π(U ) = |G∩U | 
+
+> n
+
+= Pr( A1 ⊆ U ). Note that the dimension of the span of the drawn vectors can increase only by one in each round. Consequently, we have 
+
+L = k in (8), which leads to the following immediate corollary. 
+
+Corollary II.4. For 0 ⩽ i ⩽ k, let V (i) be the span of the sampled columns at the first time its dimension becomes 
+
+i. Then 
+
+E[C] = 
+
+> k−1
+
+X
+
+> i=0
+
+E
+
+ 11 − π(V (i))
+
+
+
+= X 
+
+> U⪇F kq
+
+(−1) codim( U )−1q(codim( U )2 ) 11 − π(U ) . (11) 
+
+C. The Optimality of MDS Codes in Distributed Model 
+
+In [12], Bar-Lev et al. studied the coverage depth problem for general codes and proved that MDS codes are optimal in terms of minimizing the expected number of reads among all codes with the same parameters. Next, we show that MDS codes are also optimal in terms of the expected number of recovery rounds in the distributed storage model. 
+
+Lemma II.5. Let G = ( g1, . . . , gn), eG = ( eg1, . . . , egn) ∈ Fk×nq be two different rank-k generator matrices, and let P = {P1, . . . , P M } be any fixed M -partition of [n]. Suppose that 
+
+rank( G|J ) ⩾ rank( eG|J ), ∀ J ⊆ [n]. (12) 
+
+Then τ (G, P) ⩽ τ ( eG, P) holds a.s. In particular, for every t ⩾ 0, we have Pr  τ (G, P) > t  ⩽ Pr  τ ( eG, P) > t ,and 
+
+E[τ (G, P)] ⩽ E[τ ( eG, P)] .
+
+Proof: Let Jt ⊆ [n] be the set of distinct coordinate indices observed by the end of round t. Under the common coupling, the two codes have observed the same set Jt. Then, by assumption (12), we have 
+
+rank( G|Jt ) ⩾ rank( eG|Jt )
+
+for every t. Thus, whenever eG|Jt has rank k, the matrix G|Jt also has rank k. Thus, τ (G, P) ⩽ τ ( eG, P) holds for every realization of the sampled indices. The tail probability and expectation inequalities follow immediately. 8
+
+Theorem II.6. Assume that an [n, k ]q MDS code exists, and let GMDS be one of its generator matrices. Then, for every rank-k generator matrix G ∈ Fk×nq and every fixed M -partition P of [n], it holds that 
+
+E[τ (GMDS , P)] ⩽ E[τ (G, P)] .
+
+Proof: For every J ⊆ [n], the MDS property yields that rank  GMDS |J
+
+ = min {| J|, k } ⩾ rank( G|J ). Hence, by Lemma II.5, τ (GMDS , P) ⩽ τ (G, P) holds a.s. Moreover, we also have 
+
+E[τ (GMDS , P)] ⩽ E[τ (G, P)] .
+
+This completes the proof. 
+
+Remark II.7. We note that MDS codes are not the only optimal codes in terms of distributed coverage depth. For example, let M = k and n = ak for an integer a ⩾ 2. For each j ∈ [M ], container j stores a nonzero scalar multiples of the j-th standard basis vector: 
+
+Gj = ( αj, 1ej , α j, 2ej , . . . , α j,a ej ),
+
+where αj,ℓ ∈ F∗ 
+
+> q
+
+for each ℓ ∈ [a]. This is the generator matrix of a repetition code with repetition level a. Clearly, it is not an MDS code and its generator matrix has rank k. Note that the sampled columns contain a nonzero multiple of each ej for j ∈ [k] after the first round. Hence, τ (G, P) = 1 , which is optimal. D. General Lower Bounds on E[τ (G, P)] and One-Round-Perfect Layouts 
+
+In Section II-B, we provided an exact formula for E[τ (G, P)] under a general layout (G, P). In this section, we first establish a lower bound on E[τ (G, P)] , and hence, on the expected total number of reads M E[τ (G, P)] .
+
+Theorem II.8. Let M be an integer satisfying 1 ⩽ M ⩽ k, and let r ≜  kM
+
+. Then, for any rank-k generator matrix G ∈ Fk×nq and any M -partition P, we have 
+
+E[τ (G, P)] ⩾ r +
+
+  qk−M −1 
+
+> qk−1
+
+r
+
+1 − qk−M −1 
+
+> qk−1
+
+.
+
+Moreover, when M = k the lower bound is attained by the staircase partition. That is, every [n, k ]q linear code admits a one-round-perfect layout. Proof: After t rounds, at most M t columns (counted with multiplicity) have been observed. If t < r , then 
+
+M t ⩽ M (r − 1) < k , hence the observed columns cannot span Fkq . Consequently, Pr( τ (G, P) > t ) = 1 for 
+
+0 ⩽ t < r . Using the tail-sum formula for a nonnegative integer random variable, 
+
+E[τ (G, P)] = 
+
+> ∞
+
+X
+
+> t=0
+
+Pr( τ (G, P) > t ) ⩾ r +
+
+> ∞
+
+X
+
+> t=r
+
+Pr( τ (G, P) > t ). (13) For any (k − 1) -dimensional hyperplane H and any t ⩾ r, the event that all M samples in each of the first t
+
+rounds fall inside H implies τ (G, P) > t . Hence, Pr( τ (G, P) > t ) ⩾ ρtH , and summing over t ⩾ r yields 
+
+> ∞
+
+X
+
+> t=r
+
+Pr( τ (G, P) > t ) ⩾ ρrH
+
+1 − ρH
+
+.
+
+Let P = {P1, . . . , P M } be a partition of [n] with |Pi| = ni. Denote by H the set of all (k − 1) -dimensional subspaces of Fkq , with |H| = qk −1 
+
+> q−1
+
+. Then 
+
+X
+
+> H∈H
+
+ρH = 1
+
+QMi=1 ni
+
+X
+
+> H∈H
+
+X
+
+> x1∈P1
+
+· · · X 
+
+> xM∈PM
+
+1{x1,...,x M ∈H}
+
+= 1
+
+QMi=1 ni
+
+X
+
+> x1∈P1
+
+· · · X 
+
+> xM∈PM
+
+{H ∈ H : ⟨x1, . . . , x M ⟩ ⊆ H}
+
+⩾ 1
+
+QMi=1 ni
+
+ MY
+
+> i=1
+
+ni
+
+ qk−M − 1
+
+q − 1 = qk−M − 1
+
+q − 1 ,9
+
+where the inequality follows from dim( ⟨x1, . . . , x M ⟩) ⩽ M . Therefore, 
+
+1
+
+|H| 
+
+X
+
+> H∈H
+
+ρH ⩾  
+
+> qk−M−1
+> q−1
+> qk−1
+> q−1
+
+= qk−M − 1
+
+qk − 1 .
+
+Consequently, there exists a hyperplane H0 such that ρH0 ⩾ qk−M −1  
+
+> qk−1
+
+. Since x 7 → xr /(1 − x) is increasing on [0 , 1) ,we obtain 
+
+> ∞
+
+X
+
+> t=r
+
+Pr( τ (G, P) > t ) ⩾ ρrH0
+
+1 − ρH0
+
+⩾
+
+  qk−M −1 
+
+> qk−1
+
+r
+
+1 − qk−M −1 
+
+> qk−1
+
+. (14) Finally, the bound follows by (13) and (14). Now, we consider the case where M = k. We first introduce the staircase partition. For any generator matrix G,we define the partition blocks P1, . . . , P k inductively as follows:  
+
+> •
+
+For i = 1 , we select an arbitrary column gj1 from G and set P1 = {j ∈ [n] : gj ∈ ⟨ gj1 ⟩} . 
+
+> •
+
+For i > 1, select an arbitrary index ji ∈ [n] \ S 
+
+> ℓ<i
+
+Pℓ, and set 
+
+Pi = {j ∈ [n] : gj ∈ ⟨ gj1 , . . . , gji ⟩} \ 
+
+> i−1
+
+[
+
+> ℓ=1
+
+Pℓ.
+
+Write Vi ≜ ⟨gj1 , . . . , gji ⟩. By construction, it holds that dim Vi = i, parts P1, . . . , P k are nonempty and pairwise disjoint, Ski=1 Pi = [ n] by rank( G) = k, and gj ∈ Vi \ Vi−1 for every j ∈ Pi (with V0 = {0}). Hence, if hi ∈ Pi
+
+for i ∈ [k], then, since ghi ∈ Vi \ Vi−1 = Vi \ ⟨ gh1 , . . . , ghi−1 ⟩, we have ⟨gh1 , . . . , ghi ⟩ = Vi for every i ∈ [k]. In particular, rank( gh1 , . . . , ghk ) = k, so that τ (G, P) = 1 a.s. and the lower bound is attained. 
+
+Remark II.9. The additive term in Theorem II.8 is small. Since ρ ≜ qk−M −1  
+
+> qk−1
+
+⩽ q−M and r = ⌈k/M ⌉, one has 
+
+ρr /(1 − ρ) = O(q−k). The content of the bound is therefore essentially the counting bound E[τ ] ⩾ ⌈k/M ⌉ together with its integrality, which is what we exploit later in Theorem IV.8. When C is a simplex code and M = 1 , the bound only yields E[C] ⩾ k + O(q−k), whereas Theorem IV.3 below yields a much stronger bound E[C] ⩾ k + O(q−1).
+
+By Theorem II.8, every [n, k ]q linear code admits a one-round-perfect k-partition, namely the staircase partition. In this paper, we also establish another sufficient condition for a layout (G, P) to be one-round-perfect, along with several explicit constructions based on Hamming codes and first-order Reed–Muller codes. Due to space constraints, we defer the detailed proofs and descriptions of these results to Appendix A. 
+
+Remark II.10. The sizes of different parts in the staircase construction vary substantially, hence, the resulting partition is highly unbalanced, as illustrated by the layouts for simplex codes in Lemma IV.5, for Hamming codes in Corollary A.2, and for first-order Reed–Muller codes in Theorem A.3. Thus, achieving one-round perfection may come at the expense of severe size imbalance among containers. If equal container capacities are required, the full saving Ov( C) may no longer be attainable, yet distributed sampling can still yield a strict gain over the single-container model, as illustrated below. 
+
+We first recall the definition of first-order Reed–Muller code. Let q be a prime power and m ⩾ 1 be an integer. Let p1, p2, . . . , pqm denote all the qm points in Fmq . The q-ary first-order Reed–Muller code of length n = qm and dimension k = m + 1 , denoted by RM q (1 , m ), is defined as the code with generator matrix: 
+
+G =
+
+ 1 1 · · · 1
+
+p1 p2 · · · pqm
+
+
+
+.
+
+Example 1. Let C = RM(1 , 3) , whose standard generator matrix has columns gp = (1 , pT )T , p ∈ F32. A balanced 
+
+4-partition of its eight columns is therefore a partition of the eight points of F32 into four pairs. We first show that no such partition is one-round-perfect. Note that four columns gp1 , . . . , gp4 fail to span F42 if and only if p1, . . . , p4 are affinely dependent. Since these four points are distinct, this is equivalent to their forming an affine plane in F32. Note that there are 14 affine planes in F32, and every pair of points is contained in exactly 
+
+3 of them. Hence, for any balanced 4-partition, at most 4 · 3 = 12 planes contain an entire pair. Hence, at least 
+
+14 − 12 = 2 affine planes contain no entire pair. Since each such plane contains four points and intersects each of the four pairs in at most one point, it must contain exactly one point from each pair. The corresponding four 10 
+
+columns are linearly dependent. Consequently, no balanced 4-partition of columns of RM(1 , 3) ’s generator matrix is one-round-perfect. More precisely, for a balanced partition P, let N (P) denote the number of affine planes containing exactly one point from each pair. In the first round, the selected columns fail to span Fkq if they lie in one of the N (P) such affine planes. Thus, conditioned on having selected one such plane, in each subsequent round the spanning of Fkq is completed as soon as at least one container returns the other point of its stored pair, which occurs with probability 
+
+1 − 124 = 15 16 . Therefore, 
+
+E[τ (G, P)] = 1 + N (P)16 · 16 15 = 1 + N (P)15 .
+
+The preceding counting argument gives N (P) ⩾ 2, and hence E[τ (G, P)] ⩾ 17 15 for every balanced 4-partition. The equality is attained, for example, by 
+
+P⋆ ={(1 , 0, 0, 0) , (1 , 1, 0, 0) }, {(1 , 0, 1, 0) , (1 , 0, 0, 1) },
+
+{(1 , 1, 1, 0) , (1 , 0, 1, 1) }, {(1 , 1, 0, 1) , (1 , 1, 1, 1) } .
+
+Moreover, the two affine planes containing exactly one point from each pair are {(0 , 0, 0) , (0 , 0, 1) , (1 , 1, 0) , (1 , 1, 1) }
+
+and {(1 , 0, 0) , (0 , 1, 0) , (0 , 1, 1) , (1 , 0, 1) }. Thus, N (P⋆) = 2 and E[τ (G, P⋆)] = 17 15 , which yields an expected total number of reads of 4E[τ (G, P⋆)] = 68 15 ≈ 4.533 .For comparison, Theorem A.3 (i), with q = 2 and m = 3 , gives the single-container coverage depth E[C] =  
+
+> 115 21
+
+≈ 5.476 .
+
+Note that τ (G, P) ⩾ 1 by definition. To better understand its extreme behavior, the next theorem characterizes precisely when τ (G, P) = 1 .
+
+Theorem II.11. Let G ∈ Fk×nq be a rank-k generator matrix and let P be an ordered M -partition of [n]. Then 
+
+τ (G, P) = 1 a.s. if and only if, for every hyperplane H of Fkq , there exists an i ∈ [M ] such that Gi ∩ H = ∅.Consequently, at least k containers are necessary for τ (G, P) = 1 a.s. Proof: Let S denote the multiset of columns drawn in the first round, with one column drawn from each container. Then τ (G, P) = 1 a.s. if and only if Span( S) = Fkq a.s. Moreover, S fails to span Fkq if and only if it is contained in some hyperplane of Fkq .Suppose first that, for every hyperplane H of Fkq , there exists an i ∈ [M ] such that no column of Gi lies in H.Then the first-round outcome can not be contained in a hyperplane: if all columns in S were contained in some hyperplane H, then the column drawn from container i would have to lie in H, contradicting the choice of i. Hence every first-round outcome spans Fkq , and therefore τ (G, P) = 1 a.s. Conversely, suppose that there exists a hyperplane H0 such that each container contains at least one column lying in H0. That is, for each i ∈ [M ], there is an ℓi ∈ Pi such that gℓi ∈ H0. Note that 
+
+Pr( S = {gℓ1 , . . . , gℓM }) = 
+
+> M
+
+Y
+
+> i=1
+
+n−1 
+
+> i
+
+> 0.
+
+This implies that all drawn columns lie in H0 has positive probability, and hence they do not span Fkq . Thus 
+
+Pr( τ (G, P) = 1) < 1. This proves the equivalence. Finally, note that dim(Span( S)) ⩽ |S| = M . Hence, τ (G, P) = 1 can hold only if M ⩾ k.We conclude this section by summarizing several representative code layouts in Table I, all of which are one-round-perfect. The detailed proofs of the one-round-perfections of MDS codes and simplex codes are deferred to Sections III and IV. III. D ISTRIBUTED COVERAGE DEPTH PROBLEM OF MDS C ODES 
+
+In this section, we present several results on the distributed coverage depth problem of [n, k ] MDS codes. As we shall see, for certain parameter regimes, the expected total number of reads required to recover all k information strands in the distributed storage setting is strictly smaller than that in the single-container setting. Throughout this section, for convenience, we use GMDS to denote the generator matrix of the corresponding MDS code. For [n, k ] MDS codes, the distributed coverage depth problem defined in Section II-A reduces to the following variant of the classic coupon collector’s problem (CCP): The model consists of M distinct containers, where the 
+
+i-th container holds ni distinct labeled balls. These n = PMi=1 ni labeled balls correspond directly to the n columns 11 
+
+Table I: Representative one-round-perfect layouts.                                                               
+
+> Code family Parameters Partition Container sizes Balanced? MDS code (Theorem III.1) Any n, k, q admitting an [n, k ]qMDS code Any ordered k-partition Any n1, . . . , n k,where ni⩾1and P
+> ini=n
+> Yes (when k|n)
+> q-ary Hamming code (Corollary A.2)
+> [n, n −r]for any integer r⩾2with n= [ r]qGeneral-position partition (r+ 1 ,1, . . . , 1) No
+> RM q(1 , m )
+> (Theorem A.3)
+> [qm, m + 1] for any integer m⩾1Affine staircase partition (qm−qm−1, . . . , q −1,1) No
+> q-ary Simplex code (Lemma IV.5)
+> [[ k]q, k ]for any integer k⩾1Projective staircase partition (qk−1, q k−2, . . . , q, 1) No
+
+of GMDS . At each round, we independently sample one ball uniformly at random (with replacement) from each container. The termination time τ (GMDS , P) turns to be the number of rounds until k distinct balls are collected. By this observation, we have the following immediate result. 
+
+Theorem III.1. Let C be an MDS code [n, k ] with k ⩾ 2 and n ⩾ k, Then, every partition of [n] into k nonempty parts is one-round-perfect, which yields the full saving 
+
+Ov( C) = E[C] − k =
+
+> k−1
+
+X
+
+> i=1
+
+in − i .
+
+Proof: Note that for MDS codes, any k codeword symbols can recover the k information symbols. Thus, the result follows directly from the definition of a one-round-perfect partition. Moreover, the value of the saving follows from the fact that E[C] = n(Hn − Hn−k) by [12, Corollary 1] (see also [20, Theorem 2.2]). 
+
+Remark III.2. Consider an [n, k ] MDS code C with k ⩾ 2 and n ⩾ k. Since in ⩽ in−i ⩽ in−k+1 , we have  
+
+> k(k−1) 2n
+
+⩽ Ov( C) ⩽ k(k−1) 2( n−k+1) . As the rate k/n varies, this yields a three-regime picture:  
+
+> •
+
+When n ⩾ (k+2)( k−1) 2 , then the rate is at most 2/k , which is very low. Then Ov( C) ⩽ k(k−1) 2(( k+2)( k−1) /2−k+1) = 1 ,so the full saving is at most one.  
+
+> •
+
+When ck ≪ n < (k+2)( k−1) 2 , the rate is larger than 2 
+
+> k
+
+(1 − o(1)) but far from constant. Then, one has 
+
+Ov( C) ⩾ k(k−1) 2n ⩾ 1 whenever n < k(k−1) 2 , implying that the saving is at least one and grows like k2 
+
+> 2n
+
+as the rate increases.  
+
+> •
+
+When n = ck for a fixed constant c > 1, Ov( C) grows linearly with k, so a constant fraction of all reads is saved. We refer to this regime the constant rate regime. 
+
+Theorem II.8 demonstrates that when M = k, there always exist one-round-perfect layouts that achieve full saving. Thus, what remains open is whether an intermediate number of containers M (with 1 < M < k ) can still achieve saving compared to the single-container model. Next, we answer this question in the affirmative by analyzing the distributed coverage depth of MDS codes for 1 < M < k .Recall from (2) that Jt denotes the set of distinct column indices observed by the end of round t. Hence, by the MDS property, we have τ (GMDS , P) = min {t ⩾ 1 : |Jt| ⩾ k}. Moreover, by the inclusion-exclusion principle, we have 
+
+Pr( |Jt ∩ Pi| = d) = 
+
+ni
+
+d
+
+ dX
+
+> ℓ=0
+
+(−1) ℓ
+
+dℓ
+
+  d − ℓni
+
+t
+
+, (15) where Jt ∩ Pi is the set of distinct column indices drawn from Pi by the end of round t.In the following, we show an example for small parameters to illustrate the advantages of distributed storage compared to the single-server model. 
+
+Example 2. For positive integers n, k, and M such that M | n, consider an [n, k ] MDS code with an ordered balanced M -partition P. Suppose that all containers have the same sizes m = n/M . Then, by (15) , we have 
+
+Pr ( |Jt| ⩾ k) = 1
+
+mtM 
+
+X 
+
+> 0⩽ji⩽min {m,t }
+> j1+··· +jM⩾kM
+
+Y
+
+> i=1
+
+mji
+
+
+
+ji!
+
+ tji
+
+
+
+,12 
+
+where 
+
+··
+
+
+
+denotes the Stirling numbers of the second kind. Figure 1 below compares the two models for n = 240 , k = 200 . In Figure 1a the horizontal axis is the total 
+
+number of reads, so that the two families of curves are directly comparable in sequencing cost. The multi-container curves are steeper because the reads are spread deterministically over the containers, which suppresses part of the coupon-collector tail, the effect grows as M increases, equivalently as the container size n/M decreases. Figure 1b plots the difference Pr( |Jt| ⩾ k) − Pr( τ (1) ⩽ M t ) against the normalized read count M t/n . It is nonnegative throughout and is maximized around M t/n ≈ 1.750 , i.e., precisely in the range of read budgets at which the decision to stop sequencing is actually made. Outside that window both models have essentially decoded, or essentially not.           
+
+> (a) Probability of reading at least kstrands: single-container vs. multiple-container models.
+> (b) Probability difference of reading at least kstrands for the single-container and multiple-container models.
+
+Figure 1: A comparison of the single container model and the multi-container model. Figure 1a shows the probabil-ities of reading at least k strands for the single-container and multiple-container models with M ∈ { 10 , 20 , 30 , 60 },and Figure 1b displays the probability difference between the two models. 
+
+A. Constant Container Size 
+
+In this section, we consider the distributed coverage depth problem for MDS codes in the setting where P is an ordered balanced M -partition of [n] (denoted by PB ) and every container has constant size. In particular, we determine the asymptotic behavior of τ (GMDS , P) and show that distribution indeed helps reduce the total number of reads. Fix two integers s ⩾ 2 and r ⩾ 2, both independent of k, and denote as ≜ 1 − 1 
+
+> s
+
+. Let α > 1 be a constant satisfying 11 − ars
+
+< α < 11 − ar−1
+
+> s
+
+. (16) 
+
+Theorem III.3. Let {C k} be a family of [n = αk, k ] MDS codes with generator matrices {Gk}, and s | n for every k. Suppose the n columns of Gk is partitioned arbitrarily into Mk ≜ ns containers, each containing exactly 
+
+s columns. Let τk denote the first round by which k different columns are observed. Then, as k → ∞ (so q → ∞ ), 
+
+E[τk] = r + o(1) ,
+
+and hence the expected total number of drawings satisfies 
+
+MkE[τk] = αr s k + o(k).
+
+Proof: For each k and i ∈ [Mk] and t ⩾ 0, let Di,k (t) denote the number of distinct columns observed from container i during the first t rounds, and define Dk(t) ≜ PMk 
+
+> i=1
+
+Di,k (t). Clearly, Dk(t) is the total number of distinct columns observed during the first t rounds, and we have τk ⩽ t if and only if Dk(t) ⩾ k.For each fixed t, the random variables D1,k (t), . . . , D Mk ,k (t) are i.i.d. A fixed column in a container is not drawn during the first t rounds with probability ats. Hence, E[Di,k (t)] = s(1 − ats). It follows that 
+
+E[Dk(t)] = Mks(1 − ats) = n(1 − ats). (17) 13 
+
+Define pt ≜ 1 − ats. The first two inequalities in (16) are equivalent to 
+
+αp r−1 < 1 < αp r . (18) Thus, r is the first round in which the expected number of distinct observed columns exceeds k by a linear margin. We next establish concentration around the mean. Since 0 ⩽ Di,k (t) ⩽ s, by Hoeffding’s inequality, for every 
+
+x > 0,
+
+Pr ( |Dk(t) − E[Dk(t)] | ⩾ x) ⩽ 2 exp 
+
+
+
+− 2x2
+
+Mks2
+
+
+
+. (19) Choose η ≜ 14 min {1 − αp r−1, αp r − 1} > 0. Since n = αk , for k sufficiently large, we have 
+
+(
+
+E[Dk(t)] ⩽ (1 − 2η)k, when t ⩽ r − 1; 
+
+E[Dk(t)] ⩾ (1 + 2 η)k, when t ⩾ r. 
+
+Combining these inequalities with (19) and using Mk = Θ( k), we obtain, 
+
+
+
+Pr( τk ⩽ t) = Pr( Dk(t) ⩾ k) ⩽ 2 exp 
+
+
+
+− 2η2k2 
+
+> Mks2
+
+
+
+= e−Ω( k), when t ⩽ r − 1; Pr( τk > t ) = Pr( Dk(t) < k ) ⩽ 2 exp 
+
+
+
+− 2η2k2 
+
+> Mks2
+
+
+
+= e−Ω( k), when t ⩾ r. 
+
+Therefore, as k → ∞ , we have 
+
+Pr( τk > t ) →
+
+(
+
+1, 0 ⩽ t < r ;0, t ⩾ r, (20) for every fixed t ⩾ 1.By (17), the expectation number of columns that have not been observed by the end of round t satisfies 
+
+E[n − Dk(t)] = na ts.
+
+If τk > t , then fewer than k distinct columns have been observed, and therefore n − Dk(t) ⩾ n − k + 1 . By Markov’s inequality, this yields 
+
+Pr( τk > t ) ⩽ Pr( n − Dk(t) ⩾ n − k + 1) ⩽ na ts
+
+n − k + 1 . (21) Since nk = α > 1, there exists a constant Cα > 0 such that nn−k+1 → Cα as k → ∞ . Hence, we have 
+
+Pr( τk > t ) ⩽ min {1, C αats}.
+
+Then, using the tail-sum formula and applying dominated convergence to (20), we obtain 
+
+lim  
+
+> k→∞
+
+E[τk] = lim 
+
+> k→∞
+
+X
+
+> t⩾0
+
+Pr( τk > t )= X
+
+> t⩾0
+
+lim  
+
+> k→∞
+
+Pr( τk > t )=
+
+> r−1
+
+X
+
+> t=0
+
+1 = r, 
+
+where the second equality follows since P 
+
+> t⩾0
+
+Cαats = Cα 
+
+> 1−as
+
+< ∞. Thus, we have E[τk] = r + o(1) . Moreover, since each complete round reads exactly Mk columns, we further have 
+
+MkE[τk] = ns
+
+ r + o(1)  = αr s k + o(k). (22) This completes the proof. 
+
+Remark III.4. In addition to (16) , when α < (1 − e−r/s )−1, we have α−1 
+
+> α
+
+< e −r/s , which yields rs < log 
+
+ αα−1
+
+
+
+.Combining E[Ck] = n(Hn − Hn−k) with (22) , we obtain in this case that 
+
+E[Ck] − MkE[τk] = α
+
+
+
+log 
+
+ αα − 1
+
+
+
+− rs
+
+
+
+k + o(k).14 
+
+Hence we have MkE[τk] < E[Ck] for all sufficiently large k. That is, the expected total number of drawings of the multi-container model is strictly smaller than that of the single-server model. It is also worth noting that the number of containers satisfies Mk = Θ( k) and Mk < k . This holds because s is fixed and satisfies s > α : since 1 − ar−1 
+
+> s
+
+⩾ 1 − as = 1 
+
+> s
+
+, the upper bound on α in (16) directly implies that α < s .
+
+The saving established in Remark III.4 is a constant fraction 1 − r/s  
+
+> log αα−1
+
+of the total read cost. Since (16) forces 
+
+α > (1 − ars)−1 and hence log αα−1 < r log ss−1 , this fraction is at most 
+
+1 −
+
+
+
+s log ss − 1
+
+−1
+
+=
+
+
+
+0.2787 , s = 2; 0.1779 , s = 3; 0.1310 , s = 4 ,
+
+and it tends to 0 as s → ∞ . The regime is therefore genuinely a small-container regime: it requires Mk = αk/s =Θ( k) containers, each holding a constant number s of strands. 
+
+B. Polynomial Container Size 
+
+In this section, we consider the regime where each part of the balanced M -partition PB of [n] has size ni =
+
+n/M = kε for some fixed 0 < ε < 1. Specifically, using the properties of negatively associated random variables, we derive the asymptotic behavior of E[τk] as k → ∞ . The key properties regarding negative association, along with the detailed concentration and tail bounds, are provided in Appendix B. Fix constants α > 1 and ε ∈ (0 , 1) . For each integer k ⩾ 1, let n = αk , mk = kε, and Mk = n/m k, and assume for simplicity that all these quantities are integers. Next, using Theorem B.1, we prove the following result. 
+
+Theorem III.5. Let Ck be a family of [αk, k ]q MDS codes and let τk be defined as in Theorem III.3. Set λ ≜
+
+− log 
+
+
+
+1 − 1
+
+> mk
+
+
+
+and tc ≜ log( α/ (α−1))  
+
+> λ
+
+. Then, as k → ∞ (and thus q → ∞ ), it holds that 
+
+E [|τk − tc|] = Oα
+
+
+
+1 + 
+
+r mk
+
+Mk
+
+
+
+. (23) 
+
+Consequently, we have 
+
+E[τk] = kε log 
+
+ αα − 1
+
+
+
++ Oα
+
+
+
+1 + kε− 12
+
+
+
+. (24) 
+
+Proof: We inherit the notations used in the proof of Theorem III.3. Note that the stopping rule Dk(t) ⩾ k is equivalent to the number of unseen coupons being at most (α − 1) k. Thus, in the following, we proceed the proof by estimating Pr( Dk(t) < k ) and Pr( Dk(t) > k ) according to different parameter regimes. For the j-th column in container i, define the indicator variable 
+
+Ii,j (t) ≜ 1{j-th column in container i has appeared by round t}. (25) Then, by definition, we have Dk(t) = PMk
+
+> i=1
+
+Pmk 
+
+> j=1
+
+Ii,j (t). Since the random variables {Ii,j (t)}(i,j )∈[Mk ]×[mk ]
+
+are negatively associated (see, e.g., [25]–[28]) and independence across containers preserves this property [27], 
+
+Dk(t) is the sum of n = Mkmk negatively associated random variables. Recall that by (17), we have E[Dk(t)] = 
+
+n − n
+
+
+
+1 − 1
+
+> mk
+
+t
+
+. Thus, by Theorem B.1, we obtain 
+
+Pr ( |Dk(t) − E[Dk(t)] | ⩾ x) ⩽ 2 exp 
+
+
+
+− 2x2
+
+n
+
+
+
+(26) for every x > 0. Furthermore, the definition of tc implies 
+
+
+
+1 − 1
+
+> mk
+
+tc
+
+= α−1 
+
+> α
+
+, which yields 
+
+E[n − Dk(⌈tc⌉)] ⩽ n
+
+
+
+1 − 1
+
+mk
+
+tc
+
+= ( α − 1) k. 
+
+Consequently, ⌈tc⌉ is the critical time when the expected number of unseen coupons reaches the threshold (α − 1) k.15 
+
+We now estimate the tail of τk. Let r ⩾ 0 be an integer and set t = ⌊tc + r⌋. Since τk is integer valued, 
+
+{τk > t c + r} = {Dk(⌊tc + r⌋) < k } = {Dk(t) < k }. Since t ⩾ tc + r − 1 and E[Dk(·)] is nondecreasing, we have 
+
+E[Dk(t)] − k ⩾ n − n
+
+
+
+1 − 1
+
+mk
+
+tc+r−1
+
+− k
+
+= ( α − 1) k 1 −
+
+
+
+1 − 1
+
+mk
+
+r−1!
+
+. (27) Note that for 0 ⩽ r ⩽ mk, 1 −
+
+
+
+1 − 1
+
+> mk
+
+r
+
+⩾ c rmk for an absolute constant 0 < c ⩽ 1, and Mk = nmk = αk mk .Hence, for 1 ⩽ r ⩽ mk + 1 ,
+
+E[Dk(t)] − k ⩾ c(α − 1) k r − 1
+
+mk
+
+= c(α − 1) 
+
+α Mk(r − 1) ,
+
+and Theorem B.1 yields 
+
+Pr( τk > t c + r) ⩽ Pr 
+
+
+
+Dk(t) − E[Dk(t)] ⩽ − c(α − 1) 
+
+α Mk(r − 1) 
+
+
+
+⩽ 2 exp 
+
+
+
+−Cα
+
+Mk(r − 1) 2
+
+mk
+
+
+
+, (28) where Cα ≜ 2
+
+ c(α−1) 
+
+> α
+
+2
+
+, and the bound is vacuous for r = 1 .Let 0 ⩽ r ⩽ tc − 1 and set t = ⌊tc − r⌋. Since E[Dk(t)] is increasing in t,
+
+k − E[Dk(t)] ⩾ k − n + n
+
+
+
+1 − 1
+
+mk
+
+tc−r
+
+= ( α − 1) k
+
+
+
+1 − 1
+
+mk
+
+−r
+
+− 1
+
+!
+
+. (29) Since 
+
+
+
+1 − 1
+
+> mk
+
+−r
+
+= eλr and λ = − log(1 − 1/m k) ⩾ 1/m k, (29) can be simplified as 
+
+k − E[Dk(t)] ⩾ (α − 1) k(eλr − 1) ⩾ (α − 1) kλr ⩾ α − 1
+
+α Mkr. 
+
+Hence, 
+
+Pr( τk < t c − r) ⩽ Pr( Dk(t) ⩾ k)
+
+⩽ Pr 
+
+
+
+Dk(t) − E[Dk(t)] ⩾ α − 1
+
+α Mkr
+
+
+
+⩽ 2 exp −2
+
+ α − 1
+
+α
+
+2 Mkr2
+
+mk
+
+!
+
+. (30) Combining the two tail estimates (28) and (30), and writing a2 ≜ mk 
+
+> Mk
+
+, we have, for 2 ⩽ r ⩽ mk, Pr( |τk − tc| >r) ⩽ 4 exp 
+
+
+
+−Cα (r−1) 2
+
+> a2
+
+
+
+. Since τk is integer-valued, the standard tail-sum bound gives 
+
+E[|τk − tc|] ⩽ 1 + X
+
+> ℓ⩾1
+
+Pr( |τk − tc| > ℓ )= 1 + 
+
+> mk
+
+X
+
+> ℓ=1
+
+Pr( |τk − tc| > ℓ ) + X
+
+> ℓ>m k
+
+Pr( |τk − tc| > ℓ )
+
+⩽ 2 + 4 
+
+> mk
+
+X
+
+> ℓ=2
+
+exp 
+
+
+
+−Cα
+
+(ℓ − 1) 2
+
+a2
+
+
+
++ X
+
+> ℓ>m k
+
+Pr( |τk − tc| > ℓ )
+
+⩽ 2 + ˜Cα(1 + a) + X
+
+> ℓ>m k
+
+Pr( |τk − tc| > ℓ ), (31) where ˜Cα in (31) is a constant depends only on α.16 
+
+It remains to check that the contribution of P 
+
+> ℓ>m k
+
+Pr( |τk − tc| > ℓ ) is negligible. Since λ = m−1 
+
+> k
+
+(1 + o(1)) as k → ∞ , we have tc = Oα(mk). Hence, there are Oα(mk) number of values of ℓ
+
+which makes Pr( τk < t c − ℓ) non-zero. Therefore, by (30), we have 
+
+X
+
+> ℓ>m k
+
+Pr( τk − tc < −ℓ) ⩽ Oα(mk) · 2 exp −2
+
+ α − 1
+
+α
+
+2 Mkm2
+
+> k
+
+mk
+
+!
+
+= Oα(mk) · 2 exp −2
+
+ α − 1
+
+α
+
+2
+
+n
+
+!
+
+= o(1) , (32) as k → ∞ .We next estimate P 
+
+> ℓ>m k
+
+Pr( τk − tc > ℓ ). For a constant A and mk < ℓ ⩽ Am k log k, by (27), we have 
+
+E[D(⌈tc + ℓ⌉)] − k ⩾ (α − 1) k 1 −
+
+
+
+1 − 1
+
+mk
+
+ℓ!
+
+⩾ cαk, 
+
+for some absolute constant cα only depends on α. Hence, by Pr( τk − tc > ℓ ) ⩽ Pr( D(⌈tc + ℓ⌉) < k ) and (26), we have   
+
+> Am klog k
+
+X
+
+> ℓ>m k
+
+Pr( τk − tc > ℓ ) ⩽ O(mk log k) · 2 exp 
+
+
+
+−2cα2 k2
+
+n
+
+
+
+= o(1) , (33) as k → ∞ . For ℓ > Am k log k, since 
+
+E[n − D(⌈tc + ℓ⌉)] ⩽ n
+
+
+
+1 − 1
+
+mk
+
+tc+ℓ
+
+= ( α − 1) k
+
+
+
+1 − 1
+
+mk
+
+ℓ
+
+,
+
+by Markov’s inequality, this yields 
+
+Pr( τk > t c + ℓ) = Pr( n − D(⌈tc + ℓ⌉) > (α − 1) k) ⩽
+
+
+
+1 − 1
+
+mk
+
+ℓ
+
+.
+
+Hence, using the inequality (1 − x)a ⩽ exp( −ax ) for all a ⩾ 0 and 0 ⩽ x ⩽ 1, we obtain 
+
+X  
+
+> ℓ>Am klog k
+
+Pr( Tk > t c + ℓ) ⩽ X  
+
+> ℓ>Am klog k
+
+
+
+1 − 1
+
+mk
+
+ℓ
+
+⩽
+
+
+
+1 − 1
+
+> mk
+
+Am k log k
+
+1 −
+
+
+
+1 − 1
+
+> mk
+
+ ⩽ mkk−A. (34) Choosing A = 2 , by ε ∈ (0 , 1) and mk = kε, we have this becomes o(1) uniformly as k → ∞ .Finally, combining (31), (32), (33), and (34) together, we have 
+
+E[|τk − tc|] ⩽ 1 + ˜Cα(1 + a) + o(1) = Oα
+
+
+
+1 + 
+
+r mk
+
+Mk
+
+
+
+.
+
+Since mk = kε and Mk = αk 1−ε, we have 
+
+q mk 
+
+> Mk
+
+= α− 12 kε− 12 and 
+
+tc = log( αα−1 )
+
+− log(1 − k−ε) = kε log 
+
+ αα − 1
+
+
+
++ Oα(1) 
+
+as k → ∞ . This finally yields 
+
+E[τk] = kε log 
+
+ αα − 1
+
+
+
++ Oα
+
+
+
+1 + kε− 12
+
+
+
+,
+
+which completes the proof. 
+
+Remark III.6. By [12, Corollary 1], we have E[C] = n Hn − Hn−k
+
+ = α log 
+
+ αα−1
+
+
+
+k + o(k). On the other hand, by Theorem III.5, we have E[τk] = kε log 
+
+ αα−1
+
+
+
++ Oα
+
+
+
+1 + kε− 12
+
+
+
+. Hence, the expected total number of reads across all M containers is M E[τk] = α log 
+
+ αα−1
+
+
+
+k + Oα
+
+
+
+k1−ε + k 12
+
+
+
+. In total, we have M E[τk]/E[C] −→ 1
+
+when k → ∞ . Hence, in cases where each container stores kε strands, distributing the reads across multiple containers enables parallel access without incurring any asymptotic increase in the total number of reads. 17 
+
+C. Low-Rate Obstructions 
+
+In Theorem III.5, we established that the distributed model provides no asymptotic savings in terms of total number of reads when all containers are required to have equal size kε. Next, we present another negative result, showing that for M = 2 , the distributed model offers no savings in the low-rate regime. 
+
+Theorem III.7. Let C be an [n, k ] MDS code with k ⩾ 3. Then, 2E[τk] > E[C] holds for the following cases 
+
+(
+
+k = 3 and n ⩾ 3; 
+
+k ⩾ 4 and n ⩾ k2.
+
+Proof: Let P be any 2-partition of [n]. Then, since each round contributes at most two distinct columns, we have τk ⩾ ⌈k/ 2⌉. Moreover, by Theorem III.1 and n − i ⩾ n − k + 1 , we have 
+
+E[C] − k =
+
+> k−1
+
+X
+
+> i=1
+
+in − i ⩽
+
+ k
+
+> 2
+
+
+
+n − k + 1 . (35) We first consider the case where k = 3 . In this case, we have τk ⩾ ⌈3/2⌉, which implies that the total number of reads is at least 2⌈3/2⌉ = 4 . 
+
+> •
+
+If n ⩾ 5, since nn−1 + nn−2 decreases in n, then 
+
+E[C] = 1 + nn−1 + nn−2 ⩽ 1 + 54 + 53 = 47 12 < 4.
+
+Hence, 2E[τk] > E[C] for n ⩾ 5. 
+
+> •
+
+For n = 4 , we split the discussion into two cases: 1) both parts in P has size 2; 2) one part P has size 1. For the first case, we have τk > t if and only if drawings from both containers keep repeating their first column (i.e., D1 = D2 = 1 ), so Pr( τk > t ) = 2 1−t · 21−t = 4 1−t and 2E[τk] = 2  1 + P 
+
+> t⩾1
+
+41−t = 2  1 + 43
+
+ = 14 3 .For the second case, we have τk ⩾ t if and only if the drawings from the container with 3 columns keep repeating its first column. Thus, we have Pr( τ > t ) = 3 1−t and 2E[τ ] = 2  1 + 32
+
+ = 5 . Both cases exceeding 
+
+E[C] = 4( H4 − H1) = 13 3 . 
+
+> •
+
+For n = 3 , the [3 , 3] -MDS code is just the identity code. In this case, the 2-partition always contains one part of size 2. Thus, we have Pr( τk > t ) = 2 1−t and 2E[τ ] = 2(1 + 2) = 6 , which is larger than E[C] = 3 H3 = 11 2 .We now consider the case where k ⩾ 4.When k is odd. Then, we have τk ⩾ ⌈k/ 2⌉ and 2E[τk] ⩾ k+1 . However, n ⩾ k2 gives n−k+1 ⩾ k2−k+1 >  k
+
+> 2
+
+.Hence, 2E[τk] ⩾ k + 1 > E[C] by (35). When k = 4 , the event τk > 2 occurs if and only if one of the columns drawn in the first two rounds repeats. Hence, 
+
+Pr( τk > 2) = 1 −
+
+
+
+1 − 1
+
+n1
+
+ 
+
+1 − 1
+
+n2
+
+
+
+= n1 + n2 − 1
+
+n1n2
+
+= n − 1
+
+n1n2
+
+⩾ 4( n − 1) 
+
+n2 ,
+
+where the last inequality follows by n1n2 ⩽ n2/4. Hence 
+
+2E[τk] − 4 ⩾ 2Pr( τ > 2) ⩾ 8( n − 1) 
+
+n2 ,
+
+and by (35), E[C] − 4 ⩽ 6 
+
+> n−3
+
+. Note that 8( n − 1)( n − 3) > 6n2 holds for every n ⩾ 16 = k2. This yields that 
+
+2E[τk] > E[C].When k ⩾ 6 and k is even. Let r ≜ k/ 2 ⩾ 3. Then, τk ⩽ r occurs iff the columns drawn from each container in the first r rounds are distinct. Hence, 
+
+Pr( τ > r ) = 1 −
+
+> r−1
+
+Y
+
+> j=1
+
+
+
+1 − jn1
+
+ 
+
+1 − jn2
+
+
+
+⩾ 1 − exp 
+
+
+
+−
+
+r
+
+2
+
+ 1
+
+n1
+
++ 1
+
+n2
+
+ 
+
+⩾ 1 − e−x,
+
+where x = 4(r
+
+> 2
+
+) 
+
+> n
+
+= k(k−2) 2n and the second inequality follows by 1 − u ⩽ e−u and the last inequality follows by  
+
+> 1
+> n1
+
++ 1 
+
+> n2
+
+⩾ 4 
+
+> n
+
+. Then, by n ⩾ k2 we have x ⩽ k−22k , and hence 1 − x 
+
+> 2
+
+⩾ 3k+2 4k . Thus, by 1 − e−x ⩾ x − x2 
+
+> 2
+
+, we have 
+
+2E[τk] − k ⩾ 2Pr( τk > r ) ⩾ 2
+
+
+
+x − x2
+
+2
+
+
+
+⩾ 2x · 3k + 2 4k = (k − 2)(3 k + 2) 4n .18 
+
+On the other side, n ⩾ k2 yields n − k + 1 ⩾ n(1 − 1 
+
+> k
+
+). Hence, by (35), E[C] − k ⩽ k(k−1) 2n(1 −1/k ) = k2 
+
+> 2n
+
+. Note that 
+
+(k − 2)(3 k + 2) − 2k2 = k2 − 4k − 4 > 0 for k ⩾ 5. Thus, 2E[τk] − k > E[C] − k. This completes the proof. For comparison, in Appendix B, we provide three exact finite-parameter examples of higher-rate MDS codes where a balanced two-container layout yields a strict saving. IV. D ISTRIBUTED COVERAGE DEPTH PROBLEM OF SIMPLEX CODES 
+
+In this section, we consider the distributed coverage depth problem of simplex codes. We first study the general coverage depth problem in the single-container model. As a consequence, we show that the simplex code is optimal in terms of coverage depth in the single-container model, which resolves a conjecture proposed by Bertuzzo, Ravagnani, and Yaakobi [20]. Next, we consider the distributed setting and show that the simplex code achieves optimal distributed coverage depth when the partition P has a staircase form. Furthermore, we obtain the asymptotic formula for the distributed coverage depth of the simplex code when the partition P is randomly balanced. Throughout this section, we use Gsimp to denote the standard normalized generator matrix of simplex code, whose columns are the representatives of the projective points with first nonzero coordinate equal to 1.
+
+A. Optimality of Simplex Codes in the Single-Container Model 
+
+We start by recalling the coverage depth result of simplex codes in the single-container model. 
+
+Theorem IV.1 ( [20, Theorem 3.1]) . Let C ⊆ Fnq be the q-ary simplex code of dimension k and length n = [ k]q .Then we have 
+
+E[C] = 
+
+> k−1
+
+X
+
+> i=0
+
+qk − 1
+
+qk − qi = (1 − q−k)
+
+> k
+
+X
+
+> j=1
+
+11 − q−j . (36) Throughout this section we use Csimp to represent the simplex code and write δq ≜ P   
+
+> j⩾11
+> qj−1
+
+, and 
+
+C(k) 
+
+> q
+
+≜ Ov( Csimp ) = E[C] − k =
+
+> k
+
+X
+
+> j=1
+
+1 − qj−k
+
+qj − 1 . (37) Clearly, C(k) 
+
+> q
+
+< δ q for every k and C(k) 
+
+> q
+
+→ δq as k → ∞ .For the single-container model, Corollary II.4 shows that the coverage depth of any code depends solely on the probability law π of its column distribution across subspaces of Fkq . Hence, in this section, we write E[C] = E(π).Recall that P denotes the set of projective points in Fkq . For a rank-k generator matrix G = ( g1, . . . , gn), we define 
+
+πp ≜ |{ j ∈ [n] : ⟨gj ⟩ = p}| 
+
+n (38) for each p ∈ P. Then, for any subspace U ⩽ Fkq , according to its definition in Section II-B, we have π(U ) = P  
+
+> p∈P(U)
+
+πp, where P(U ) denotes the set of projective points in U . With this notation, the simplex code, in which each projective point appears as a column exactly once, has a column law given by the uniform distribution on P.Next, we proceed with the proof of the optimality of simplex codes in the single-container model, starting with the following lemma. 
+
+Lemma IV.2. For any probability law π whose support spans Fkq , let ¯πi ≜ E[π(V (i))] for each 0 ⩽ i ⩽ k. Then, we have ¯πi ⩾ [i]q 
+
+> [k]q
+
+, for 0 ⩽ i ⩽ k, where equality holds for every i if and only if π = u.Proof: We proceed the proof by induction on i. The case i = 0 is immediate, since V (0) = {0} and hence 
+
+¯π0 = 0 = [0] q /[k]q .Now fix an integer i with 1 ⩽ i ⩽ k, and assume that ¯πi−1 ⩾ [i − 1] q /[k]q . Let U be a fixed (i − 1) -dimensional subspaces. The number of i-dimensional subspaces W satisfying U ⩽ W is 
+
+Ni ≜
+
+k − (i − 1) 1
+
+
+
+> q
+
+= [ k − i + 1] q ,
+
+which is independent of U . Moreover, the sets W \ U , where W ranges over all such i-dimensional subspaces, form a partition of Fkq \ U . For each such subspace W , define aW ≜ π(W ) − π(U ). By the definition of π(U ), we have 
+
+aW = X 
+
+> p∈P(W)
+
+πp − X 
+
+> p∈P(U)
+
+πp = X  
+
+> p∈P(W)\P(U)
+
+πp ⩾ 0.19 
+
+Hence, X   
+
+> U⩽W⩽Fkq
+> dim( W)= i
+
+aW = π(Fkq ) − π(U ) = 1 − π(U ).
+
+Conditioned on V (i−1) = U and the first draw leaving U , the resulting span is equal to W with probability 
+
+aW /(1 − π(U )) . Therefore, 
+
+E
+
+h
+
+π(V (i)) | V (i−1) = U
+
+i
+
+= X   
+
+> U⩽W⩽Fkq
+> dim( W)= i
+
+aW
+
+1 − π(U )
+
+ π(U ) + aW
+
+
+
+= π(U ) + X   
+
+> U⩽W⩽Fkq
+> dim( W)= i
+
+a2
+
+> W
+
+1 − π(U ) . (39) By the Cauchy–Schwarz inequality, we obtain 
+
+X   
+
+> U⩽W⩽Fkq
+> dim( W)= i
+
+a2 
+
+> W
+
+⩾ 1
+
+Ni
+
+ X   
+
+> U⩽W⩽Fkq
+> dim( W)= i
+
+aW
+
+2
+
+= (1 − π(U )) 2
+
+Ni
+
+.
+
+Substituting this bound into (39) yields 
+
+E
+
+h
+
+π(V (i)) | V (i−1) = U
+
+i
+
+⩾ π(U ) + 1 − π(U )
+
+Ni
+
+= π(U )
+
+
+
+1 − 1
+
+Ni
+
+
+
++ 1
+
+Ni
+
+. (40) Taking expectations in both sides of (40) over U , we obtain ¯πi ⩾ ¯πi−1
+
+
+
+1 − 1
+
+> Ni
+
+
+
++ 1 
+
+> Ni
+
+. Since Ni = [ k−i+1] q ⩾ 1,the map x 7 → x(1 − 1 
+
+> Ni
+
+) + 1 
+
+> Ni
+
+is nondecreasing. By the induction hypothesis, this yields 
+
+¯πi ⩾ [i − 1] q
+
+[k]q
+
+
+
+1 − 1
+
+Ni
+
+
+
++ 1
+
+Ni
+
+.
+
+Then, using [k]q − [i − 1] q = qk −qi−1 
+
+> q−1
+
+= qi−1[k − i + 1] q = qi−1Ni, we further obtain 
+
+[i − 1] q
+
+[k]q
+
+
+
+1 − 1
+
+Ni
+
+
+
++ 1
+
+Ni
+
+= [i − 1] q
+
+[k]q
+
++ [k]q − [i − 1] q
+
+[k]q Ni
+
+= [i − 1] q
+
+[k]q
+
++ qi−1
+
+[k]q
+
+= [i]q
+
+[k]q
+
+,
+
+where the last equality follows from [i]q − [i − 1] q = qi−1. This proves the desired lower bound. Finally, the equality in the Cauchy-Schwarz step at level i forces the numbers aW to be constant over all i-dimensional subspaces W containing U , for every possible U in the support of V (i−1) . Specifically, taking i = 1 
+
+already suffices: for i = 1 , we have V (0) = {0}, and the relevant subspaces W are exactly the points p ∈ P , with 
+
+aW = πp. Equivalently, ¯π1 = P 
+
+> p∈P
+
+π2 
+
+> p
+
+⩾ 1[k]q with equality if and only if πp ≡ 1/[k]q , i.e., π = u. Conversely, if 
+
+π = u, then u(V (i)) = [ i]q /[k]q for every i, so equality holds at every level. With the help of Lemma IV.2, we next show that simplex codes has the smallest coverage depth among all kinds of linear codes with the same code length and dimension, which confirms [20, Conjecture 3.2]. 
+
+Theorem IV.3. Let u be the uniform probability law on P. For every probability law π on P, we have 
+
+E(π) ⩾ E(u) = 
+
+> k−1
+
+X
+
+> i=0
+
+qk − 1
+
+qk − qi .
+
+Moreover, equality holds if and only if π = u. In particular, among length-[k]q , dimension-k linear codes, the q-ary simplex code is, up to isomorphism, the unique minimizer. Proof: If π(V (i)) = 1 with positive probability for some i < k , then Corollary II.4 gives E(π) = ∞, and the desired inequality is trivial. Thus, in what follows, we assume that π(V (i)) < 1 a.s. for every 0 ⩽ i ⩽ k − 1.20 
+
+Let ϕ(x) = (1 − x)−1, for 0 ⩽ x < 1. By Corollary II.4 and Jensen’s inequality, for each 0 ⩽ i ⩽ k − 1, we have 
+
+E
+
+h
+
+ϕ
+
+
+
+π(V (i))
+
+i 
+
+⩾ ϕ
+
+
+
+E[π(V (i))] 
+
+
+
+= ϕ(¯ πi).
+
+Since ϕ is strictly increasing on [0 , 1) , Lemma IV.2 implies 
+
+E(π) = 
+
+> k−1
+
+X
+
+> i=0
+
+E
+
+h
+
+ϕ
+
+
+
+π(V (i))
+
+i 
+
+⩾
+
+> k−1
+
+X
+
+> i=0
+
+ϕ(¯ πi)
+
+⩾
+
+> k−1
+
+X
+
+> i=0
+
+ϕ
+
+ [i]q
+
+[k]q
+
+
+
+=
+
+> k−1
+
+X
+
+> i=0
+
+[k]q
+
+[k]q − [i]q
+
+=
+
+> k−1
+
+X
+
+> i=0
+
+qk − 1
+
+qk − qi = E(u),
+
+where the last equality follows by Theorem IV.1. It remains to characterize the equality case. Since all the gaps in the two inequalities above are nonnegative, equality E(π) = E(u) holds if and only if equality holds term by term in both inequalities, namely, 
+
+E
+
+h
+
+ϕ
+
+
+
+π(V (i))
+
+i 
+
+= ϕ(¯ πi)
+
+and ϕ(¯ πi) = ϕ
+
+ [i]q
+
+> [k]q
+
+
+
+for all 0 ⩽ i ⩽ k − 1. For the first equality, since ϕ(x) = (1 − x)−1 is strictly convex on 
+
+[0 , 1) , equality in Jensen’s inequality holds if and only if 
+
+π(V (i)) = E[π(V (i))] = ¯ πi.
+
+For the second equality, since ϕ is strictly increasing, it is equivalent to ¯πi = [ i]q /[k]q holds for all 0 ⩽ i ⩽ k − 1.Thus, by Lemma IV.2, the second equality holds if and only if π = u. Moreover, when π = u, we have u(V (i)) = [i]q /[k]q for every i, and hence the equality condition in Jensen’s inequality is also satisfied. Therefore, equality in the theorem holds if and only if π = u.
+
+Corollary IV.4. Let k ⩾ 2, let N = [ k]q , and let π be a probability distribution on P whose support spans Fkq .Then 
+
+E(π) − E(u) ⩾ ∥π − u∥22
+
+(1 − 1/N )2 . (41) 
+
+Proof. Let d ≜ ∥π − u∥22 = P 
+
+> p∈P
+
+(πp − 1/N )2. By Lemma IV.2, for each 0 ⩽ i ⩽ k − 1, the difference 
+
+Eϕ π(V (i)) − qk −1  
+
+> qk−qi
+
+is non-negative. Hence, considering only the term corresponding to i = 1 , we have 
+
+E(π) − E(u) ⩾ 11 − ¯π1
+
+− 11 − 1/N = d
+
+(1 − 1/N − d)(1 − 1/N ) ,
+
+where the second equality follows from ¯π1 = P 
+
+> p∈P
+
+π2 
+
+> p
+
+= 1 /N + d. Since the support of π spans Fkq , it must contain at least two points. Hence, P 
+
+> p
+
+π2 
+
+> p
+
+< 1 and 0 < 1 − 1/N − d < 1 − 1/N , which directly yields (41). 
+
+B. Full Saving for M = k and No-Saving Obstructions for M < k 
+
+As a direct consequence of Theorem II.8, the following lemma establishes the explicit construction of one-round-perfect partitions for the simplex code. 
+
+Lemma IV.5. For each 1 ⩽ i ⩽ k, assign to container i all columns of the form 
+
+g = (0 , . . . , 0
+
+| {z }
+
+> i−1
+
+, 1, ∗, . . . , ∗)T ,
+
+where the entries denoted by ∗ are arbitrary elements of Fq , and denote the corresponding k-partition of [( qk −
+
+1) /(q − 1)] . Then, P is one-round-perfect, and τ (Gsimp , P) = 1 a.s. Proof. Let Wk ⊊ Wk−1 ⊊ · · · ⊊ W1 = Fkq be a sequence of subspaces of Fkq , where Wi = ⟨ei, ei+1 , . . . , ek⟩ and 
+
+Wk+1 ≜ {0}. Then, container i is exactly the set of columns lying in Wi \ Wi+1 , with qk−i elements, and any set 21 
+
+of k columns (h1, . . . , hk) with hi ∈ Wi \ Wi+1 forms an upper triangular matrix with nonzero diagonal entries, hence a basis of Fkq . Hence, the result follows by the definition of one-round-perfection. 
+
+Remark IV.6. By (37) , Ov( Csimp ) < δ q = P
+
+> j⩾1
+
+(qj − 1) −1, with δ2 = 1 .6067 and δq < 1 for q ⩾ 3. Thus, for simplex codes, whether distribution reduces the total number of reads concerns an overhead bounded by an absolute constant, independent of k (at most about 1.61 when q = 2 , and less than one when q ⩾ 3). 
+
+By Theorem II.8, we have the following immediate corollary. 
+
+Corollary IV.7. For any q-ary k-dimensional simplex code, we have min M, P M E [τ (Gsimp , P)] = k. This minimum is attained by the k-partition of [( qk − 1) /(q − 1)] given in Lemma IV.5. Thus, distributing the simplex code into 
+
+k containers as in Lemma IV.5 achieves full savings Ov( Csimp ).
+
+We stress that the weaker consequence M E[τ ] ⩾ k of Theorem II.8 is not sufficient here, since the single-container coverage depth of the simplex code equals k + C(k) 
+
+> q
+
+> k . What is needed is the integrality of the bound. The following theorem gives M E[τ ] ⩾ M ⌈k/M ⌉, and by Remark IV.6, the overhead C(k) 
+
+> q
+
+of the simplex code is bounded by an absolute constant, so this rounding alone already rules out any saving whenever M ⌈k/M ⌉ > k .
+
+Theorem IV.8. Let C be a q-ary simplex code of dimension k with standard generator matrix Gsimp , and let 
+
+M be any integer satisfying 1 < M < k . Then, for every M -partition P of [( qk − 1) /(q − 1)] , it holds that 
+
+M E[τ (Gsimp , P)] ⩾ M ⌈k/M ⌉. Moreover, we have the following two integrality obstructions: 
+
+(i) If M ∤ k and M ∤ (k + 1) , then M ⌈k/M ⌉ ⩾ k + 2 > E[C].
+
+(ii) If M | (k + 1) and either q ⩾ 3 or k = 3 , then M ⌈k/M ⌉ = k + 1 > E[C].Proof: The result M E[τ (Gsimp , P)] ⩾ M ⌈k/M ⌉ follows directly by Theorem II.8. First, M ∤ k gives M ⌈k/M ⌉ = k + ( M − (k mod M )) ⩾ k + 1 . Moreover, note that M − (k mod M ) = 1 if and only if M | k+1 . Hence, for (i), we have M ⌈k/M ⌉ ⩾ k + 2 , and for (ii), M ⌈k/M ⌉ = k + 1 .On the other hand, since 1−qj−k  
+
+> qj−1
+
+< 1  
+
+> qj−1
+
+, we have C(k) 
+
+> q
+
+< δ q ≜ P
+
+> j⩾1
+
+(qj − 1) −1. Since qj − 1 > q j−1 holds for q ⩾ 2 and j ⩾ 3, we have 
+
+δ2 = 1 + 13 + X
+
+> j⩾3
+
+(2 j − 1) −1 < 1 + 13 + X
+
+> j⩾3
+
+21−j = 11 6 < 2,
+
+and for q ⩾ 3
+
+δq ⩽ δ3 < 12 + 18 + X
+
+> j⩾3
+
+31−j = 12 + 18 + 16 < 1.
+
+Consequently, this proves (i) holds for every q and (ii) for q ⩾ 3.Finally, for q = 2 and k = 3 , the results follows since C(3) 2 = E[C] − 3 = 47 12 − 3 = 11 12 < 1.The two smallest parameter pairs not settled by the preceding integrality obstruction require a separate codimension-two argument. Corresponding arguments for M = 2 is deferred to Appendix C. 
+
+C. Distributed Coverage Depth under Balanced Partitions 
+
+Fix q, we next restrict our attention to the case where M | [k]q and every part of the ordered M -partition P has the same size [k]q /M .
+
+Remark IV.9. A balanced M -partition of the columns of Gsimp exists only if M | [k]q , and this imposes a restriction on k. If prime p divides both M and q, then [k]q = 1 + q + · · · + qk−1 ≡ 1 mod p, so M ∤ [k]q for every k. In particular, for q = 2 no balanced M -partition exists for any even M . If p | M and p ∤ q, then p | [k]q is equivalent to d | k, where d = p when p | q − 1 and d = ord p(q) otherwise. 1 For instance, for q = 3 and M = 2 only even k
+
+are admissible. All results in this subsection are stated for admissible dimensions k only. 
+
+We first prove the following upper bound on E[τ (Gsimp , P)] .
+
+Proposition IV.10. Fix integer M . Let P be a balanced ordered M -partition of [[ k]q ]. Then, we have 
+
+M E[τ (Gsimp , P)] ⩽ k + cq,M + o(1) ,           
+
+> 1Here ord p(q)denotes the order of qmodulo p, i.e., the smallest positive integer dsatisfying qd≡1 (mod p).22
+
+as k → ∞ , where cq,M = O(M ) is independent of k.Proof: Note that a round fails to span Fkq only if its draws lie in a common hyperplane, so for any layout and any t, a union bound over all the [k]q hyperplanes gives Pr( τ (Gsimp , P) > t ) ⩽ P 
+
+> H
+
+ρtH .For balanced partitions, since ni = [ k]q /M for every i ∈ [M ], the AM-GM inequality gives 
+
+ρH =
+
+> M
+
+Y
+
+> i=1
+
+mHi
+
+[k]q /M ⩽ 1
+
+M
+
+X
+
+> i
+
+mHi
+
+[k]q /M 
+
+!M
+
+=
+
+ [k − 1] q
+
+[k]q
+
+M
+
+.
+
+Denote β ≜ [k − 1] q /[k]q . We have ln(1 /β ) = ln q + O(q−k) and ln([ k]q ) = ( k − 1) ln q + ln qq−1 + O(q−k).Let t∗ ≜ ln([ k]q )  
+
+> Mln(1 /β )
+
+. Hence 
+
+M t ∗ = ln([ k]q )ln(1 /β ) = ( k − 1) + ln qq−1
+
+ln q + o(1) .
+
+Then, we have Pr ( τ (Gsimp , P) > t ) ⩽ [k]q βM t , which is less than 1 when t > t ∗.Since E[τ (Gsimp , P)] = P∞ 
+
+> t=0
+
+Pr( τ (Gsimp , P) > t ), then by bounding the first ⌈t∗⌉ tail terms by 1 and the remaining ones by a geometric series of ratio βM , and using β → q−1, we get 
+
+M E[τ (Gsimp , P)] ⩽ M ⌈t∗⌉ + M [k]q βM ⌈t∗⌉
+
+1 − βM ⩽ k + cq,M + o(1) ,
+
+where cq,M ≜ M − 1 + ln qq−1  
+
+> ln q
+
++ M 
+
+> 1−q−M
+
+is independent of k, which completes the proof. 
+
+Remark IV.11. Since E[Csimp ] < k + δq < k + 2 by Remark IV.6, the bound of Proposition IV.10 does not exhibit any saving over the single-container model. It demonstrates that the total-read overhead of an arbitrary balanced layout remains O(M ) uniformly in k, i.e., that it does not grow with the dimension. 
+
+To quantify the saving in terms of the expected total number of reads achieved by the layout (Gsimp , P) when 
+
+P is balanced, we consider the case where P is a random balanced partition. Let Prb ,k = ( P1, . . . , P M ) be a uniformly distributed balanced M -partition of the columns of Gsimp ,k . Clearly, 
+
+|P1| = · · · = |PM | = [k]q 
+
+> M
+
+. We define the average coverage depth over all possible partitions as 
+
+Erb (k, M ) ≜ EPrb ,k [E [τ (Gsimp ,k , Prb ,k )]] . (42) We then have the following result. 
+
+Theorem IV.12. Let τsimp ,k denote the single-container coverage time of the k-dimensional simplex code. Then, as k → ∞ through dimensions satisfying M | [k]q ,
+
+M E rb (k, M ) = E[τsimp ,k ] + γM (k) + o(1) = k + δq + γM (k) + o(1) ,
+
+where γM (k) ≜ E[[ −τsimp ,k ]M ], and [a]M denotes the least nonnegative residue of an integer a modulo M .Moreover, let {Γj }j⩾1 be independent geometric random variables with Γj ∼ Geom(1 − q−j ) and let D∞ ≜P
+
+> j⩾1
+
+(Γ j − 1) . For every a ∈ { 0, 1, . . . , M − 1} that is attained by infinitely many admissible dimensions (see Remark IV.9), 
+
+γM (k) → γ∞ 
+
+> M,a
+
+≜ E [[ −(a + D∞)] M ] as k → ∞ with k ≡ a(mod M ).
+
+Hence γM (k) is asymptotically periodic with period M on the set of admissible dimensions. If all M residue classes are attained, then, one has 1
+
+> M
+
+PM −1 
+
+> a=0
+
+γ∞ 
+
+> M,a
+
+= M −12 .
+
+The proof of Theorem IV.12 is technical and combines total-variation bounds, tail truncation, and a limiting geometric-stage decomposition. To maintain the flow of the main text, the full proof is deferred to Appendix D. It is worth to mention that, in general, only the limits γ∞ 
+
+> M,a
+
+with a attained carry information about the model. For example, for q = 3 and M = 2 only a = 0 is attained, and γ∞ 
+
+> 2,0
+
+= Pr( D∞ odd ) = 12
+
+
+
+1 − Q  
+
+> j⩾1 3j−13j+1
+
+
+
+= 0 .321 ,rather than the unconditional average 12 .23 
+
+V. C ONCLUSION AND OPEN PROBLEMS 
+
+This paper establishes a general framework for analyzing full-message recovery in distributed DNA storage via the notion of distributed coverage depth. First, we provide exact formulas, general lower bounds, and optimal layout constructions for linear codes, proving that MDS codes remain optimal in minimizing the expected number of sequencing rounds. Second, a systematic evaluation of MDS codes reveals a key trade-off: while constant-size balanced containers achieve a genuine reduction in total reads compared to the single-container case, polynomial-size containers merely accelerate recovery via parallelism without reducing the total read volume. Furthermore, our low-rate lower bounds and higher-rate constructions show that these distributional gains are governed jointly by code rate and container scaling. Third, for simplex codes, we resolve a conjecture by Bertuzzo, Ravagnani, and Yaakobi [20] in the single-container setting, construct optimal staircase layouts achieving minimal total reads when M = k, and bound the total-read overhead for both deterministic and random balanced layouts. Together, these results demonstrate that distribution is neither inherently beneficial nor universally detrimental. Ultimately, whether distribution reduces coverage overhead or merely provides parallel speedup depends fundamen-tally on the underlying rank geometry of the code and the combinatorial structure of the layout. Several natural directions and open problems emerge from our results. Here we highlight a few of them for future research. 1) Optimal layouts under given constraints. For a fixed generator matrix G, a fixed number of containers M ,and prescribed container sizes n1, . . . , n M , determine 
+
+min  
+
+> P
+
+E[τ (G, P)] .
+
+Even when the partition is required to be balanced, a structural characterization of the optimal layout is not known for a general code. It would be particularly useful to characterize which codes admit balanced one-round-perfect layouts and, when this is impossible, to determine the smallest achievable number of total reads. A related question is to develop nearly balanced constructions when M ∤ n.2) Optimal codes over small fields. Given a field Fq , a fixed integer M , and a fixed ordered M -partition P of 
+
+[n], determine 
+
+min  
+
+> G
+
+E[τ (G, P)] ,
+
+and identify the optimal rank-k generator matrix G. This problem represents the counterpart to the previous one, focusing on finding optimal codes that minimize the distributed coverage depth. While this problem is completely settled when MDS codes exist, it remains open for parameters where no MDS code is available (e.g., over small fields where q < n − 3). In the single-container setting, the analogous question was studied in [20] using duality arguments and extended weight enumerators; adapting such combinatorial tools may provide a fruitful direction for the distributed storage model. 3) Simplex code layouts with intermediate numbers of containers. The integrality arguments rule out savings for many values of q, k, and M , and the codimension-two analysis settles two small exceptional cases. It remains to determine the optimal distributed coverage depth in the remaining regimes, especially when M | k, and in the binary cases where M | (k + 1) .4) Nonuniform, asynchronous, adaptive, and noisy sampling. The present model assumes that all strands within a container are equally likely to be sampled, that one read is obtained from every container in every round, and that every sampled strand is observed without error. Practical systems may exhibit unequal strand abundances, different sequencing rates across containers, adaptive allocation of reads, erasures, or sequencing errors. Extending the present results to these models, and determining which of the layout-optimality principles remain valid, are natural directions for future work. APPENDIX AONE -R OUND -P ERFECT CONSTRUCTIONS AND EXAMPLES 
+
+Theorem A.1. Let C be an [n, k ] linear code with redundancy r = n − k ⩾ 1 and parity-check matrix H. Suppose some r + 1 columns of H, indexed by B ⊆ [n], are in general position 2. Then, the generator matrix G and the 
+
+k-partition 
+
+P = ( B, {j1}, {j2}, . . . , {jn−| B|}), (43)             
+
+> 2A set of ℓvectors in Fmqwith ℓ⩾mis said to be in general position if every mof them are linearly independent. 24
+
+where [n] \ B = {j1, j 2, . . . , j n−| B|} together yield a one-round-perfect layout. Proof: Recall that a parity-check matrix of an [n, k ] code C is any full-rank matrix H = ( h1, . . . , hn) ∈ Fr×nq
+
+such that C = ker( H).First, by definition, the partition has (n − r − 1) + 1 = n − r = k non-empty parts and is clearly a k-partition. Let T ⊆ [n] be an index set such that ([ n] \ B) ⊆ T and |T ∩ B| = 1 . Thus, its complement T C = [ n] \ T
+
+has the form B \ { b} and is of size r. Suppose that the columns of the generator matrix indexed by T fail to span 
+
+Fkq . Then, there exists a non-zero vector h ∈ Fkq such that the codeword c = hG is non-zero and has its support contained in [n] \ T = B \ { b}. However, the parity-check condition Hc ⊤ = 0 reads P 
+
+> j∈supp( c)
+
+cj hj = 0. This yields a non-trivial linear dependence among at most r columns of H indexed by B, contradicting the condition that the columns indexed by B are in general position. Hence, the columns of the generator matrix G indexed by every such k-set T span Fkq , which proves that (G, P) is one-round-perfect. According to the proof of Theorem A.1, since H has rank r, any r + 1 of its columns are linearly dependent. Thus, by the definition of general position, every dependency inside B must include all r + 1 columns. This implies that there exists a codeword of C with support set B, while no non-zero codeword of C is supported on a proper subset of B. From this observation, we draw two consequences and one caution. First, if C is an MDS code, then so is its dual C⊥; hence, every r columns of H are linearly independent, and by Theorem A.1, every (r + 1) -subset 
+
+B induces a one-round-perfect k-partition (see Theorem III.1 in Section III below). The second consequence is the following result, which shows that Hamming codes also admit one-round-perfect k-partitions. 
+
+Corollary A.2. For every prime power q and every integer r ⩾ 2, let CHamming be the [[ r]q , [r]q −r] Hamming code over Fq whose parity-check columns represent the [r]q distinct directions of Frq . Let B be the set of those r+1 indices whose corresponding parity-check columns are the r standard basis vectors e1, . . . , er and their sum e1 + · · · + er .Then the layout (GHamming , P) with P = ( B, {j1}, {j2}, . . . , {jn−| B|}), where {j1, j 2, . . . , j n−| B|} = [[ r]q ] \ B is one-round-perfect layout. Proof: According to Theorem A.1, it suffices to verify that the r + 1 columns indexed by B are in general position. This follows directly from their specific forms. The caution is that the condition in Theorem A.1 is sufficient but not necessary. For instance, the binary first-order Reed–Muller code RM(1 , 3) is self-dual, and its parity-check matrix has no 5-subset of parity-check columns in general position; nevertheless, it admits a one-round-perfect 4-partition. To support the above discussion, we next focus on first-order Reed–Muller codes. Unlike MDS codes and Hamming codes, which can admit high code rates, the first-order Reed–Muller code is a low-rate code family, similar to simplex codes. 
+
+Theorem A.3. For C = RM q (1 , m ), the following two statements hold. 
+
+(i) The coverage depth of C in the single-container model is 
+
+E[C] = k +
+
+> m
+
+X
+
+> j=1
+
+1
+
+qj − 1 ,
+
+so the overhead is Ov( C) = Pmj=1 (qj − 1) −1.
+
+(ii) The affine staircase k-partition of [n] = [ qm], consisting of P0 = {j ∈ [qm] : pj = 0} and, for 1 ⩽ i ⩽ m,
+
+Pi = {j ∈ [qm] : pj = ( pj, 1, . . . , p j,m ) such that pj, 1 = · · · = pj,i −1 = 0 , p j,i ̸ = 0 }
+
+of size (q − 1) qm−i, is one-round-perfect. Proof. The proof of both parts relies on a key observation. A linear combination P 
+
+> i
+
+λi(1 , pi) of columns has 1 as its first coordinate if and only if P 
+
+> i
+
+λi = 1 ; more generally, it is a non-zero scalar multiple of some column (1 , a)
+
+if and only if P 
+
+> i
+
+λi̸ = 0 . Thus, the vector a can be viewed as an affine combination of {pi}i∈[qm].For any non-empty subset T of columns, let XT ≜ {pi : (1 , pi) ∈ T }. By fixing any p0 ∈ XT , we have 
+
+Span( T ) = Span {(1 , p0)} ⊕ Span {(0 , pi − p0) : pi ∈ XT }. This yields 
+
+(Span( T ) ∩ { (1 , pi)}i∈[qm] = {(1 , a) : a ∈ aff( XT )};dim(Span( T )) = 1 + dim(aff( XT )) , (44) where aff( XT ) denotes the affine hull of XT in Fmq . In particular, Span( T ) = Fkq if and only if aff( XT ) = Fmq .25 
+
+For (i), note that this is the single-container model. Let V (i) be the span of the sampled columns at the first time its dimension becomes i as in Corollary II.4. By (44), V (i) corresponds to an affine subspace of dimension i − 1
+
+for i ⩾ 1, which contains exactly qi−1 vectors in Fmq . Hence, V (i) holds exactly qi−1 of the qm columns, which yields π(V (i)) = qi−1−m is deterministic. Hence, by (11) in Corollary II.4, we have 
+
+E[C] = 1 + 
+
+> m
+
+X
+
+> i=1
+
+11 − qi−1−m = 1 + 
+
+> m
+
+X
+
+> j=1
+
+11 − q−j = 1 + 
+
+> m
+
+X
+
+> j=1
+
+
+
+1 + 1
+
+qj − 1
+
+
+
+= k +
+
+> m
+
+X
+
+> j=1
+
+1
+
+qj − 1 .
+
+For (ii), we first note that {Pi}mi=0 forms a k-partition of [qm]. The pairwise disjointness of the sets Pi and their corresponding sizes follow directly from their definitions. Specifically, pj = 0 lies in P0, and any pj̸ = 0 belongs to the part Pi corresponding to its first non-zero coordinate i. Hence, Smi=0 Pi = [ qm].Next, we show that the partition {Pi}mi=0 is one-round-perfect. Let {(1 , x(0) ), (1 , x(1) ), . . . , (1 , x(m))} be a set of drawn vectors within one time round, with x(0) = 0 ∈ P0 and x(i) ∈ Pi for 1 ⩽ i ⩽ m. By (44), this set spans Fkq if and only if vectors x(0) , . . . , x(m) affinely span Fmq , which is equivalent to {x(i) − x(0) = x(i)}i∈[m] being linearly independent. This follows directly because the m × m matrix with rows x(1) , . . . , x(m) is upper triangular with non-zero diagonal entries, since each x(i) has its first non-zero coordinate precisely at position i and is therefore invertible. Hence, the set {(1 , x(0) ), (1 , x(1) ), . . . , (1 , x(m))} spans Fkq , which confirms that the partition {Pi}mi=0 
+
+is one-round-perfect. This completes the proof. APPENDIX BTECHNICAL RESULTS FOR THE MDS A NALYSIS 
+
+A. Concentration Results for Negatively Associated Random Variables 
+
+We first recall the following definition and properties of negatively associated random variables. 
+
+Definition B.1 ([26]) . Random variables X1, X 2, . . . , X n are said to be negatively associated if for every disjoint index sets I, J ⊆ [n] and coordinate-wise non-decreasing functions f and g, it holds that Cov  f (XI ), g (XJ ) ⩽ 0,where XI = ( Xi : i ∈ I) and XJ = ( Xj : j ∈ J).
+
+Theorem B.1 (Chernoff–Hoeffding bounds for NA variables [27], [29]) . Let X1, X 2, . . . , X m be negatively asso-ciated random variables with Xj ∈ [aj , b j ] always. Then Y = Pmj=1 Xj satisfies the following bound 
+
+Pr( |Y − E[Y ]| ⩾ t) ⩽ 2 exp − 2t2
+
+Pmj=1 (bj − aj )2
+
+!
+
+. (45) 
+
+B. Balanced Two-Container MDS Examples with Reduced Total Reads 
+
+Example 3. In this example, we provide three sets of parameters for which there exist MDS codes with balanced 
+
+2-partitions under the distributed model that require strictly fewer total reads than in the single-container model. All three parameter sets can be realized by Reed–Solomon codes.  
+
+> •
+
+Case 1: n = 6 , k = 4 . Recall that Di(t) denote the number of distinct columns observed from container i up to round t. Hence, τk > t if and only if (D1(t), D 2(t)) ∈ { (1 , 1) , (1 , 2) , (2 , 1) }. Thus, 
+
+Pr( τk > t ) = Pr( D1(t) = 1)  Pr( D2(t) = 1) + Pr( D2(t) = 2) 
+
++ Pr( D1(t) = 2)Pr( D2(t) = 1) = 9 1−t(2 t+1 − 3) = 18( 29 )t − 27( 19 )t,
+
+where the last equality follows by (15) with ni = 3 . Summing the geometric series yields 
+
+E[τk] = 1 + X
+
+> t⩾1
+
+Pr( τk > t ) = 1 + 18 · 2/97/9 − 27 · 1/98/9 = 155 56 .
+
+On the other hand, E[C] = 6( H6 − H2) = 57 10 = 5 .7, which is strictly larger than 2E[τk] ≈ 5.5357 . 
+
+> •
+
+Case 2: n = 8 , k = 4 . Similarly, we have τk > t if and only if (D1(t), D 2(t)) ∈ { (1 , 1) , (1 , 2) , (2 , 1) }. Using 
+
+(15) with ni = 4 , the same computation yields Pr( τk > t ) = 48( 18 )t − 80( 116 )t and E[τk] = 1 + 48 7 − 16 3 = 53 21 .Thus, the expected total number of reads is 2E[τk] = 106 21 = 530 105 , which improves upon E[C] = 8( H8 − H4) =  
+
+> 533 105
+
+.26  
+
+> •
+
+Case 3: n = 6 , k = 5 . Since k = 5 , we have τk > t if and only if (D1(t), D 2(t)) ∈ { (1 , 1) , (1 , 2) , (2 , 1) , (1 , 3) ,
+
+(3 , 1) , (2 , 2) }. Using (15) with ni = 3 , by similar computations to those in the previous cases, we have 
+
+Pr( τk > t ) = 6( 13 )t + 9( 49 )t − 36( 29 )t + 27( 19 )t,
+
+which leads to E[τk] = 1+6 · 12 +9 · 45 −36 · 27 +27 · 18 = 1201 280 . Hence, the total number of reads is 2E[τk] = 1201 140 
+
+which improves upon E[C] = 6( H6 − H1) = 87 10 = 1218 140 .
+
+APPENDIX CEXCEPTIONAL TWO -C ONTAINER CASES FOR SIMPLEX CODES 
+
+By Theorem IV.8, the only parameter regimes in which the distributed model with M (1 < M < k ) containers could potentially yield a smaller expected total number of reads are those where M | k (for any q), and M | (k + 1) 
+
+with q = 2 and k ⩾ 4. In the following, we consider the two simplest parameter settings in these regimes for 
+
+M = 2 , namely, (q, k ) = (2 , 5) and (3 , 4) . We show that for M = 2 , the distributed model cannot improve upon the single-container model in terms of the expected total number of reads. 
+
+Theorem C.1. Let C be a q-ary simplex code of dimension k with standard generator matrix Gsimp , and let P be any 2-partition of [( qk − 1) /(q − 1)] . If (q, k ) = (2 , 5) or (3 , 4) , then 2E[τ (Gsimp , P)] > E[C].
+
+For the proof of Theorem C.1, we need some preliminary results. First, we present the following corollary of Theorem II.3 for general M .
+
+Corollary C.2. Under the assumptions of Theorem II.3, let ut ≜ k − dim( Vt), and define Xt ≜ P 
+
+> H⪇F kq
+
+ρtH ,
+
+Yt ≜ P  
+
+> codim( U)=2
+
+ρtU . Then, for every integer t ⩾ 0,
+
+Pr  τ (G, P) > t  = Xt − qY t + q3E
+
+"
+
+1{ut⩾3}
+
+ut − 12
+
+
+
+> q
+
+#
+
+. (46) 
+
+In particular, Pr  τ (G, P) > t  ⩾ Xt − qY t.Proof: For 1 ⩽ d ⩽ k, put Zd,t ≜ P  
+
+> codim( U)= d
+
+ρtU . By (9), 
+
+Pr  τ (G, P) > t  =
+
+> k
+
+X
+
+> d=1
+
+(−1) d−1q(d
+
+> 2
+
+)Zd,t . (47) Note that for each subspace H ⪇ F kq , Pr( Vt ⊆ H) = ρtH , and the number of codimension-d subspaces containing 
+
+Vt is ut
+
+> d
+
+ 
+
+> q
+
+. Hence, Zd,t = P  
+
+> codim( U)= d
+
+Pr( Vt ⊆ U ) = E
+
+hut
+
+> d
+
+
+
+> q
+
+i
+
+. In particular, Z1,t = E[[ ut]q ] = Xt and 
+
+Z2,t = E
+
+hut
+
+> 2
+
+
+
+> q
+
+i
+
+= Yt. Moreover, by the linearity of expectation, we have 
+
+> k
+
+X
+
+> d=3
+
+(−1) d−1q(d
+
+> 2
+
+)Zd,t = E
+
+" kX
+
+> d=3
+
+(−1) d−1q(d
+
+> 2
+
+)
+
+ut
+
+d
+
+
+
+> q
+
+#
+
+= E
+
+" utX
+
+> d=3
+
+(−1) d−1q(d
+
+> 2
+
+)
+
+ut
+
+d
+
+
+
+> q
+
+#
+
+, (48) where the second equality follows since for every realization of ut, one has ut
+
+> d
+
+ 
+
+> q
+
+= 0 whenever d > u t.For every integer u ⩾ 1, the q-binomial theorem [30, Equation 1.87] gives 1 = Pud=1 (−1) d−1q(d
+
+> 2
+
+)ud
+
+ 
+
+> q
+
+. Separating the terms with d = 1 and d = 2 , we obtain 
+
+> u
+
+X
+
+> d=3
+
+(−1) d−1q(d
+
+> 2
+
+)
+
+ud
+
+
+
+> q
+
+= 1 − [u]q + q
+
+u
+
+2
+
+
+
+> q
+
+= q3
+
+u − 12
+
+
+
+> q
+
+(49) for every u ⩾ 1, where the second equality follows by [u]q = 1 + q[u − 1] q and the q-Pascal identity u
+
+> 2
+
+ 
+
+> q
+
+=
+
+q2u−12
+
+ 
+
+> q
+
++ [ u − 1] q . Hence, by substituting (49) into (47) and taking expectations, (48) yields 
+
+Pr  τ (G, P) > t  = Xt − qY t + q3E
+
+"
+
+1{ut⩾3}
+
+ut − 12
+
+
+
+> q
+
+#
+
+.27 
+
+Since the last term is nonnegative, Pr  τ (G, P) > t  ⩾ Xt − qY t follows. Next, we establish some lower bounds on the partial sums of Xt and Yt defined in Corollary C.2. 
+
+Lemma C.3. Let Gsimp be the standard generator matrix of the q-ary simplex code of dimension k, and let P be a 2-partition of [( qk − 1) /(q − 1)] . Let Xt and Yt be as defined in Corollary C.2. Let A be any nonempty family of hyperplanes, and define ρA ≜ 1
+
+> |A|
+
+P 
+
+> H∈A
+
+ρH . Then, for every integer t0 ⩾ 1,
+
+X
+
+> t⩾t0
+
+X
+
+> H∈A
+
+ρtH ⩾ |A| ρ t0
+
+> A
+
+1 − ρA
+
+. (50) 
+
+In particular, X
+
+> t⩾t0
+
+Xt ⩾ [k]q
+
+([ k − 2] q /[k]q )t0
+
+1 − [k − 2] q /[k]q
+
+. (51) 
+
+Moreover, defining μ∗ ≜ max codim( U )=2 ρU , we have μ∗ < 1 and 
+
+X
+
+> t⩾t0
+
+Yt ⩽ μ t0−1
+
+> ∗
+
+1 − μ∗
+
+k − 22
+
+
+
+> q
+
+. (52) 
+
+Finally, 
+
+μ∗ ⩽ ⌊[k − 2] q /2⌋⌈ [k − 2] q /2⌉
+
+n1n2
+
+. (53) 
+
+Proof: For every fixed integer t ⩾ 1, the function f (x) = xt is convex on [0 , 1] . Hence, by Jensen’s inequality, 
+
+X
+
+> H∈A
+
+ρtH ⩾ |A| 1
+
+|A| 
+
+X
+
+> H∈A
+
+ρH
+
+!t
+
+= |A| ρ t
+
+> A
+
+.
+
+Since every hyperplane is a proper subspace, one has ρH < 1 for every hyperplane H. In particular, ρA < 1.Summing the preceding inequality over t ⩾ t0 proves (50). According to (6), we have 
+
+X
+
+> H⪇F kq
+
+ρH = X
+
+> H⪇F kq
+
+X
+
+> g1∈G1
+
+X
+
+> g2∈G2
+
+1{g1, g2 ∈ H}
+
+n1n2
+
+= X
+
+> g1∈G1
+
+X
+
+> g2∈G2
+
+|{ H ⪇ F kq : Span {g1, g2} ⊆ H}| 
+
+n1n2
+
+= [ k − 2] q ,
+
+where the last equality follows since columns of Gsimp are projective points in P and any two of them are linearly independent. Note that the number of hyperplanes in Fkq is [k]q . Hence, (51) follows by applying (50) to the family of all hyperplanes. We next consider Yt. Since ρU < 1 for every codimension-two subspace U , we have μ∗ < 1. Therefore, 
+
+X
+
+> t⩾t0
+
+Yt = X 
+
+> codim( U)=2
+
+ρt0
+
+> U
+
+1 − ρU
+
+X 
+
+> codim( U)=2
+
+ρU
+
+ρt0−1
+
+> U
+
+1 − ρU
+
+⩽ μ t0−1
+
+> ∗
+
+1 − μ∗
+
+X 
+
+> codim( U)=2
+
+ρU ,
+
+where the last inequality follows since xt0−1 
+
+> 1−x
+
+is increasing in x for 0 < x < 1 and t0 ⩾ 1. Again, according to (6), we have X 
+
+> codim( U)=2
+
+ρU = X
+
+> g1∈G1
+
+X
+
+> g2∈G2
+
+|{ codim( U ) = 2 : Span {g1, g2} ⊆ U }| 
+
+n1n2
+
+=
+
+k − 22
+
+
+
+> q
+
+,
+
+and hence (52) follows. Finally, every codimension-two subspace contains exactly [k − 2] q projective points. Denote aU ≜ |G1 ∩ U |,then, we have |G2 ∩ U | = [ k − 2] q − aU . Thus, ρU = aU ([ k−2] q −aU ) 
+
+> n1n2
+
+. Set b ≜ min {n1, ⌊[k − 2] q /2⌋} . Since 
+
+aU = |G1 ∩ U | ⩽ min {n1, [k − 2] q } and a 7 → a([ k − 2] q − a) is unimodal, we obtain 
+
+ρU ⩽ b ([ k − 2] q − b)
+
+n1n2
+
+⩽ ⌊[k − 2] q /2⌋⌈ [k − 2] q /2⌉
+
+n1n2
+
+. (54) 28 
+
+Taking the maximum over U proves (53). Next, using Lemma C.3, we proceed to prove Theorem C.1. 
+
+Proof of Theorem C.1: We identify the columns of Gsimp with the set of projective points P in Fkq . Put 
+
+n = [ k]q , and ni = |Pi|, i = 1 , 2. By the symmetry between the two containers, assume throughout the proof that 
+
+n1 ⩽ n2.For a vector subspace U ⩽ Fkq , recall that ρU = |C1∩U |  
+
+> n1
+> |C2∩U|
+> n2
+
+and ρU is the probability that the two columns drawn in one round both lie in U . Consequently, the probability that all columns drawn during the first t rounds lie in U is ρtU .We first record a quotient reduction that will be used when the container with smaller size of the two is very small. Let Tq,k denote the recovery time of k-dim q-ary simplex code in the single-container model, i.e., Tq,k =
+
+τ (Gsimp , P0) with P0 = {[( qk − 1) /(q − 1)] }.Let W ≜ span {gj : j ∈ G1} and suppose that w ≜ dim W ⩽ k − 2. Consider the quotient space Q ≜
+
+Fkq /W . Clearly, every column drawn from G1 projects to zero in Q. Moreover, every projective point of Q has 
+
+[w + 1] q − [w]q = qw projective preimages outside W , all of which belong to G2. Hence, conditioned on lying outside W , the projection of a column drawn from G2 in Q is uniform on the projective points of Q.Let Rj be the round in which the j-th drawn column from G2 lies outside W , and let TQ be the number of such draws required to span Q. Then, according to the discussion above, TQ has the same distribution as Tq,k −w.Moreover, since all columns drawn from G1 project to zero in Q, we have τ (Gsimp , P) ⩾ RTQ ⩾ TQ a.s. Therefore, 
+
+E[τ (Gsimp , P)] ⩾ E[Tq,k −w]. (55) If n1 = 1 , then W is the line spanned by the unique projective point of G1, so w = 1 and every column drawn from G2 lies outside W . Since each projective point of Q = F kq /W has exactly [2] q − [1] q = q preimages outside 
+
+W , all of them in G2, the projection of a draw from G2 is uniform on the projective points of Q. Consequently 
+
+τ (Gsimp , P) has the same distribution as Tq,k −1.We now consider the two parameter sets separately. 
+
+Case 1: (q, k ) = (2 , 5) . Here n = 31 , and E[C] = E[T2,5] = 3567 560 by Theorem IV.1. Since at most four columns have been drawn after two rounds, for 0 ⩽ t ⩽ 2, we have Pr  τ (Gsimp , P) > t  = 1 .Therefore, denote 
+
+Σ2,5 ≜ X
+
+> t⩾3
+
+Pr  τ (Gsimp , P) > t ,
+
+we have E[τ (Gsimp , P)] = 3 + Σ 2,5. It suffices to prove Σ2,5 > E[C]−62 = 207 1120 .Suppose first that n1 ⩾ 4. In this case, [k − 2] q = [3] q = 7 , k−22
+
+ 
+
+> q
+
+= 32
+
+ 
+
+> q
+
+= 7 . By (51), with t0 = 3 ,
+
+X
+
+> t⩾3
+
+Xt ⩾ 31 (7 /31) 3
+
+1 − 7/31 = 343 744 .
+
+By (53), μ∗ ⩽ 3·4 
+
+> n1(31 −n1)
+
+⩽ 12 4·27 = 19 . Hence (52) yields 
+
+2 X
+
+> t⩾3
+
+Yt ⩽ 2 (1 /9) 2
+
+1 − 1/9 · 7 = 736 .
+
+Then, by Corollary C.2, we obtain 
+
+Σ2,5 ⩾ 343 744 − 736 = 595 2232 > 207 1120 .
+
+Next suppose that n1 = 3 . The three projective points of G1 are contained in some hyperplane H0. Since H0
+
+contains [4] q = 15 projective points, we have ρH0 = 3315 −328 = 37 . Recall that P
+
+> H⪇F kq
+
+ρH = [ k − 2] q = 7 . Hence, the average mass of the remaining thirty hyperplanes is u = 7−3/730 = 46 7·30 = 23 105 . Applying (50) with A being the set of the remaining thirty hyperplanes and ρA = u yields 
+
+X
+
+> t⩾3
+
+Xt ⩾ (3 /7) 3
+
+1 − 3/7 + 30 u3
+
+1 − u = 27 196 + 12167 30135 .29 
+
+Moreover, by (53), μ∗ ⩽ 3·43·28 = 17 . Hence, 
+
+2 X
+
+> t⩾3
+
+Yt ⩽ 2 (1 /7) 2
+
+1 − 1/7 · 7 = 13
+
+by (52). Then, it follows that 
+
+Σ2,5 ⩾ 27 196 + 12167 30135 − 13 = 25093 120540 > 207 1120 .
+
+If n1 = 2 , then the two distinct projective points of G1 span a two-dimensional space. Thus (55) yields 
+
+E[τ (Gsimp , P)] ⩾ E[T2,3] = 47 12 > 3567 1120 = E[C]2 .
+
+If n1 = 1 , since τ (Gsimp , P) has the same distribution as Tq,k −1, then we have 
+
+E[τ (Gsimp , P)] = E[T2,4] = 291 56 > 3567 1120 = E[C]2 .
+
+Case 2: (q, k ) = (3 , 4) . Here n = 40 , and E[C] = E[T3,4] = 1621 351 . Since two vectors cannot span F43, we have 
+
+Pr  τ (Gsimp , P) > t  = 1 , for 0 ⩽ t ⩽ 1. Denote 
+
+Σ3,4 ≜ X
+
+> t⩾2
+
+Pr  τ (Gsimp , P) > t ,
+
+we have E[τ (Gsimp , P)] = 2 + Σ 3,4. It therefore suffices to prove Σ3,4 > E[C]−42 = 217 702 .Suppose first that n1 ⩾ 3. In this case, [k − 2] q = [2] q = 4 , k−22
+
+ 
+
+> q
+
+= 22
+
+ 
+
+> q
+
+= 1 . By (51), with t0 = 2 , we have 
+
+X
+
+> t⩾2
+
+Xt ⩾ 40 (1 /10) 2
+
+1 − 1/10 = 49 .
+
+Moreover, by (53) μ∗ ⩽ 2·2 
+
+> n1(40 −n1)
+
+⩽ 43·37 = 4111 . Thus 
+
+3 X
+
+> t⩾2
+
+Yt ⩽ 3 4/111 1 − 4/111 = 12 107 .
+
+Therefore, by Corollary C.2, we have 
+
+Σ3,4 ⩾ 49 − 12 107 = 320 963 > 217 702 .
+
+If n1 = 2 , then (55) gives 
+
+E[τ (Gsimp , P)] ⩾ E[T3,2] = 73 > 1621 702 = E[C]2 .
+
+If n1 = 1 , since τ (Gsimp , P) has the same distribution as Tq,k −1, we have 
+
+E[τ (Gsimp , P)] = E[T3,3] = 127 36 > 1621 702 = E[C]2 .
+
+The proof is complete. APPENDIX DPROOF OF THEOREM IV.12 
+
+Proof: Set N ≜ [k]q and s ≜ NM . Let τrb ,k denote the coverage time under the joint randomness of the balanced partition and the subsequent draws. Thus, Erb (k, M ) = E[τrb ,k ].Let X1, X 2, . . . be i.i.d. columns drawn uniformly from the N columns of Gsimp ,k , and define 
+
+bτk ≜ min t ⩾ 1 : Span( X1, . . . , X M t ) = Fkq .
+
+Clearly, we have bτk =  τsimp ,k 
+
+> M
+
+.30 
+
+Fix an integer 1 ⩽ L ⩽ s, we regard the indices of the columns drawn in the first L rounds as an ordered array with M L positions. Let μ(L)rb and μ(L)iid denote the distributions of these arrays in the random balanced model and in the i.i.d. process, respectively. Let DL be the event that the M L sampled columns are all distinct. We claim that 
+
+μ(L)rb ( · | D L) = μ(L)iid ( · | D L). (56) To show this, consider any ordered array x = ( xi,t )i∈[M ], t ∈[L] consisting of M L distinct columns. In order to obtain this array, we must have {xi,t }t∈[L] ⊆ Pi holds for all i ∈ [M ] in the random balanced model. The probability that a uniformly random balanced partition satisfies these constraints is (( s)L)M /(N )M L , where (a)r =
+
+a(a − 1) · · · (a − r + 1) denotes the falling factorial. Conditioned on such a partition, the probability of drawing the prescribed array is s−M L . Hence 
+
+μ(L)rb (x) = (s)ML
+
+(N )M L 
+
+s−M L ,
+
+which is independent of the particular choice of x. Thus, conditioned on DL, the random balanced process is uniform over all ordered arrays of M L distinct columns. On the other hand, for the i.i.d. process, every ordered array has probability N −M L . Hence, conditioned on DL,it is also uniform over all ordered arrays of distinct columns. This proves (56). Recall that for probability measures μ and ν on a common finite sample space Ω, their total variation distance is defined as 
+
+dTV (μ, ν ) ≜ sup 
+
+> A⊆Ω
+
+|μ(A) − ν(A)| = 12
+
+X
+
+> ω
+
+|μ(ω) − ν(ω)|.
+
+Thus, by (56), it follows that 
+
+dTV 
+
+
+
+μ(L)rb , μ (L)iid 
+
+
+
+⩽ Pr rb (DcL) + Pr iid (DcL). (57) Under partition Prb ,k , columns stored in different container cannot coincide. Thus a collision can occur only between two draws from the same container. By the union bound, we have 
+
+Pr rb (DcL) ⩽ M
+
+L
+
+2
+
+ 1
+
+s = M 2 L
+
+> 2
+
+
+
+N .
+
+For the i.i.d. process, we have 
+
+Pr iid (DcL) ⩽
+
+M L 
+
+2
+
+ 1
+
+N .
+
+Therefore, 
+
+dTV 
+
+
+
+μ(L)rb , μ (L)iid 
+
+
+
+= O
+
+ M 2L2
+
+N
+
+
+
+. (58) We next control the tails of the two coverage times. Let βk ≜ [k−1] q 
+
+> [k]q
+
+. Consider an arbitrary balanced partition P = ( P1, . . . , P M ) of [k]q and a hyperplane H ⩽ Fkq .Define ρi(H) ≜ |Pi∩H||Pi| . Then, we have ρi(H) = M |Pi ∩ H|/[k]q and PMi=1 ρi(H) = M |H|/[k]q = M β k, which leads to QMi=1 ρi(H) ⩽ βMk by the AM–GM inequality. Thus, the probability that all columns drawn in the first t
+
+rounds lie in H is at most βM t k . Since column set not spanning the whole space Fkq is contained in some hyperplane and there are [k]q = N hyperplanes, this yields that 
+
+Pr( τrb ,k > t ) ⩽ N β M t k . (59) Moreover, note that bτk > t is equivalent to X1, . . . , X M t lies in certain hyperplane, thus we also have 
+
+Pr( bτk > t ) ⩽ N β M t k . (60) For each 0 ⩽ t ⩽ L, let At ⊆ Ω be the event that columns drawn in the first t rounds fail to span Fkq . Then, we have μ(L)rb (At) = Pr( τrb ,k > t ) and μ(L)iid (At) = Pr( bτk > t ). By the definition of dT V (·), this further implies that 
+
+|Pr( τrb ,k > t ) − Pr( bτk > t )| = μ(L)rb (At) − μ(L)iid (At)
+
+⩽ dTV 
+
+
+
+μ(L)rb , μ (L)iid 
+
+
+
+. (61) 31 
+
+Recall that E[τ ] = P 
+
+> t⩾0
+
+Pr( τ > t ). Thus, for every L ⩾ 1, (58), (60) and (61) imply 
+
+|E[τrb ,k ] − E[bτk]| ⩽
+
+> L
+
+X
+
+> t=0
+
+|Pr( τrb ,k > t ) − Pr( bτk > t )|
+
++ X
+
+> t>L
+
+Pr( τrb ,k > t ) + X
+
+> t>L
+
+Pr( bτk > t )
+
+⩽ (L + 1) O
+
+ M 2L2
+
+N
+
+
+
++ 2N β M (L+1) 
+
+> k
+
+1 − βMk
+
+. (62) Take L = 2 k. Since N = qk −1 
+
+> q−1
+
+and βk < q −1, the first term on the right-hand side of (62) is Oq (M 2k3q−k), while the second is O  q−M −(2 M −1) k. Consequently, by M ⩾ 1 and bτk =  τsimp ,k 
+
+> M
+
+, this proves 
+
+E[τrb ,k ] = E
+
+hl τsimp ,k 
+
+M
+
+mi 
+
++ Oq,M (k3q−k). (63) Note that M  cM
+
+ = c + [ −c]M holds for every nonnegative integer c. Thus, multiplying (63) by M yields 
+
+M E rb (k, M ) = E[τsimp ,k ] + γM (k) + o(1) . (64) Moreover, by Theorem IV.1, we have 
+
+E[τsimp ,k ] = (1 − q−k)
+
+> k
+
+X
+
+> j=1
+
+11 − q−j = k +
+
+> k
+
+X
+
+> j=1
+
+q−j − q−k
+
+1 − q−j
+
+= k +
+
+> k
+
+X
+
+> j=1
+
+1
+
+qj − 1 − q−kkX
+
+> j=1
+
+11 − q−j
+
+= k + δq + o(1) ,
+
+where the last equality follows since δq = Pkj=1 (qj − 1) −1 + P
+
+> j>k
+
+(qj − 1) −1 = Pkj=1 (qj − 1) −1 + O(q−k) and 
+
+q−k Pkj=1 11−q−j = O(kq −k). Hence, (64) becomes 
+
+M E rb (k, M ) = k + δq + γM (k) + o(1) .
+
+It remains to analyze γM (k). Decompose the single-container process into k stages according to the dimension of the space spanned by the drawn columns. For j ∈ [k], let Gk,j denote the number of draws made to have dimension 
+
+k − j + 1 conditioned on the current span has dimension k − j. Then Gk,j ’s are independent geometric random variables with success probabilities 1 − [k−j]q 
+
+> [k]q
+
+, and we can write 
+
+τsimp ,k =
+
+> k
+
+X
+
+> j=1
+
+Gk,j = k + Dk,
+
+where Dk ≜ Pkj=1 (Gk,j − 1) . Then, by [k]q − [k − j]q = qk−j [j]q , we have 
+
+E[Gk,j − 1] = [k]q
+
+[k]q − [k − j]q
+
+− 1= [k − j]q
+
+[k]q − [k − j]q
+
+= 1 − q−(k−j)
+
+qj − 1 ⩽ 1
+
+qj − 1 . (65) Note that for each fixed j, as k → ∞ , 1 − [k − j]q /[k]q → 1 − q−j . Thus, Gk,j d
+
+−→ Γj 3. Moreover, for any fixed finite set of indices j, the variables Gk,j are independent, hence the joint convergence also holds. Therefore, by P   
+
+> j⩾11
+> qj−1
+
+< ∞, we have D∞ = P
+
+> j⩾1
+
+(Γ j − 1) < ∞ a.s.             
+
+> 3For two random variables Xand Y, the notation Xd
+> −→Ydenotes that Xconverges in distribution to Y.32
+
+For a fixed J, denote Dk,J = PJj=1 (Gk,j − 1) and D∞,J = PJj=1 (Γ j − 1) . Then, since the random variables 
+
+{Gk,j }Jj=1 are mutually independent and so are {Γj }Jj=1 , by the Continuous Mapping Theorem (see [31, Theorem 2.7]), we have Dk,J d
+
+−→ D∞,J .On the other hand, by (65), we have sup k E[Dk − Dk,J ] ⩽ P   
+
+> j>J 1
+> qj−1
+
+and E[D∞ − D∞,J ] = P   
+
+> j>J 1
+> qj−1
+
+, both converge to 0 as J → ∞ . Therefore, for every bounded Lipschitz function f ,
+
+lim sup 
+
+> k→∞
+
+|E[f (Dk)] − E[f (D∞)] | ⩽ lim sup 
+
+> k→∞
+
+|E[f (Dk,J )] − E[f (D∞,J )] |
+
++ Lf
+
+
+
+sup 
+
+> k
+
+E[Dk − Dk,J ] + E[D∞ − D∞,J ]
+
+
+
+.
+
+The first term on the right-hand side is zero for each fixed J, while the second term tends to zero as J → ∞ .Thus, we have Dkd
+
+−→ D∞. Since Dk and D∞ are both integer-valued, the weak convergence implies: 
+
+Pr( Dk = d) −→ Pr( D∞ = d), (66) for all integer d ⩾ 0.Now fix a ∈ { 0, 1, . . . , M − 1} and let k → ∞ with k ≡ a (mod M ). For any integer d ⩾ 0, define ra(d) ≜
+
+[−(a + d)] M . Since τsimp ,k = k + Dk, by the definition of γM (k), we have 
+
+γM (k) = E[ra(Dk)] = X
+
+> d⩾0
+
+Pr( Dk = d)ra(d).
+
+By the definition of Dk, we have E[Dk] ⩽ δq uniformly in k from (65). Thus, by Markov’s inequality, we have 
+
+Pr( Dk > J ) ⩽ δq 
+
+> J
+
+and Pr( D∞ > J ) ⩽ δq 
+
+> J
+
+. Note that for each J ⩾ 0,
+
+> J
+
+X
+
+> d=0
+
+Pr( Dk = d)ra(d) −→ 
+
+> J
+
+X
+
+> d=0
+
+Pr( D∞ = d)ra(d)
+
+by the pointwise convergence of the probability mass functions. Moreover, by ra(d) ⩽ M − 1 for every d ⩾ 0, we also have X
+
+> d>J
+
+Pr( Dk = d)ra(d) ⩽ (M − 1)Pr( Dk > J ) ⩽ (M − 1) δq
+
+J ,
+
+uniformly in k, and the same bound holds with D∞ in place of Dk. Hence, by first letting k → ∞ with J fixed and then letting J → ∞ , we obtain 
+
+γM (k) = E[ra(Dk)] −→ E[ra(D∞)] = E[[ −(a + D∞)] M ] .
+
+Therefore, along each residue class modulo M , the rounding term converges to a limit depending only on that residue class. Equivalently, γM (k) is asymptotically periodic with period M .Finally, if all M residue classes are attained, we compute the average of these M limiting values E[ra(D∞)] . For each fixed integer d, as a ranges from 0 to M − 1, the residues [−(a + d)] M form a permutation of 0, 1, . . . , M − 1.Hence 
+
+1
+
+M 
+
+> M−1
+
+X
+
+> a=0
+
+[−(a + d)] M = M − 12 .
+
+Then, the result follows directly by averaging over d = D∞, completing the proof. REFERENCES [1] G. M. Church, Y. Gao, and S. Kosuri, “Next-generation digital information storage in DNA,” Science , vol. 337, no. 6102, pp. 1628–1628, 2012. [2] N. Goldman, P. Bertone, S. Chen, C. Dessimoz, E. M. LeProust, B. Sipos, and E. Birney, “Towards practical, high-capacity, low-maintenance information storage in synthesized DNA,” Nature , vol. 494, no. 7435, pp. 77–80, 2013. [3] S. M. H. T. Yazdi, H. M. Kiah, E. Garcia-Ruiz, J. Ma, H. Zhao, and O. Milenkovic, “DNA-based storage: Trends and methods,” IEEE Transactions on Molecular, Biological and Multi-Scale Communications , vol. 1, no. 3, pp. 230–248, 2015. [4] L. Organick, S. D. Ang, Y.-J. Chen, R. Lopez, S. Yekhanin, K. Makarychev, M. Z. R´ acz, G. Kamath, P. Gopalan, B. Nguyen et al. ,“Random access in large-scale DNA data storage,” Nature Biotechnology , vol. 36, no. 3, pp. 242–248, 2018. [5] I. Shomorony and R. Heckel, “Information-theoretic foundations of DNA data storage,” Foundations and Trends in Communications and Information Theory , vol. 19, no. 1, pp. 1–106, 2022. 33 
+
+[6] O. Sabary, H. M. Kiah, P. H. Siegel, and E. Yaakobi, “Survey for a decade of coding for DNA storage,” IEEE Transactions on Molecular, Biological and Multi-Scale Communications , vol. 10, no. 2, pp. 253–271, 2024. [7] R. Heckel, G. Mikutis, and R. N. Grass, “A characterization of the DNA data storage channel,” Scientific Reports , vol. 9, no. 1, p. 9663, 2019. [8] P. Erd˝ os and A. R´ enyi, “On a classical problem of probability theory,” Magyar Tudom´ anyos Akad´ emia Matematikai Kutat´ o Int´ ezet´ enek K¨ ozlem´ enyei , vol. 6, no. 1–2, pp. 215–220, 1961. [9] W. Feller, An Introduction to Probability Theory and Its Applications , 3rd ed. New York: Wiley, 1968, vol. 1. [10] P. Flajolet, D. Gardy, and L. Thimonier, “Birthday paradox, coupon collectors, caching algorithms and self-organizing search,” Discrete Applied Mathematics , vol. 39, no. 3, pp. 207–229, 1992. [11] A. Boneh and M. Hofri, “The coupon-collector problem revisited: A survey of engineering problems and computational methods,” Stochastic Models , vol. 13, no. 1, pp. 39–66, 1997. [12] D. Bar-Lev, O. Sabary, R. Gabrys, and E. Yaakobi, “Cover your bases: How to minimize the sequencing coverage in DNA storage systems,” 
+
+IEEE Trans. Inf. Theory , vol. 71, no. 1, pp. 192–218, 2025. [13] A. Gruica, D. Bar-Lev, A. Ravagnani, and E. Yaakobi, “A combinatorial perspective on random access efficiency for DNA storage,” IEEE Trans. Inf. Theory , vol. 71, no. 12, pp. 9395–9412, 2025. [14] A. Gruica, M. Montanucci, and F. Zullo, “The geometry of codes for random access in DNA storage,” Des. Codes Cryptogr. , vol. 94, no. 5, 2026. [15] A. Boruchovsky, O. Elishco, R. Gabrys, A. Gruica, I. Tamo, and E. Yaakobi, “Making it to first: The random access problem in DNA storage,” IEEE Trans. Inf. Theory , vol. 72, no. 8, pp. 5623–5638, 2026. [Online]. Available: https://doi.org/10.1109/TIT.2026.3699871 [16] H. Abraham, R. Gabrys, and E. Yaakobi, “Covering all bases: The next inning in DNA sequencing efficiency,” in Proceedings of the IEEE International Symposium on Information Theory , 2024, pp. 464–469. [17] S. Chandak, K. Tatwawadi, B. Lau, J. Mardia, M. Kubit, J. Neu, P. Griffin, M. Wootters, T. Weissman, and H. Ji, “Improved read/write cost tradeoff in DNA-based data storage using LDPC codes,” in Proceedings of the 57th Annual Allerton Conference on Communication, Control, and Computing , 2019, pp. 147–156. [18] I. Preuss, B. Galili, Z. Yakhini, and L. Anavy, “Sequencing coverage analysis for combinatorial DNA-based storage systems,” IEEE Transactions on Molecular, Biological and Multi-Scale Communications , vol. 10, no. 2, pp. 297–316, 2024. [19] T. Cohen and E. Yaakobi, “Optimizing the decoding probability and coverage ratio of composite DNA,” in Proceedings of the IEEE International Symposium on Information Theory , 2024, pp. 1949–1954. [20] M. Bertuzzo, A. Ravagnani, and E. Yaakobi, “The DNA coverage depth problem: Duality, weight distributions, and applications,” arXiv preprint arXiv:2603.06489 , 2026. [21] A. G. Dimakis, P. B. Godfrey, Y. Wu, M. J. Wainwright, and K. Ramchandran, “Network coding for distributed storage systems,” IEEE Trans. Inf. Theory , vol. 56, no. 9, pp. 4539–4551, 2010. [22] V. Ramkumar, S. B. Balaji, B. Sasidharan, M. Vajha, M. N. Krishnan, and P. V. Kumar, “Codes for distributed storage,” Foundations and Trends in Communications and Information Theory , vol. 19, no. 4, pp. 547–813, 2022. [23] A. Levy, R. Con, E. Yaakobi, and H. M. Kiah, “Expected recovery time in DNA-based distributed storage systems,” arXiv preprint arXiv:2602.07601 , 2026. [24] J. McLaughlin, Topics and Methods in q-Series . WORLD SCIENTIFIC, 2017. [Online]. Available: https://www.worldscientific.com/doi/ abs/10.1142/10528 [25] D. Barak-Pelleg and D. Berend, “On Conjectures concerning the Labeled Coupon Collector Problem,” CoRR , vol. abs/2510.23249, 2025. [Online]. Available: https://arxiv.org/abs/2510.23249v1 [26] D. P. Dubhashi and A. Panconesi, Concentration of Measure for the Analysis of Randomized Algorithms . Cambridge University Press, 2009. [27] D. Dubhashi and D. Ranjan, “Balls and bins: A study in negative dependence,” Random Structures & Algorithms , vol. 13, no. 2, pp. 99–124, 1998. [28] K. Joag-Dev and F. Proschan, “Negative association of random variables with applications,” The Annals of Statistics , vol. 11, no. 1, pp. 286–295, 1983. [29] W. Hoeffding, “Probability inequalities for sums of bounded random variables,” Journal of the American Statistical Association , vol. 58, no. 301, pp. 13–30, 1963. [30] R. P. Stanley, Enumerative combinatorics , 2nd ed. Cambridge University Press, 2011, vol. 1. [31] P. Billingsley, Convergence of probability measures . John Wiley & Sons, 2013.
