@@ -1,0 +1,25 @@
+{
+  "date": "20261009",
+  "date_label": "",
+  "generated_at": "2026-10-09 23:09:50 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.11114v1",
+      "route": "202610/09/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system",
+      "title": "IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "纠删码存储的主动修复与数据重建",
+      "first_seen_at": "2026-10-09 23:09:50 UTC",
+      "updated_at": "2026-10-09 23:09:50 UTC"
+    }
+  ]
+}

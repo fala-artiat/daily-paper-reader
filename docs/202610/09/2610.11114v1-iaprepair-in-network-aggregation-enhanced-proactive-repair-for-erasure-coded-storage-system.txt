@@ -1,0 +1,949 @@
+Title: IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System
+
+URL Source: https://arxiv.org/pdf/2610.11114v1
+
+Published Time: Fri, 09 Oct 2026 00:48:33 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+> 1
+
+# IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System 
+
+Lei Liu, Yong Wang, Junqi Chen, Member, IEEE , Yangfan Liang, Member, IEEE , Qian He, Baokang Zhao 
+
+Abstract —Erasure-coded storage provides fault tolerance with substantially lower storage overhead than full replication, but repairing lost or at-risk blocks requires intensive cross-node data transfer. Existing reactive repair schemes start only after a failure, while proactive schemes can move data before failure but commonly treat migration, reconstruction, and network aggregation as loosely coupled operations. As a result, receiver-side bottlenecks, heterogeneous available bandwidth, and limited programmable-switch state continue to constrain repair paral-lelism. This paper presents IAPRepair, an in-network aggre-gation enhanced proactive repair framework for erasure-coded storage. IAPRepair jointly constructs each repair batch, assigns reconstruction providers and replacement nodes according to normalized transmission loads, schedules migration around the remaining receive capacity, and selectively enables in-network aggregation for reconstruction blocks that would otherwise over-load healthy nodes. The selective design reduces receiver-side traffic while retaining migration parallelism and respecting a configurable switch-resource budget. We implement IAPRepair with a Tofino programmable switch and 16 storage nodes, and evaluate it using both a prototype testbed and large-scale simu-lations. Across coding parameters, block sizes, node populations, and multiple STF-node scenarios, IAPRepair reduces repair time by at least 47.83% compared with the evaluated state-of-the-art methods. The results demonstrate that coordinating proactive repair decisions with in-network processing is an effective way to improve repair efficiency under bandwidth heterogeneity. 
+
+Index Terms —Erasure coding, in-network aggregation, proac-tive repair, distributed storage 
+
+This work was supported by the “Jianfeng” Action Plan of the Guangxi Science and Technology Major Program (Grant No. 2026JF0601001-2), the Guangxi Key Research and Development Program, China (Grant No. AB25069178), the Open Project Program of Guangxi Key Laboratory of Digital Infrastructure (Grant No. GXDIOP2024008), the Project for Enhancing Young and Middleaged Teacher’s Research Basis Ability in Colleges of Guangxi (Grant No. 2025KY0250), the National Natural Science Foundation of China (Grant Nos. 62461057, 61861013), and the Innovation Project of GUET Graduate Education (Grant Nos. 2025YCXS059, 2026YCXS062) (Corresponding author: Junqi Chen. )Lei Liu is with the School of Computer Science and Information Security, Guilin University of Electronic Technology, Guilin 541004, China, and also with the School of Computer Science and Engineering, Guilin University of Aerospace Technology, Guilin 541004, China (e-mail: leiz2018@guat.edu.cn). Yong Wang, Junqi Chen are with the School of Computer Science and Information Security, Guilin University of Electronic Technology, Guilin 541004, China (e-mail: ywang@guet.edu.cn; cookiechen@mails.guet.edu.cn). Yangfan Liang is with the College of Information Science and Engineering, Jiaxing University, Jiaxing 314001, China Qian He are with the Guangxi University Engineering Research Center of Cloud Network Convergence and Data Security, Guilin University of Electronic Technology, Guilin 541004, China (e-mail: heqian@guet.edu.cn; cookiechen@mails.guet.edu.cn). B. Zhao is with the College of Computer Science and Technology, National University of Defense Technology, Changsha 410073, China. 
+
+I. I NTRODUCTION 
+
+Large-scale distributed storage systems increasingly rely on erasure coding to provide fault tolerance with much lower storage overhead than full replication. Reed–Solomon (RS) codes, for example, encode k data blocks into n blocks and allow a missing block to be reconstructed from any k surviving blocks. The benefit comes with a substantial repair cost: reconstructing one block requires data to be retrieved from multiple nodes, and a node failure creates many concurrent block-repair tasks. The resulting cross-node traffic prolongs the data-unavailability window and can directly affect storage-system reliability. Most existing repair systems are reactive. Pipeline-based methods such as PR, PPT, and PivotRepair reduce incast effects by coordinating transmissions across storage nodes, while RepairBoost and SelectiveEC balance repair workloads after a failure has occurred [1]–[5]. Failure prediction makes it possible to repair data before a node becomes unavailable. We refer to a node predicted to fail as a soon-to-fail (STF) node. Proactive repair can either migrate STF blocks directly to healthy nodes or reconstruct them from surviving blocks, and recent systems such as FastPR and LFPR combine these two operations in batches [6]–[12]. Nevertheless, current proac-tive schemes do not sufficiently coordinate receiver capacity, bandwidth heterogeneity, and the choice between migration and reconstruction. The central difficulty is an asymmetric traffic pattern. Both STF and healthy nodes may provide repair data, but only healthy nodes can receive repaired blocks. Concurrent mi-gration and reconstruction can therefore overload a small subset of healthy receivers. The problem is amplified when the available bandwidth of storage nodes is shared with front-end workloads and differs across nodes. A repair schedule that is balanced in terms of block counts can still be highly imbalanced in transmission time. Programmable switches provide a complementary opportu-nity. In-network aggregation (INA) can combine reconstruc-tion traffic on the forwarding path and reduce the volume delivered to storage nodes. Existing INA-based repair systems, including NetEC, Paint, and InaPR, primarily target reactive repair [13]–[15]. Applying INA to proactive repair, however, raises two coupled questions: which reconstruction blocks should consume scarce switch state, and how should migration and reconstruction tasks be assigned when node bandwidth is heterogeneous? Figure 1 summarizes this design gap. To address these issues, we present IAPRepair, an in-network aggregation enhanced proactive repair framework for arXiv:2610.11114v1 [cs.DC] 8 Oct 2026 2(a) Repair before predicted failure (b) Parallel repair overloads receivers (c) Aggregation leaves scheduling questions    
+
+> Failure prediction creates a limited repair window
+> Proactive repair window
+> Prediction Failure
+> Soon-to-fail node Many blocks need protection
+> h1 h2 h3
+> Healthy destinations
+> Protect data while the STF node is still available
+> FastPR couples migration and reconstruction
+> STF node
+> Migration
+> One block from the STF node
+> Reconstruction
+> k blocks from healthy providers
+> Network
+> h3
+> Shared receive link
+> Parallel repair overloads the shared receive link
+> Available bandwidth varies across healthy nodes
+> Parallelism can increase receiver contention
+> Conventional reconstruction
+> Network
+> Receiver bottleneck
+> In-network aggregation
+> P4 switch
+> One aggregated block
+> Limited aggregation state
+> Design gap
+> 1 Which blocks should be aggregated? 2 How should repair load be balanced?
+> IAPRepair: selective INA + load-aware repair
+
+Fig. 1: Motivation for IAPRepair. Predicted failure creates a repair burst; concurrent migration and reconstruction can overload healthy receivers; and naive in-network aggregation alone does not determine which blocks to aggregate or how to balance the remaining repair load. erasure-coded storage. IAPRepair coordinates three decisions within each repair batch. First, it selects reconstruction blocks and assigns their provider and replacement nodes according to normalized uplink and downlink loads. Second, it sched-ules migration blocks around the residual receive capacity of healthy nodes. Third, it selectively enables INA for reconstruc-tion blocks whose traffic would otherwise create a receiver bottleneck, while respecting a configurable switch-resource budget. This design couples network processing with load-aware repair scheduling, allowing migration and reconstruction to progress in parallel without indiscriminately consuming switch state. The contributions of this paper are as follows.  
+
+> •
+
+We present IAPRepair, a proactive repair framework that combines migration, reconstruction, and selective in-network aggregation for erasure-coded storage.  
+
+> •
+
+We develop a load-aware batch-construction strategy that jointly assigns reconstruction and migration tasks under heterogeneous node bandwidth and receiver-capacity con-straints.  
+
+> •
+
+We design a selective INA decision mechanism that reduces receiver-side traffic while limiting the number of reconstruction blocks processed by the programmable switch.  
+
+> •
+
+We implement IAPRepair with a Tofino programmable switch and 16 storage nodes. Prototype and simulation results show that IAPRepair reduces repair time by at least 47.83% compared with the evaluated state-of-the-art methods. The rest of this paper is organized as follows. Section II reviews erasure-coded repair, proactive repair, programmable-switch aggregation, and related work. Section III presents the system architecture and problem formulation. Section IV details the batch-construction and selective-aggregation algo-rithms. Section V describes the prototype implementation. Section VI reports the evaluation results, and Section VII concludes the paper. II. B ACKGROUND AND RELATED WORK 
+
+A. Basics of erasure coding Σ
+
+Block Coding group Stripe (5 blocks) Word Reconstructed block Decoding 
+
+𝐀 1
+
+𝐀 2
+
+𝐀 3
+
+Fig. 2: Illustration of reconstruction with RS (5 , 3) 
+
+Many erasure codes are proposed in the literature. In this pa-per, we focus on Reed–Solomon codes (denoted as RS (n, k )), which are widely deployed in production storage systems [16]. 
+
+RS (n, k ) performs linear transformations on k data blocks to generate n − k parity blocks, and combines these n blocks to form a stripe. A block can be reconstructed from any other k
+
+blocks within the same stripe. Specifically, denoting the failed block as D∗ and the selected blocks used to reconstruct D∗ as 
+
+D1, D 2, . . . , D k, the reconstruction process can be represented as follows: 
+
+D∗ =
+
+> k
+
+X
+
+> i=1
+
+βiDi (1) where βi is the decoding coefficient of block Di. The lin-ear transformation is performed based on the Galois Field 3
+
+GF (2 w) [17] over w-bit words. Fig. 2 illustrates data re-construction using RS (5 , 3) as an example. The reconstructed block can be any one of the five blocks. Each block consists of a large number of w-bit words. Within a stripe, the words at the same offset across all blocks form an coding group. Decoding of different coding groups are independent of each other. Therefore, during the reconstruction of a failed block, a word can be reconstructed as long as any other k words from the same coding group are available. This is also the theoretical basis for performing erasure-coded data repair using programmable switches, since buffering a whole block prior to data repair would exhaust the switch’s limited SRAM resources [18]. 
+
+B. Proactive repair 
+
+Proactive repair, based on failure prediction, repairs the blocks stored on STF nodes. Compared to reactive repair, proactive repair exhibits two advantages. (1) Conducting data repair prior to failure occurrence achieves consistent data availability and enhances the reliability of the storage system. (2) Repair can be performed simultaneously via both migration and reconstruction, achieving higher repair efficiency. As illustrated in Fig. 3, the number of healthy nodes is typically much larger than that of STF nodes. Migration (the green line) directly copies a block from the STF node to the replacement node, which incurs a low data transmission overhead. How-ever, since only the STF node can supply data for migration, the repair parallelism is inherently limited. Reconstruction (the blue lines) retrieves blocks from multiple healthy nodes. Although reconstruction enables parallel repair of multiple blocks, it requires a larger volume of data to reconstruct a single block. Coordinating migration and reconstruction through effective repair task scheduling can improve repair efficiency. h1 h2 h3 h4 h5hSTF 
+
+> s4
+> s1
+> s3
+> s2
+> h6
+
+Fig. 3: Proactive repair via migration and reconstruction 
+
+C. In-network aggregation 
+
+In-network aggregation is a technique that offloads data aggregation tasks (e.g., summation, averaging, counting, etc.) from severs to network devices. Aggregating the repair traffic directly on network devices along the transfer paths can reduce network load and alleviate bandwidth bottlenecks. Unlike traditional fixed-function switches, the Intel Tofino programmable switch [19] enables users to execute custom computation, storage and logical processing operations during packet forwarding via the P4 programming language [20]. The arithmetic logic units and SRAM-based stateful objects (e.g., registers) within the programmable switch can be uti-lized to implement data aggregation. Since erasure-coded data repair requires aggregating data from multiple nodes, the programmable switch can be leveraged to enhance the data reconstruction efficiency. However, in-network aggregation with programmable switches faces challenges such as scarcity of switch internal resources and the impact of uncertainty in packet arrival time on aggregation performance [13], [14]. 
+
+D. Related work 
+
+Existing repair techniques can be organized along two di-mensions: whether repair is triggered after a failure or before a predicted failure, and whether computation remains on storage nodes or is partially offloaded to network hardware. Table I summarizes the distinctions most relevant to IAPRepair. Reactive repair methods operate after a failure has been observed. PR partitions repair traffic into a pipeline, whereas PPT and PivotRepair refine the pipeline structure to reduce incast and improve transmission overlap [1]–[3]. RepairBoost, SelectiveEC, SMFRepair, and SARepair further address work-load placement or repair-stripe selection to balance node-side traffic [4], [5], [21], [22]. These methods improve reactive repair efficiency, but they do not exploit the additional time available before a predicted failure. Proactive repair methods use failure prediction to move data before a node becomes unavailable. Proactive Replication and ProCode reduce the risk of a future failure through migration or replication, at the cost of additional traffic or storage overhead [23], [24]. FastPR couples migration with reconstruction in a batched workflow, and LFPR extends the idea with a lazy strategy for mobile distributed storage [11], [12]. These approaches establish the basis for IAPRepair, but their scheduling decisions do not jointly account for receiver-side contention, heterogeneous available bandwidth, and limited in-network state. Programmable-network repair methods move part of the re-pair computation into the network. NetEC and INC-EC offload decoding or decoding-related operations to programmable switches, while AggreTree, XORInc, Paint, and InaPR use host–switch collaboration to aggregate repair traffic [13]–[15], [25]–[27]. SmartNIC- and accelerator-based designs provide another hardware-assisted direction [28], [29]. These methods reduce data movement, but they primarily target reactive repair and do not solve the joint scheduling problem of proactive migration and reconstruction. IAPRepair fills this gap by cou-pling load-aware proactive batch construction with selective INA under an explicit switch budget. III. SYSTEM ARCHITECTURE AND PROBLEM FORMULATION 
+
+A. System overview 
+
+IAPRepair uses a control plane to select repair blocks and assign providers and destinations, and a programmable-switch data plane to forward packets and aggregate only the selected reconstruction traffic. The overall workflow is shown in Fig. 4. The coordinator first determines the reconstruction set, then 4
+
+TABLE I: Comparison of repair approaches for erasure-coded storage. INA denotes in-network aggregation. 
+
+Representative work Trigger Core repair strategy INA Bandwidth/load awareness Proactive 
+
+PR, PPT, PivotRepair [1]–[3] Reactive Pipelined repair and transmission overlap 
+
+✗ Pipeline-oriented balancing; no proactive receiver model 
+
+✗
+
+RepairBoost, SelectiveEC, SMFRepair, SARepair [4], [5], [21], [22] Reactive Load balancing, forwarding, or stripe-aware repair 
+
+✗ Node-side workload balancing ✗
+
+Proactive Replication, ProCode [23], [24] Proactive Migration or replication before failure 
+
+✗ Fixed-rate or replication-oriented scheduling 
+
+✓
+
+FastPR, LFPR [11], [12] Proactive Batched migration combined with reconstruction 
+
+✗ Limited joint handling of heteroge-neous load 
+
+✓
+
+NetEC, INC-EC [13], [25] Reactive Switch-assisted decoding or recon-struction 
+
+✓ Constrained by switch computation and state 
+
+✗
+
+AggreTree, XORInc, Paint, InaPR [14], [15], [26], [27] Reactive Host–switch collaborative aggrega-tion 
+
+✓ Sensitive to switch state and packet-arrival skew 
+
+✗
+
+IAPRepair Proactive Joint batch selection for migra-tion and reconstruction with se-lective INA 
+
+✓ Uplink/downlink load balancing under a switch budget 
+
+✓(a) System overview (b) Switch datapath (P4)         
+
+> STF detection (external)
+> Repair coordinator (control plane) Block metadata · Available bandwidth · INA budget θ
+> 1Reconstruction
+> selection
+> S
+> ᵣ
+> 2Migration
+> assignment
+> Sm
+> 3Selective INA
+> decision
+> Sina
+> ⊆S
+> ᵣ
+> Repair commands
+> Source nodes (storage) Programmable switch (P4 data plane)
+> Healthy destinations (storage)
+> STF node (S ᵣ)
+
+⋯
+
+> Healthy nodes
+
+⋯ ⋯ ⋯
+
+> Forwarding + selective aggregation
+
+⋯⋯⋯             
+
+> Migration
+> (S m)Migrated blocks (to S m)Reconstruction (Sᵣ) Reconstructed blocks (to Sᵣ) Healthy nodes may act as both sources and destinations
+> ACP packet format (UDP)
+> UDP Type Pid Bid Ver Seq Data
+> Packet processing pipeline
+> Aggregator groups
+> (selected reconstruction only)
+> rNum
+> rCnt rVer rData rCnt rVer rData
+> One group per selected block
+> Parser (inspect Type)
+> Forward (route / emit)
+> Selected reconstruction
+> Migration (bypass)
+> Unmarked reconstruction (bypass)
+> To destinations
+> Migration Reconstruction Repair commands
+
+Fig. 4: Overall architecture of IAPRepair. The control plane coordinates reconstruction selection, migration assignment, and selective INA; the P4 data plane parses ACP packets, forwards unmarked traffic, and aggregates selected reconstruction packets. assigns migration blocks around the resulting receive load, and finally marks the subset of reconstruction blocks that should consume aggregator state. The data plane parses the packet type, forwards migration and unmarked reconstruction packets directly, and routes marked reconstruction packets through a dedicated aggregator group before emission to healthy destinations. In this section, we describe and analyze the problems in proactive repair, and then formulate a model for proactive repair. Our work is built on existing failure prediction mech-anisms [6]–[9], and focuses on the proactive repair strategies after STF node detection. 
+
+B. Problem description and Analysis 
+
+Given that a large number of blocks are stored on a node, the proactive repair of an STF node is typically performed in batches to avoid excessive consumption of network and memory resources [5], [11]. Let nm and nr denote the number of blocks repaired via migration and reconstruction in a batch, respectively. Let hST F denote the STF node, hi denote the 
+
+i-th healthy node, and sj denotes the j-th STF block. STF nodes can migrate their blocks to any healthy node but cannot receive data from other nodes. All healthy nodes can serve as replacement nodes and receive migration and reconstruction data from other nodes. Problem 1: How to alleviate the downlink bottlenecks in proactive repair? 5h1 h2 h3 h4 h5hSTF 
+
+> s5
+> s1
+> s3
+> s2
+> s4
+> s6
+> s7
+
+(a) Without in-network aggregation h1 h2 h3 h4 h5hSTF  
+
+> s5
+> s1
+> s3
+> s2
+> s4
+> s6
+> s7
+> Σ
+
+(b) Skewed repair workload h1 h2 h3 h4 h5hSTF  
+
+> s5
+> s1
+> s3
+> s2
+> s4
+> s6
+> s7
+> ΣΣ
+
+(c) Repair with maximum efficiency 
+
+Fig. 5: Comparison of proactive repair efficiency across different strategies. In (a) and (b), the number of STF nodes repaired is limited to 6. In (c), 7 STF stripes are repaired in parallel. All nodes can provide data to repair STF blocks. Specifi-cally, STF nodes provide data for the migration of STF blocks, whereas healthy nodes provide data for the reconstruction of STF blocks. However, the repaired blocks can only be stored on healthy nodes. Consequently, the number of receiving nodes is smaller than that of sending nodes, which may overload the receiving nodes and degrade repair efficiency. As illustrated in Fig. 5a, when the numbers of migrated and reconstructed blocks are 2 and 4, respectively, every healthy node needs to receive two data blocks, whereas nodes h3 and h5 send only one data block each. The receiving capacity limits repair performance. In-network aggregation provides an solution to this problem. By reducing bandwidth consumption, in-network aggregation enables more STF blocks to be reconstructed within a single batch. As illustrated in Fig. 5c, employing in-network aggrega-tion to reconstruct s1 and s7 alleviates the bandwidth demand on h1, enabling it to complete the reconstruction of two STF blocks. All nodes send and receive two blocks. Problem 2: How to select an appropriate set of STF blocks for each batch? The selection of STF blocks for a batch impacts the repair efficiency. Consider a batch comprising 7 STF blocks as illustrated in Fig. 5b, where s6 and s7 differ from those in Fig. 5c. Although in-network aggregation is employed for data reconstruction in Fig. 5b, the repair efficiency is lower than that in Fig. 5c. This is because h5 can provide data for the reconstruction of only one STF block. Consequently, to repair s7, at least one of hST F , h2, and h4 must transmit three blocks. This uneven distribution of the transmission workload adversely affects repair performance. Furthermore, heterogeneity in available bandwidth across nodes exacerbates both the severity and complexity of this issue. 
+
+C. Formulation 
+
+Let nST F denote the total number of STF blocks, indexed by S = {1, 2, . . . , n ST F }. Let Sm and Sr denote the sets of STF blocks to be repaired via migration and reconstruction, respectively, in a batch. Let Hh denote the set of healthy nodes, and HST F denote the set of STF nodes. The set of healthy nodes capable of providing data for the reconstruction of sj is denoted as pro (sj ). The decision variables φi,j and 
+
+ϕi,j are binary (Eq. 2 and 3). If hi provides a block for the reconstruction of sj , φi,j = 1 , and φi,j = 0 otherwise. Eq. 4 restricts that only healthy nodes in pro (sj ) are permitted to provide data for the reconstruction of STF block sj . Eq. 5 ensures that only STF nodes can provide data for migration. If hi is selected as the replacement node for sj to store the repaired STF block, ϕi,j = 1 , and ϕi,j = 0 otherwise. Eqs. 6 and 7 require all repaired blocks to be stored exclusively on healthy nodes, and blocks belonging to the same stripe to be placed on distinct nodes for fault tolerance, where, g(sj )
+
+denotes the stripe to which sj belongs. 
+
+φi,j = {0, 1}, ∀i ∈ Hh ∩ HST F , j ∈ S (2) 
+
+ϕi,j = {0, 1}, ∀i ∈ Hh, j ∈ S (3) 
+
+φi,j = 0 , ∀i ∈ (Hh \ pro (sj )) ∪ HST F , j ∈ Sr (4) 
+
+φi,j = 0 , ∀i ∈ Hh, j ∈ Sm (5) 
+
+ϕi,j = 0 , ∀i ∈ pro (sj ) ∪ HST F , j ∈ Sr ∪ Sm (6) 
+
+ϕi,j + ϕi,j ′ ≤ 1, ∀g(sj ) = g(sj′ ), j ̸ = j′ (7) Reconstructing an STF block requires k healthy nodes to provide data, whereas migrating an STF block requires only one STF node to provide data (Eqs. 8 and 9). Eq 10 guarantees that each STF block is assigned a designated replacement node. 
+
+X
+
+> i∈Hh
+
+φi,j = k, ∀j ∈ Sr (8) 
+
+X
+
+> i∈HST F
+
+φi,j = 1 , ∀j ∈ Sm (9) 
+
+X
+
+> i∈HST F
+
+ϕi,j = 1 , ∀j ∈ Sr ∪ Sm (10) The number of blocks transmitted by each node is denoted as nui , computed via Eq. 11. Let ψj be a binary indicator, 6
+
+where ψj = 1 signifies that in-network aggregation is em-ployed for the reconstruction of block sj , and ψj = 0 indicates that data aggregation is performed at the storage node (Eq. 12). Without in-network aggregation, a node must receive k blocks to reconstruct one block. In contrast, for the migration or in-network aggregation-enabled reconstruction, the node needs to receive only one block. The number of blocks received by each node is denoted as ndi , computed via Eq. 13. Due to limited switch resources, Eq. 14 limits the number of blocks reconstructed through in-network aggregation, where 
+
+θ denotes the maximum number of such blocks. 
+
+nui = X 
+
+> j∈Sr∪Sm
+
+φi,j , ∀i ∈ HST F ∪ Hh (11) 
+
+ψj ∈ { 0, 1}, ∀j ∈ Sr (12) 
+
+ndi = X
+
+> j∈Sr
+
+ϕi,j (k(1 − ψj ) + ψj ) + X
+
+> j∈Sm
+
+ϕi,j , ∀i ∈ Hh (13) 
+
+X
+
+> j∈Sr
+
+ψj ≤ θ (14) Let bsize nui and bsize ndi denote the data volumes transmitted and received by a node, respectively, where bsize is the block size. Let ui and di denote the available uplink and downlink bandwidths of hi, respectively. The repair time of the entire batch, denoted by tbch , is determined by the node with the maximum transmission time. tbch can be calculated using the Eq 15. 
+
+tbch = bsize max 
+
+  nui
+
+ui
+
+i ∈ Hh ∪ HST F 
+
+
+
+∪
+
+ ndi
+
+di
+
+i ∈ Hh
+
+ (15) IAPRepair aims to reduce repair time by maximizing the repair efficiency of each batch. The objective of IAPRepair is to select appropriate Sm and Sr for each batch, and determine the values of the decision variables φi,j , ϕi,j , and ψj , such that more STF blocks can be repaired within a shorter time for each batch, as formulated in Eq. 16. 
+
+max |Sm| + |Sr |
+
+tbch 
+
+(16) IV. D ESIGN OF IAPR EPAIR 
+
+IAPRepair is a proactive repair framework for erasure-coded data built on programmable networks. It enhances the parallelism of migration and reconstruction. Specifically, IAPRepair selects STF blocks to be reconstructed for each batch based on the available bandwidth of each node, and assigns reconstruction tasks to individual nodes. Subsequently, based on the reconstruction load of each node, it selects an appropriate number of STF blocks for migration and assigns a replacement node for each migrated STF block. Finally, IAPRepair determines which STF blocks should be reconstructed using in-network aggregation. 
+
+A. Block selection for reconstruction 
+
+Leveraging in-network aggregation can substantially reduce the bandwidth demand of data reconstruction, which elimi-nates the bandwidth contention between migration and recon-struction. Consequently, migration and reconstruction can be considered separately. IAPRepair first selects STF blocks to be reconstructed for a batch solely from the perspective of maximizing reconstruction efficiency. As illustrated by the blue lines in Fig. 3, since in-network aggregation reduces the volume of data received by nodes during reconstruction, the uplink bandwidth is more likely to become the bottleneck limiting reconstruction efficiency. IAPRepair prioritizes the utilization of the uplink bandwidth of healthy nodes. For any two nodes hi and hj , if nui /u i < n uj /u j , hi is rel-atively more idle than hj . When adding reconstruction blocks to a batch, priority should be given to assigning reconstruction tasks to idle nodes, so as to improve the utilization of their uplink bandwidth. The notation Kmin (sj ) denotes the k nodes in pro (sj ) with the smallest ratio of (nui + 1) /u i. Eq. 17 is used to compute the score sc j of sj . By selecting the STF block with the minimum score, IAPRepair preferentially assigns reconstruction tasks to less loaded nodes. 
+
+sc j = X 
+
+> i∈Kmin (sj)
+
+nui + 1 
+
+ui
+
+(17) The number of STF blocks to be reconstructed in each batch is not fixed. It is determined by the balance of transmission loads across nodes. Let luavg = 1
+
+> |Hh|
+
+P 
+
+> i∈Hh
+> nui
+> ui
+
+denote the average load of all nodes, and let lumax = max hi∈Hh 
+
+> nui
+> ui
+
+denote the maximum load. IAPRepair uses the ratio luavg /l umax to represent the load balance among nodes. When luavg /l umax > ξ ,no additional STF blocks are added to Sr , where ξ is a prede-fined threshold. IAPRepair limits the number of reconstructed blocks in each batch to at most 2|Hh| to avoid long tbch and excessively consumption of computation and cache resources. Similarly, nr,d i /d i reflects the receive load of of hi, where 
+
+nr,d i denotes the number of blocks received by hi for block reconstruction in a batch. Among all nodes satisfying the fault-tolerance requirements, the one with the minimum receiving load is selected as the replacement node, as shown in Eq. 18. When multiple STF nodes are detected, several STF blocks may belong to the same stripe, and these blocks must be placed on distinct nodes. To this end, we use Pi to record the replacement nodes allocated for the i-th stripe. Pi persists throughout the entire lifecycle of proactive repair and remains valid across all batches. It is initialized as Pg(sj ) = ∅, ∀j ∈ S.Since the replacement node is required to receive k blocks, the numerator in the receiving load computation is incremented by k. For reconstruction, the maximum receiving load is: 
+
+lr,d max = max hi∈Hh 
+
+> nr,d i
+> di
+
+.
+
+i∗ = arg min   
+
+> i∈Hh\(pro (sj)∪Pg(sj))
+
+nr,d i + kdi
+
+(18) Algorithm 1 describes the details of selecting STF blocks for reconstruction. The input S represents all blocks in the STF 7
+
+Algorithm 1: Block selection for reconstruction 
+
+Input: STF blolks S
+
+Output: Reconstruction blocks Sr 
+
+> 1
+
+Set Sr = ∅; 
+
+> 2
+
+Set nui = 0 and nr,d i = 0 , ∀i ∈ Hh; 
+
+> 3
+
+while S̸ = ∅ and |Sr | ≤ 2|Hh| do  
+
+> 4
+
+Set sc temp = inf ; 
+
+> 5
+
+for each sj in S do  
+
+> 6
+
+Compute sc j using Eq. 17;  
+
+> 7
+
+if sc j < sc temp then  
+
+> 8
+
+Set sc temp = sc j ; 
+
+> 9
+
+Set Htemp = Kmin (sj ); 
+
+> 10
+
+Set j∗ = j; 
+
+> 11
+
+Select replacement node hi∗ for sj∗ using Eq. 18;  
+
+> 12
+
+Add i∗ to Pg(stemp ), and add sj∗ to Sr ; 
+
+> 13
+
+Set φi,j ∗ = 1 and nui = nui + 1 ,∀i ∈ Htemp ; 
+
+> 14
+
+Set ϕi∗,j ∗ = 1 and ndi∗ = ndi∗ + k; 
+
+> 15
+
+Remove sj∗ from S; 
+
+> 16
+
+if luavg 
+
+> lumax
+
+≥ ξ then  
+
+> 17
+
+break;  
+
+> 18
+
+return Sr ;nodes, and the output Sr denotes the selected STF blocks. Algorithm 1 performs multiple iterations over S. In each iteration, it selects the STF block stemp with the minimum score, along with the set of k nodes Htemp responsible for providing data for reconstructing stemp (Lines 4–10). Select the replacement node for stemp , and update Pg(sj )
+
+accordingly (Lines 11-12). Identify the data-providing nodes for reconstructing s∗ 
+
+> j
+
+and update their loads (Line 13). Identify the replacement node for s∗ 
+
+> j
+
+and update its load (Line 14). Subsequently, remove sj∗ from S before proceeding to select the next STF block (Line 15). The selection of reconstruction blocks is completed when the ratio of luavg to lumax exceeds the threshold ξ (Lines 16-17). Fig. 6 illustrates an example of Algorithm 1, which con-siders one STF node and five healthy nodes with RS (4 , 2) 
+
+encoding. Suppose three STF blocks have already been se-lected for reconstruction in the batch. Based on Eq. 17, the scores sc 1, sc 2, and sc 3 are computed to be 0.9, 1.0, and 1.0, respectively. The block s1 with the minimum score is selected and added to the batch, with h1 and h3 designated as the provider nodes for reconstructing s1. Since h1 and h2, and 
+
+h3 already host blocks belonging to the same stripe as s1, the reconstructed block can only be placed on either h4 or h5.The more idle node h5 is selected as the replacement node. Finally, the values of nu 
+
+> 1
+
+, nu 
+
+> 3
+
+, and nr,d  
+
+> 5
+
+are updated. 
+
+B. Block selection for migration 
+
+In this section, we identify the migration blocks. The time required to reconstruct the STF blocks in each batch is primarily determined by lumax and lr,d max . To prevent the repair time of the entire batch from increasing due to excessive STF block migration, the maximum number of blocks transmitted h1 h2 h3 h4 h5
+
+𝐀𨀀 𝐀 
+
+1.0 
+
+0.9 
+
+1.0 
+
+𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀,𝐀 𝐀 𝐀 𝐀,𝐀 
+
+h1 2 3 0 0
+
+h2 3 4 1 0
+
+h3 5 8 1 4
+
+h4 4 5 1 2
+
+h5 8 4 3 0
+
+s2
+
+s1
+
+s3
+
+hSTF 
+
+4/8 2/4 2/5 2/3 1/2 
+
+√ √√ √√ √
+
+2/4 4/5 6/8 2/4 2/3 
+
+𝐀 𝐀 𝐀,𝐀 𝐀 𝐀 𝐀,𝐀 
+
+1 01 02 41 23 2  
+
+> 𝐀 𝐀 𝐀,𝐀 + 1 𝐀 𝐀
+> 𝐀 𝐀 𝐀,𝐀 + 𝐀 𝐀 𝐀
+
+Fig. 6: Example of block selection for reconstruction by each STF node can be computed using Eq. 19. With in-network aggregation employed, hi is required to receive at least nr,d i /k blocks for reconstruction. Consequently, the maximum number of migration blocks each healthy node can receive is computed by Eq 20. The number of migration blocks is constrained by N ui and N m,d i .
+
+N ui =
+
+
+
+ui max( lumax , lr,d max 
+
+k )
+
+
+
+, ∀i ∈ HST F (19) 
+
+N m,d i =
+
+$
+
+di max( lumax , lr,d max 
+
+k ) − nr,d i
+
+k
+
+%
+
+, ∀i ∈ Hh (20) The node that provides the data for each migration block is uniquely determined, whereas its replacement node is not. Let Hm,d = {i|i ∈ Hh, N m,d i > 0} denote the set of healthy nodes capable of receiving migration blocks. For a migration block sj , any node in (Hh \ pro (sj )) ∩ Hm,d can serve as its replacement node. When selecting replacement nodes for migration blocks, concentrating these blocks on a small number of healthy nodes is beneficial for reducing the resource consumption of the programmable switch. This is because the bandwidth released by reconstructing one block via in-network aggregation can be leveraged to migrate k − 1
+
+blocks. Distributing migrated blocks across different nodes would lead to more idle bandwidth and require reconstructing more STF blocks using in-network aggregation. As illustrated in Fig. 7, h1 is the STF node, and all the others are healthy nodes. In this batch, three blocks are reconstructed and three blocks are migrated concurrently. To prevent the receiving side from becoming a bottleneck that degrades repair efficiency, the number of blocks received by any single node must not exceed three. If the migration blocks are placed according to the scheme indicated by the green lines, in-network aggregation is required to reconstruct all three blocks. In contrast, adopting the scheme indicated by the orange lines, 8
+
+only two blocks need to be reconstructed through in-network aggregation. For all migration blocks, IAPRepair preferentially selects the node with the largest N m,d i as their replacement nodes. h1 h2 h3 h4
+
+h5 h6 h7
+
+Reconstruction Migration 2 Migration 1 
+
+Fig. 7: Example of replacement node selection for migration 
+
+Algorithm 2: Block selection for migration 
+
+Input: STF blolks S
+
+Output: Migration blocks Sm 
+
+> 1
+
+Set Qi = ∅, ∀Hh; 
+
+> 2
+
+Set nui = 0 , ∀i ∈ HST F ; 
+
+> 3
+
+Set nm,d i = 0 , ∀i ∈ Hh; 
+
+> 4
+
+Compute N ui and N m,d i using Eqs. 19 and 20, respectively;  
+
+> 5
+
+for each sj in S do  
+
+> 6
+
+Set i∗ = arg min i∈Hh\(pro (sj )∪Pg(sj )) N m,d i ; 
+
+> 7
+
+Add sj to Qi∗ and add i∗ to Pg(sj ); 
+
+> 8
+
+for each Ql in sort (Q1, Q 2, . . . , Q |Hh|) do  
+
+> 9
+
+for each sj in Ql do  
+
+> 10
+
+Let hi be the STF node of sj ; 
+
+> 11
+
+if nui < N ui and nm,d i∗ < N m,d i∗ then  
+
+> 12
+
+Set nui = nui + 1 and nm,d i∗ = nm,d i∗ + 1 ; 
+
+> 13
+
+Add sj to Sm; 
+
+> 14
+
+Set φi,j = 1 and ϕi∗,j = 1 ; 
+
+> 15
+
+Remove sj from S; 
+
+> 16
+
+return Sm;Algorithm 2 presents the details of migration task assign-ment. Qi stores all migrated STF blocks that designate hi as their replacement node. Qi is initialized as empty (Line 1). The number of migration blocks to be transmitted by each STF node ( nui , ∀i ∈ HST F ) and the number of migration blocks to be received by each healthy node ( nm,d i , ∀i ∈ Hh)are both initialized to 0 (Lines 2–3). The values of N ui and 
+
+N m,d i are computed using Eqs. 19 and 20, respectively (Line 4). While ensuring fault tolerance, for each STF block sj
+
+in S, the node hi∗ with the largest N m,d i is selected as its replacement node and recorded in Qi∗ (Lines 5–7). Traverse 
+
+{Q1, Q 2, . . . , Q |Hh|} in descending order according to the number of migration blocks contained in each set (Lines 8-9). For an STF block sj , if the number of blocks transmitted by its assigned STF node hi is less than N ui , and the number of blocks received by its assigned replacement node hi∗ is less than N m,d i∗ , then sj can be migrated in the current batch (Line 11). Accordingly, sj is added to Sm, and φi,j and ϕi∗,j are set to 1 (Lines 12-15). 
+
+C. In-network aggregation decision 
+
+IAPRepair traverses each healthy replacement node to iden-tify which of its assigned reconstruction blocks should be repaired via in-network aggregation. Let nina i denote the number of reconstruction blocks that require repair via in-network aggregation and are assigned hi as the replacement node. The value of nina i can be computed according to Eq. 21. To avoid an increase in repair time due to insufficient data receiving capacity, nina i must satisfy the constraint given in Eq. 22. By transforming Eq. 22, it can be derived that when 
+
+nina i at least equals to N ina i (Eq. 23), the limitation on repair performance imposed by receiving capacity is eliminated. 
+
+nina i = X
+
+> j∈Sr
+
+ϕi,j ψj , ∀i ∈ Hh (21) 
+
+nm,d i
+
+di
+
++ k(nr,d i − nina i )
+
+di
+
++ nina i
+
+di
+
+≤ lumax , ∀i ∈ Hh (22) 
+
+N ina i = max 
+
+&
+
+dilumax − nm,d i − kn r,d i
+
+1 − k
+
+'
+
+, 0
+
+!
+
+, ∀i ∈ Hh
+
+(23) However, the value of nina i is also constrained by the internal resources of the programmable switch (Eq. 14). Thus it cannot be guaranteed that setting nina i to N ina i is always fea-sible. IAPRepair mitigates the impact of the internal resource constraints of the programmable switch on repair performance by minimizing max i∈Hh (N ina i − nina i ), where N ina i ≥ nina i .Algorithm 3 details the procedure for determining the blocks which are constructed via in-network aggregation. Initially, all reconstructions are first assumed to not require in-network aggregation (Line 1). The demand of each node for in-network aggregation is computed according to Eq. 23 (Line 2). Sina 
+
+and cnt are employed to record the blocks adopting in-network aggregation and the quantity, respectively. In each iteration, Algorithm 3 identifies the node hi∗ with the largest difference between N ina i and nina i , and randomly selects one block 
+
+sj∗ from all STF blocks whose replacement node is hi∗ to reconstruct via in-network aggregation (Lines 6-9). Algorithm 3 continues until the requirements of all nodes are satisfied or no additional reconstructed blocks can adopt in-network aggregation. 
+
+D. Algorithm Analysis 
+
+Complexity Analysis. Algorithm 1 selects at most 2|Hh|
+
+reconstruction blocks for each batch and traverses S at most 
+
+2|Hh| times. The time complexity of computing the score for one block is O( |Hh|) . Therefore, the time complexity of Algorithm 1 is O( 2|Hh|2|S|) . Algorithm 2 traverses S twice. In the first traversal, a replacement node is selected for each STF block, where each selection incurs a time complexity of 
+
+O(|Hh|). A total of |S| selections are required. The second 9
+
+Algorithm 3: In-network aggregation descision 
+
+Input: Limitations on in-network aggregation θ
+
+Output: Blocks reconstructed via in-network aggregation Sina  
+
+> 1
+
+Set nina i = 0 , ∀i ∈ Hh; 
+
+> 2
+
+Compute N ina i , ∀i ∈ Hh using Eq. 23;  
+
+> 3
+
+Set i∗ = arg max i∈Hh (N ina i − nina i ); 
+
+> 4
+
+Set cnt = 0 and Sina = ∅; 
+
+> 5
+
+while cnt < θ and N ina i∗ > n ina i∗ do  
+
+> 6
+
+Set cnt = cnt + 1 ; 
+
+> 7
+
+Set nina i∗ = nina i∗ + 1 ; 
+
+> 8
+
+Select a block sj∗ assigned hi∗ as the replacement node and add it to Sina ; 
+
+> 9
+
+Set ψj∗ = 1 ; 
+
+> 10
+
+Set i∗ = arg max i∈Hh (N ina i − nina i ); 
+
+> 11
+
+return Sina ;traversal selects migrated blocks and inserts them into |Sm|.Thus, the time complexity of Algorithm 2 is O(|S|(|Hh| + 1)) 
+
+. Algorithm 3 iterates at most θ times, and each iteration selects one block to add to Sina with a time complexity of 
+
+O(|Hh|). Therefore, the time complexity of Algorithm 3 is 
+
+O(θ|Hh|). Since Algorithms 1, 2, and 3 execute sequentially, the overall time complexity of IAPRepair is approximately 
+
+O(2 |Hh|2|S| + θ|Hh|).Extensibility. IAPRepair is equally applicable to LRC [30], [31], which is another erasure code deployed in production environments, denoted as LRC (n, k, r ). An LRC (n, k, r )
+
+stripe comprises n blocks, including k data blocks. These k
+
+data blocks are partitioned into k/r groups ( k is divisible by r
+
+). Each group contains r data blocks and one local parity block. The local parity block is generated from the data blocks within the same group. In addition, LRC (n, k, r ) contains n−k−k/r 
+
+global parity blocks. These global parity blocks are encoded from all k data blocks. Reconstructing a local block within a group requires only r blocks from the same group, whereas reconstructing a global parity block requires reading r blocks from every group. STF nodes store both global parity blocks and local blocks, and the number of global parity blocks is smaller. Since the data volume required to reconstruct a local block is substantially less than that required for a global parity block, IAPRepair prioritizes repairing global parity blocks through migration. V. I MPLEMENTATION 
+
+We have implement a prototype of IAPRepair using C++, Python, and the P4 language. The transmission of repair data and repair commands leverages Linux socket interfaces, while the computation of decoding coefficients and Galois field operations are built upon the Jerasure library [32]. Algorithms 1-3 of IAPRepair are implemented in Python, and the internal processing logic of the programmable switch is realized in P4. Paint [14] proposed the ACP protocol for data transmission for in-network aggregation. The ACP protocol extends UDP with a retransmission mechanism to ensure reliable delivery, and enables resource management on programmable switches rData rCnt 
+
+> Aggregator
+> rNum rVer rData rCnt
+> Aggregator
+> rVer rData rCnt
+> Aggregator
+> rVer
+
+...... 
+
+> rData rCnt
+> Aggregator
+> rNum rVer rData rCnt
+> Aggregator
+> rVer rData rCnt
+> Aggregator
+> rVer
+
+...... 
+
+> rData rCnt
+> Aggregator
+> rNum rVer rData rCnt
+> Aggregator
+> rVer rData rCnt
+> Aggregator
+> rVer
+
+......      
+
+> rData rCnt Pid Bid Ver Seq Data UDP Header
+> Aggregator Aggregator groups
+> Packet rNum Type rVer
+> rData rCnt
+> Aggregator
+> rVer rData rCnt
+> Aggregator
+> rVer
+> Parser Forward Aggregator groups Programmable Switch Reconstruction flow
+
+...... 
+
+> Migration flow
+
+Fig. 8: The system architecture of IAPRepair. through additional fields including Ver, Bid, and Pid. Our prototype system adopts the ACP protocol for in-network aggregation. In the prototype system, the programmable switch is em-ployed for data forwarding and in-network aggregation, as illustrated in Fig. 8. The programmable switch comprises the Parser, the Forward module, and multiple aggregators. The Parser identifies whether a packet requires in-network aggregation based on its Type field. Reconstruction packets carrying specific markings are distributed to the aggregator group, while all other packets (including both reconstruction and migration packets) are directly dispatched to the Forward module. The Aggregator serves as the core component for in-network aggregation, and perform aggregation operations on the marked reconstruction packets. The aggregated results are subsequently delivered to the Forward module. In the figure, blue lines represent reconstruction data flows, and green lines represent migration data flows. Only a portion of the reconstruction data requires in-network aggregation. STF nodes transmit migration data, and do not receive any repair data. Healthy nodes transmit reconstruction data and receive both migration and reconstruction data. IAPRepair allocates a group of aggregators to each STF block reconstructed via in-network aggregation. This design enables nodes to transmit data continuously without await-ing receiver acknowledgments, thereby preventing throughput degradation caused by acknowledgment waiting. Assuming that each group contains Na aggregators, the sender can trans-mit at least Na packets consecutively. Additionally, multiple aggregators function as data buffers, mitigating the impact of differences in packet arrival times from different nodes on aggregation efficiency. Each aggregator maintains three state objects: rCnt, rVer, and rData. Aggregators within the same group share a common rNum state object. All of these state objects are implemented using Register objects in the programmable switch. The rNum register stores the number of data flows required for aggre-gation and is configured before proactive repair begins. The rData register stores the intermediate aggregation result. Upon receiving a packet, the aggregator performs a bitwise XOR 10 
+
+operation between rData and the packet’s Data field, writes the result back to rData, and increments rCnt. When the value of rCnt equals to that of rNum, indicating that all aggregation operations required for decoding have been completed, the aggregator dispatches the data stored in rData to the Forward module and resets rData. The Pid and Bid fields are used to identify the aggre-gator group and the specific aggregator within that group, respectively. Packets for repairing the same STF block carry an identical Pid. The Seq field indicates the offset of the carried data within the STF block and is employed to handle out-of-order packet arrivals. Due to the limited resources of programmable switches, a single aggregator is shared by packets with different Seq, with Bid cycling repeatedly from 1 to Na. However, aggregator sharing may lead to aggre-gation of packets with differing Seq. To prevent this, the sender increments the Ver field by 1 after every Na packets transmitted. Correspondingly, rVer is incremented by 1 upon completing aggregation of rNum packets. If the value of Ver differs from that of rVer, a transmission error is detected, and the corresponding data must be retransmitted. VI. E VALUATION 
+
+We conduct a complete proactive repair process on the IAPRepair prototype system to evaluate its repair performance. We also evaluate the resource consumption and runtime overhead of IAPRepair in large-scale storage systems via simulation. In our evaluation, the repair time includes the data transfer time and the algorithm runtime. 
+
+A. Experimental settings 
+
+The prototype system consists of a Tofino ASIC pro-grammable switch (with bf-sde 9.2.0 Software Development Kit installed) and 17 servers. Among these servers, one func-tions as the management node, and the remaining 16 operate as storage nodes. Each server is equipped with an Intel Core i7-4790K CPU, 16 GB of RAM, a 500 GB SSD, and a dual-port 10GbE network interface card, and has the Ubuntu 20.04 operating system installed. Unless otherwise specified, all the results are the average values of 10 tests. The default coding is RS (9 , 6) , the block size is 8 MB, and the value of ξ is set to 0.9. There are 512 stripes and 1 STF node. Each stripe consists of one block placed in the STF node, while the other n − 1
+
+blocks are randomly placed across healthy nodes. Recent work [3] evaluates the bandwidth consumption of each node in a storage system under three workloads: SWIM, TPC-DS, and TPC-H. We randomly select measurement results exhibiting heterogeneous bandwidth consumption and use the Linux tc command to configure the available bandwidth of each node in our prototype system accordingly. We select FastPR [11], SelectiveEC [5] and Migration as the comparative algorithms. FastPR parallelizes migration and re-construction to proactively repair blocks in STF nodes, but its block selection strategy does not adequately account for load balancing across nodes. SelectiveEC proposes a load-balanced task assignment method, but it only adopts reconstruction for RS(6,4) RS(9,6) RS(12,8) RS(14,10) Erasure Codes 020 40 60 80 Repair Time (s) 
+
+> IAPRepair SelectiveEC FastPR Migration
+
+Fig. 9: Impact of coding parameters on repair time repair. Migration directly transfers data from STF nodes to healthy nodes without performing data reconstruction. 
+
+B. Repair time 
+
+Experiment 1 (Impact of coding parameters): Fig. 9 presents the repair time of different methods under the coding param-eters of RS (6 , 4) [33], RS (9 , 6) [34], RS (12 , 8) [35] and 
+
+RS (14 , 10) [36]. IAPRepair leverages in-network aggregation to reduce the bandwidth consumption of reconstruction and eliminates the bottleneck imposed by node downlink band-width on repair performance. Additionally, the block selection and balanced task assignment methods improve reconstruction efficiency. IAPRepair consistently demonstrates the best repair performance across all coding parameters, reducing repair time by 47.83% to 68.04% compared to SelectiveEC, 53.79% to 65.49% compared to FastPR, and 57.76% to 75.94% compared to Migration. As the coding parameter k increases, reconstructing a block requires more data, leading to a corresponding increase in repair time. SelectiveEC exhibits a significant degradation in repair performance in RS (14 , 10) . The primary reason stems from the difficulty in establishing a one-to-one matching be-tween STF stripes and replacement nodes when the parameter 
+
+k is close to the number of nodes. Although IAPRepair also encounters the issue of shared replacement nodes, it effectively avoids performance degradation by reducing data transmission volume through in-network aggregation. Migration transfers data from the STF node sequentially, resulting in long repair times, yet its repair duration is unaffected by coding parame-ters. Experiment 2 (Impact of block size): We evaluated the impact of block size on repair time, with the block size varying from 2MB to 32MB. The experimental results are illustrated in Fig. 10, showing that the repair time of all methods increases with larger block sizes, yet IAPRepair consistently outperforms other methods. On average, the repair time of IAPRepair is 55.31%, 61.97% and 67.87% shorter than that of SelectiveEC, FastPR and Migration, respectively. Experiment 3 (Impact of the number of nodes): As the number of storage nodes increases, more STF blocks can be reconstructed concurrently. Consequently, the repair time for IAPRepair, SelectiveEC and FastPR decreases accordingly. SelectiveEC incurs long repair times when the number of 11 2 4 8 16 32 Block Size (MB) 025 50 75 100 125 150 175 Repair Time (s) 
+
+> IAPRepair SelectiveEC FastPR Migration
+
+Fig. 10: Impact of block size on repair time 10 11 12 13 14 15 16 Number of Nodes 10 20 30 40 50 60 70 Repair Time (s) 
+
+> IAPRepair SelectiveEC FastPR Migration
+
+Fig. 11: Impact of the number of nodes on repair time nodes is close to the coding parameter k. FastPR requires an increase of k nodes to add one reconstructed STF stripe in a repair batch, resulting in a step-like pattern in its repair time curve. Due to the limitation of the uplink bandwidth of the STF node, increasing the number of healthy nodes does not reduce the repair time of Migration. IAPRepair exhibits the shortest repair time, reducing it by at least 40.97%, 47.82%, and 60.48% compared to SelectiveEC, FastPR, and Migration, respectively. In addition, IAPRepair exhibits asmoothly decreasing repair time curve, indicating that it can exploit the bandwidth resources of all nodes to improve repair performance. Experiment 4 (Impact of number of STF nodes): We evaluate proactive repair for multiple STF nodes. For the 
+
+RS (9 , 6) coding scheme used in our experiments, data re-construction becomes infeasible when more than three nodes fail. Thus, the number of STF nodes ranges from 1 to 3. Since FastPR is not applicable to the repair of multiple STF nodes, only SelectiveEC and Migration were considered as baseline methods in the experiments. As the number of STF nodes increases, the number of healthy nodes available for reconstruction decreases, resulting in degraded reconstruction performance. Because healthy nodes are more than STF nodes, the data stored on multiple STF nodes can be migrated in parallel without mutual interference. SelectiveEC repairs through reconstruction, and its repair time increases notice-ably with the number of STF nodes. Migration copies data from STF nodes to healthy nodes, exhibiting nearly constant repair time. IAPRepair combines migration and reconstruction. 1 2 3Number of STF Nodes 10 20 30 40 50 60 70 Repair Time (s) 
+
+> IAPRepair SelectiveEC Migration
+
+Fig. 12: Impact of number of STF nodes on repair time 0.85 0.9 0.95 1.0 Paramter 
+
+> 10 12 14 16 18 20 Repair Time (s)
+> RS(6, 4) RS(9, 6) RS(12, 8) RS(14, 10)
+
+Fig. 13: Impact of ξ on repair time Although its repair time also increases as the number of STF nodes grows, it consistently outperforms the other methods. As shown in Fig. 14, compared with the baseline methods, IAPRepair reduces the repair time by 53.84%, 49.09%, and 36.79% in scenarios with one, two, and three STF nodes, respectively. Experiment 5 (Impact of ξ): We evaluated the impact of parameter ξ on repair time, with ξ ranging from 0.85 to 1.0. As illustrated in Fig. 13, the repair time first decreases as the value of parameter ξ increases, and then rises gradually. As ξ increases, the load distribution across nodes becomes more balanced, which is conducive to improving the repair efficiency. However, an excessively high threshold cannot be reached in practice, and Algorithm 1 terminates after selecting 
+
+2|Hh| STF blocks. At this point, the balance among nodes may deteriorate, resulting in an increase in the repair time. The shortest repair time is achieved when ξ is within the range of 0.9 to 0.95. Fig. 14 further shows that the repair time of each batch increases with ξ, because Algorithm 1 needs to select more STF blocks to meet the threshold requirement. Since network conditions vary dynamically, an excessively long batch time may cause the network state measured during the execution of Algorithm 1 to become obsolete. Therefore, 
+
+ξ should not be set too large. In the experiments, ξ is set to 0.9. Experiment 6 (Impact of node failure): STF nodes may fail during the repair process. To evaluate the impact of STF node failures on repair performance, we configured the STF node to fail at different time points after the proactive 12 0.85 0.9 0.95 1.0 Paramter 
+
+> 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 Batch Repair Time (s)
+> RS(6, 4) RS(9, 6) RS(12, 8) RS(14, 10)
+
+Fig. 14: Impact of ξ on batch time 1 2 3 4 5 6 7 8 9 10 Failure Occurrence Time (s) 10 15 20 25 30 35 Repair Time (s) 
+
+> RS(6, 4) RS(9, 6) RS(12, 8) RS(14, 10)
+
+Fig. 15: Impact of node STF failure time repair began. Once an STF node fails, IAPRepair can only perform reconstruction. The test results are presented in Fig. 15. IAPRepair can still accomplish the node repair even the STF node fails. The repair performance exhibits higher sensitivity to the failure occurrence time with a smaller coding parameter k. Specifically, for RS (6 , 4) , RS (9 , 6) , RS (12 , 8) ,and RS (14 , 10) , a failure occurring at the 10th second reduces the repair time by 22.56%, 22.31%, 21.97%, and 20.53%, respectively, compared with a failure occurring at the 1st second. Experiment 7 (Extension to LRCs): We use LRC (n, k, r )
+
+to evaluate the generality of IAPRepair. An LRC (n, k, r )
+
+consists of data blocks, local parity blocks, and global parity blocks. Since these different types of blocks require differ-ent reconstruction procedures, proactive repair in LRCs is more complex. We select LRC (6 , 4, 2) , LRC (8 , 6, 2) , and 
+
+LRC (10 , 8, 2) in this evaluation. he evaluation results are presented in Fig. 16. Compared with the baseline methods, IAPRepair reduces the repair time by 29.79%–69.65%. These results demonstrate that IAPRepair can be applied to various erasure codes. Experiment 8 (Ablation study on IAPRepair): We perform an ablation study on IAPRepair to investigate the effectiveness of block selection and in-network aggreation decision. IAPRepair-S and IAPRepair-I are two variants of IAPRepair. IAPRepair-S randomly select STF blocks for re-construction. IAPRepair-I performs data aggregation within nodes. The experimental results are shown in Fig. 17. When the number of nodes is comparable to the coding parameter, LRC(6,4,2), LRC(8,6,2) LRC(10,8,2) Erasure Codes 010 20 30 40 50 Repair Time (s) 
+
+> IAPRepair SelectiveEC FastPR Migration
+
+Fig. 16: Extension to LRCs the block selection algorithm is more effective in reducing repair time than in-network aggregation. Conversely, when the number of nodes is markedly larger than the coding parameters, in-network aggregation becomes more effective. IAPRepair is the synthesis of IAPRepair-S and IAPRepair-I, and achieves the shortest repair time. Compared with IAPRepair-S, IAPRepair reduces the repair time by up to 43.47%; compared with IAPRepair-I, it achieves a maximum reduction of 36.42% in repair time. 
+
+C. Repair Overhead 
+
+Experiment 9 (Resource usage of the switch): We evaluate the internal resource usage of the programmable switch. The resource usage is directly proportional to the number of blocks reconstructed using in-network aggregation. We record the maximum number of STF blocks that are reconstructed via in-network aggregation across all batches under various coding parameters and number of nodes. As illustrated in Fig. 18, the number of nodes increases from 20 to 50. The number of STF blocks reconstructed via in-network aggregation exhibits an upward trend as the number of nodes increases. For RS (6 , 4) ,
+
+RS (9 , 6) , RS (12 , 8) and RS (14 , 10) , the maximum number of blocks requiring in-network aggregation is 21, 29, 27 and 30, respectively. We establish 32 aggregator groups in the programmable switch, each containing 64 aggregators. The payload size of each packet is 400 bytes. In-network aggregation primarily consumes SRAM resources in the pro-grammable switch, and the corresponding resource consump-tion is presented in Table II. The in-network aggregation operations are distributed across 11 stages, with the SRAM utilization in each stage remaining below 15.00%. The usage of Hash Bit and VLIW Instruction resources indicates that each stage retains sufficient capacity for resource mapping and instruction execution. TCAM is primarily used in packet-forwarding operations for rapid address matching, mask-based matching, and longest-prefix matching. IAPRepair incurs neg-ligible TCAM overhead. Experiment 10 (Algorithm runtime): The number of nodes and the number of STF blocks are two critical factors deter-mining the runtime of IAPRepair. Table III and IV respectively present the impact of these two factors on runtime, with the number of nodes varying from 20 to 100, and the number of STF blocks ranging from 200 to 1000. The time overhead 13 RS(6,4) RS(9,6) RS(12,8) RS(14,10) Erasure Codes 0510 15 20 25 30 35 Repair Time (s) 
+
+> IAPRepair IAPRepair-S IAPRepair-I
+
+Fig. 17: Ablation study 20 25 30 35 40 45 50 Number of Nodes 10 15 20 25 30 35 Number of Blocks Repaired via INA  RS(6, 4) RS(9, 6) RS(12, 8) RS(14, 10) 
+
+Fig. 18: Number of blocks reconstructed using INA of IAPRepair consistently outperforms that of SelectiveEC and FastPR. For various numbers of nodes, the runtime of IAPRepair is reduced by at least 17.71% compared to other methods. For different numbers of STF blocks, IAPRepair achieves a minimum reduction of at least 18.18% in runtime compared to other methods. The rationale is that SelectiveEC and FastPR require repeated invocations of the maximum flow algorithm for block selection, which incurs high time complexity. In contrast, IAPRepair simply computes block scores based on the distribution of STF stripes across nodes, leading to low computational overhead. In production storage systems, a node contains more than 1.5 million blocks [37], [38]. These blocks can be partitioned into multiple smaller subsets and repaired sequentially us-ing a pipelined scheduling-transmission approach. IAPRepair TABLE II: Tofino ASIC Resource Usage 
+
+Stage SRAM Hash Bit TCAM VLIW Instr 0 5.00% 7.93% 0.00% 15.63% 1 1.25% 2.10% 0.00% 9.38% 2 6.25% 13.46% 0.00% 9.38% 3 15.00% 12.50% 0.00% 9.38% 4 15.00% 12.50% 0.00% 9.38% 5 13.75% 12.50% 0.00% 9.38% 6 15.00% 12.50% 0.00% 9.38% 7 15.00% 12.50% 0.00% 9.38% 8 15.00% 12.50% 0.00% 9.38% 9 13.75% 11.78% 0.00% 15.62% 10 1.25% 2.40% 0.00% 6.25% 
+
+TABLE III: Impact of the number of nodes on runtime 
+
+# nodes IAPRepair SelectiveEC FastPR 20 0.29s 0.41s 0.99s 40 0.47s 0.61s 4.03s 60 0.62s 0.79s 8.51s 80 0.79s 0.96s 33.96s 100 0.93s 1.16s 41.08s 
+
+TABLE IV: Impact of the number of blocks on runtime 
+
+# blocks IAPRepair SelectiveEC FastPR 200 0.09s 0.11s 0.27s 400 0.17s 0.25s 0.53s 600 0.31s 0.43s 0.79s 800 0.42s 0.56s 1.06s 1000 0.56s 0.71s 1.33s 
+
+features a lightweight computational overhead (less than 1 second). Its runtime can be hidden within the data transfer time of the previous subset, thus having negligible impact on repair performance. VII. C ONCLUSION 
+
+The proposed IAPRepair performs proactive repair on the STF node based on accurate node failure prediction. We first analyze the factors influencing proactive repair. Subsequently, by employing a rational method for STF stripes partition-ing and leveraging in-network aggregation for STF blocks reconstruction, we achieve fully bandwidth utilization and enhance the efficiency of proactive repair. Prototype system testing and large-scale simulations demonstrate that IAPRepair significantly reduces data repair time compared to existing methods. ACKNOWLEDGEMENTS 
+
+The authors would like to thank the associate editor and the anonymous reviewers for their valuable comments. This work was supported by the National Natural Science Foundation of China (Grant No: 61861013, 62162018), Guangxi Key Research and Development Project(Grant No: 2024AB24072) and the Project for Enhancing Young, Middle-aged Teacher’s Research Basis Ability in Colleges of Guangxi (Grant No: 2023KY0814). REFERENCES [1] X. Li, Z. Yang, J. Li, R. Li, P. P. Lee, Q. Huang, and Y. Hu, “Repair pipelining for erasure-coded storage: Algorithms and evaluation,” ACM Transactions on Storage (TOS) , vol. 17, no. 2, pp. 1–29, 2021. [2] Y. Bai, Z. Xu, H. Wang, and D. Wang, “Fast recovery techniques for erasure-coded clusters in non-uniform traffic network,” in Proceedings of the 48th International Conference on Parallel Processing , 2019, pp. 1–10. [3] Q. Yao, Y. Hu, X. Tu, P. P. Lee, D. Feng, X. Zhu, X. Zhang, Z. Yao, and W. Wei, “Pivotrepair: Fast pipelined repair for erasure-coded hot storage,” in 2022 IEEE 42nd International Conference on Distributed Computing Systems (ICDCS) . IEEE, 2022, pp. 614–624. [4] S. Lin, G. Gong, Z. Shen, P. P. Lee, and J. Shu, “Boosting full-node repair in erasure-coded storage,” in 2021 USENIX Annual Technical Conference (USENIX ATC 21) , 2021, pp. 641–655. 14 
+
+[5] L. Xu, M. Lyu, Q. Li, L. Xie, C. Li, and Y. Xu, “Selectiveec: Towards balanced recovery load on erasure-coded storage systems,” 
+
+IEEE Transactions on Parallel and Distributed Systems , vol. 33, no. 10, pp. 2386–2400, 2021. [6] B. Zhu, G. Wang, X. Liu, D. Hu, S. Lin, and J. Ma, “Proactive drive failure prediction for large scale storage systems,” in 2013 IEEE 29th symposium on mass storage systems and technologies (MSST) . IEEE, 2013, pp. 1–5. [7] M. M. Botezatu, I. Giurgiu, J. Bogojeska, and D. Wiesmann, “Predicting disk replacement towards reliable data centers,” in Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining , 2016, pp. 39–48. [8] F. Mahdisoltani, I. Stefanovici, and B. Schroeder, “Proactive error prediction to improve storage system reliability,” in 2017 USENIX Annual Technical Conference (USENIX ATC 17) , 2017, pp. 391–402. [9] J. Zhang, P. Huang, K. Zhou, M. Xie, and S. Schelter, “HDDse: Enabling High-Dimensional disk state embedding for generic failure detection system of heterogeneous disks in large data centers,” in 2020 USENIX Annual Technical Conference (USENIX ATC 20) , 2020, pp. 111–126. [10] E. Sit, A. Haeberlen, F. Dabek, B.-G. Chun, H. Weatherspoon, R. T. Morris, M. F. Kaashoek, and J. Kubiatowicz, “Proactive replication for data durability,” in IPTPS , 2006. [11] X. Li, K. Cheng, Z. Shen, and P. P. Lee, “Fast proactive repair in erasure-coded storage: Analysis, design, and implementation,” IEEE Transactions on Parallel and Distributed Systems , vol. 33, no. 12, pp. 3400–3414, 2022. [12] Y. Wu, D. Liu, Y. Tan, M. Duan, L. Luo, W. Wang, and X. Chen, “LFPR: A lazy fast predictive repair strategy for mobile distributed erasure coded cluster,” IEEE Internet of Things Journal , vol. 10, no. 1, pp. 704–719, 2022. [13] Y. Qiao, M. Zhang, Y. Zhou, X. Kong, H. Zhang, M. Xu, J. Bi, and J. Wang, “Netec: Accelerating erasure coding reconstruction with in-network aggregation,” IEEE Transactions on Parallel and Distributed Systems , vol. 33, no. 10, pp. 2571–2583, 2022. [14] J. Xia, L. Luo, B. Sun, G. Cheng, and D. Guo, “Parallelized in-network aggregation for failure repair in erasure-coded storage systems,” 
+
+IEEE/ACM Transactions on Networking , vol. 32, no. 4, pp. 2888–2903, 2024. [15] L. Liu, Y. Wang, Y. Liang, J. Chen, and Q. He, “In-network aggregation enabled multiple sub-blocks parallel repair in erasure-coded storage system,” Computer Networks , p. 111523, 2025. [16] Z. Shen, Y. Cai, K. Cheng, P. P. Lee, X. Li, Y. Hu, and J. Shu, “A survey of the past, present, and future of erasure coding for storage systems,” 
+
+ACM Transactions on Storage , vol. 21, no. 1, pp. 1–39, 2025. [17] K. M. Greenan, E. L. Miller, and T. J. S. SJ, “Optimizing galois field arithmetic for diverse processor architectures and applications,” in 2008 IEEE International Symposium on Modeling, Analysis and Simulation of Computers and Telecommunication Systems . IEEE, 2008, pp. 1–10. [18] G. Cheng, J. Xia, H. Mi, D. Guo, K. Wang, and Z. Wang, “SINA: A server-assisted in-network repair acceleration for erasure-coded storage systems,” in 2025 IEEE/ACM 33rd International Symposium on Quality of Service (IWQoS) . IEEE, 2025, pp. 1–6. [19] A. Agrawal and C. Kim, “Intel tofino2–a 12.9 tbps p4-programmable ethernet switch,” in 2020 IEEE Hot Chips 32 Symposium (HCS) . IEEE Computer Society, 2020, pp. 1–32. [20] P. Bosshart, D. Daly, G. Gibb, M. Izzard, N. McKeown, J. Rexford, C. Schlesinger, D. Talayco, A. Vahdat, G. Varghese et al. , “P4: Pro-gramming protocol-independent packet processors,” ACM SIGCOMM Computer Communication Review , vol. 44, no. 3, pp. 87–95, 2014. [21] H. Zhou, D. Feng, and Y. Hu, “Bandwidth-aware scheduling repair techniques in erasure-coded clusters: Design and analysis,” IEEE Trans-actions on Parallel & Distributed Systems , vol. 33, no. 12, pp. 3333– 3348, 2022. [22] H. Zhou and D. Feng, “Stripe-schedule aware repair in erasure-coded clusters with heterogeneous star networks,” ACM Transactions on Ar-chitecture and Code Optimization , vol. 21, no. 3, pp. 1–24, 2024. [23] A. Duminuco, E. Biersack, and T. En-Najjary, “Proactive replication in distributed storage systems using machine availability estimation,” in 
+
+Proceedings of the 2007 ACM CoNEXT conference , 2007, pp. 1–12. [24] P. Li, J. Li, R. J. Stones, G. Wang, Z. Li, and X. Liu, “Procode: A proactive erasure coding scheme for cloud storage systems,” in 2016 IEEE 35th Symposium on Reliable Distributed Systems (SRDS) . IEEE, 2016, pp. 219–228. [25] W. Jiang, H. Jiang, J. Wu, and Q. Chen, “Accelerating distributed cloud storage systems with in-network computing,” IEEE Network , vol. 37, no. 4, pp. 64–70, 2023. [26] J. Xia, D. Guo, and J. Xie, “Efficient in-network aggregation mechanism for data block repairing in data centers,” Future Generation Computer Systems , vol. 105, pp. 33–43, 2020. [27] F. Wang, Y. Tang, Y. Xie, and X. Tang, “Xorinc: Optimizing data repair and update for erasure-coded systems with xor-based in-network computation,” in 2019 35th Symposium on Mass Storage Systems and Technologies (MSST) . IEEE, 2019, pp. 244–256. [28] H. Shi and X. Lu, “Inec: Fast and coherent in-network erasure coding,” in SC20: International Conference for High Performance Computing, Networking, Storage and Analysis , 2020, pp. 1–17. [29] V. Maisto, A. Cilardo, E. Billi, and C. Fader, “A hardware/software architecture for multi-threaded offloading of erasure codes in distributed file systems,” Future Generation Computer Systems , vol. 176, p. 108187, 2026. [30] C. Huang, H. Simitci, Y. Xu, A. Ogus, B. Calder, P. Gopalan, J. Li, and S. Yekhanin, “Erasure coding in windows azure storage,” in 2012 USENIX Annual Technical Conference (USENIX ATC 12) , 2012, pp. 15–26. [31] I. Tamo and A. Barg, “A family of optimal locally recoverable codes,” 
+
+IEEE Transactions on Information Theory , vol. 60, no. 8, pp. 4661– 4676, 2014. [32] J. S. Plank, S. Simmerman, and C. D. Schuman, “Jerasure: A library in c/c++ facilitating erasure coding for storage applications-version 1.2,” 
+
+University of Tennessee, Tech. Rep. CS-08-627 , vol. 23, 2008. [33] G. Zhang, K. Li, J. Wang, and W. Zheng, “Accelerate RDP RAID-6 scaling by reducing disk i/os and XOR operations,” IEEE Transactions on Computers , vol. 64, no. 1, pp. 32–44, 2013. [34] K. Shvachko, H. Kuang, S. Radia, and R. Chansler, “The hadoop distributed file system,” in 2010 IEEE 26th symposium on mass storage systems and technologies (MSST) . Ieee, 2010, pp. 1–10. [35] C. Lai, S. Jiang, L. Yang, S. Lin, G. Sun, Z. Hou, C. Cui, and J. Cong, “Atlas: Baidu’s key-value storage system for cloud data,” in 2015 31st Symposium on Mass Storage Systems and Technologies (MSST) . IEEE, 2015, pp. 1–14. [36] S. Muralidhar, W. Lloyd, S. Roy, C. Hill, E. Lin, W. Liu, S. Pan, S. Shankar, V. Sivakumar, L. Tang et al. , “f4: Facebook’s warm {BLOB }
+
+storage system,” in 11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14) , 2014, pp. 383–398. [37] Z. Ren, W. Shi, J. Wan, F. Cao, and J. Lin, “Realistic and scalable benchmarking cloud file systems: Practices and lessons from alicloud,” 
+
+IEEE Transactions on Parallel and Distributed Systems , vol. 28, no. 11, pp. 3272–3285, 2017. [38] Z. Wang, G. Zhang, Y. Wang, Q. Yang, and J. Zhu, “Dayu: Fast and low-interference data recovery in very-large storage systems,” in 2019 USENIX Annual Technical Conference (USENIX ATC 19) , 2019, pp. 993–1008.

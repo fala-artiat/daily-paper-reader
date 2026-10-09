@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-10-09 <!--dpr-date:20261009-->
+    * 精读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/09/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system" data-sidebar-item="{&quot;title&quot;: &quot;IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;纠删码存储的主动修复与数据重建&quot;}">IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System</a>
   * 2026-10-08 <!--dpr-date:20261008-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/08/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage" data-sidebar-item="{&quot;title&quot;: &quot;The Coverage Depth Problem in Distributed DNA Data Storage&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.02931v1-the-coverage-depth-problem-in-distributed-dna-data-storage&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;利用MDS码实现分布式存储中的编码数据恢复&quot;}">The Coverage Depth Problem in Distributed DNA Data Storage</a>

@@ -1,0 +1,24 @@
+{
+  "label": "2026-10-09",
+  "date": "2026-10-09",
+  "generated_at": "2026-10-09T23:09:52",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202610/09/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system",
+      "section": "deep",
+      "title_en": "IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System",
+      "authors": "Lei Liu, Yong Wang, Junqi Chen, Yangfan Liang, Qian He, Baokang Zhao",
+      "date": "2026-10-08",
+      "pdf": "https://arxiv.org/pdf/2610.11114v1",
+      "score": "9.0",
+      "evidence": "纠删码存储的主动修复与数据重建",
+      "tldr": "纠删码存储修复需跨节点大量传输，现有反应式修复滞后，主动修复又常将迁移、重建与网内聚合割裂处理，受接收端瓶颈、带宽异构和交换机状态限制。IAPRepair 联合构建修复批次，按归一化传输负载分配重建者与替换节点，围绕剩余接收容量调度迁移，并选择性启用网内聚合。在 Tofino 交换机与 16 节点原型及大规模仿真中，修复时间较现有方法至少降低 47.83%。结果表明，主动修复与网内处理协同可有效提升异构带宽下的修复效率。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "Erasure-coded storage provides fault tolerance with substantially lower storage overhead than full replication, but repairing lost or at-risk blocks requires intensive cross-node data transfer. Existing reactive repair schemes start only after a failure, while proactive schemes can move data before failure but commonly treat migration, reconstruction, and network aggregation as loosely coupled operations. As a result, receiver?side bottlenecks, heterogeneous available bandwidth, and limited programmable-switch state continue to constrain repair paral?lelism. This paper presents IAPRepair, an in-network aggre?gation enhanced proactive repair framework for erasure-coded storage. IAPRepair jointly constructs each repair batch, assigns reconstruction providers and replacement nodes according to normalized transmission loads, schedules migration around the remaining receive capacity, and selectively enables in-network aggregation for reconstruction blocks that would otherwise over?load healthy nodes. The selective design reduces receiver-side traffic while retaining migration parallelism and respecting a configurable switch-resource budget. We implement IAPRepair with a Tofino programmable switch and 16 storage nodes, and evaluate it using both a prototype testbed and large-scale simu?lations. Across coding parameters, block sizes, node populations, and multiple STF-node scenarios, IAPRepair reduces repair time by at least 47.83% compared with the evaluated state-of-the-art methods. The results demonstrate that coordinating proactive repair decisions with in-network processing is an effective way to improve repair efficiency under bandwidth heterogeneity.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
