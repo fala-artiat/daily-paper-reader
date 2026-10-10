@@ -1,0 +1,25 @@
+{
+  "date": "20261010",
+  "date_label": "",
+  "generated_at": "2026-10-10 22:37:32 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.07370v1",
+      "route": "202610/10/2610.07370v1-optimal-codes-for-the-coverage-depth-problem-and-the-performance-of-random-codes",
+      "title": "Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "raid-erasure"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "用于存储数据恢复的MDS与最优线性码",
+      "first_seen_at": "2026-10-10 22:37:32 UTC",
+      "updated_at": "2026-10-10 22:37:32 UTC"
+    }
+  ]
+}

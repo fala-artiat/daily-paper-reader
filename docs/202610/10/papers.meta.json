@@ -1,0 +1,24 @@
+{
+  "label": "2026-10-10",
+  "date": "2026-10-10",
+  "generated_at": "2026-10-10T22:37:35",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202610/10/2610.07370v1-optimal-codes-for-the-coverage-depth-problem-and-the-performance-of-random-codes",
+      "section": "quick",
+      "title_en": "Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes",
+      "authors": "Roee Gross, Yitzchak Grunbaum, Matteo Bertuzzo, Eitan Yaakobi, Alberto Ravagnani",
+      "date": "2026-10-05",
+      "pdf": "https://arxiv.org/pdf/2610.07370v1",
+      "score": "6.0",
+      "evidence": "用于存储数据恢复的MDS与最优线性码",
+      "tldr": "DNA存储通过随机采样读取信息，所需读取次数是核心性能指标，覆盖深度问题即寻找使随机采样列张成信息空间的期望列数最小的线性码。MDS码存在时已知最优，但MDS码不存在的参数区间仍大多未解。本文推导覆盖深度期望一般公式，证明q元单纯形码在其存在参数下最优，并借助对偶码独立集与拟阵基生成多项式对数凹性证明q元Hamming码最优。同时分析随机线性码，给出期望覆盖深度精确表达式，并发现常码率下其与MDS基准的加性差距不随码长增长。",
+      "tags": "query:raid-erasure",
+      "abstract_en": "DNA storage systems retrieve information by randomly sampling synthesized DNA strands, making the number of reads required for successful recovery a fundamental performance measure. This motivates the coverage depth problem: for given code parameters, determine a linear code that minimizes the expected number of randomly sampled columns required to span the entire information space. While MDS codes are known to be optimal whenever they exist, identifying optimal codes in parameter regimes where MDS codes do not exist remains largely open. In this work, we derive a general formula for the expectation in the coverage depth setting, and apply this result to establish the optimality of the $q$-ary simplex code for the parameters that allow its existence. Moreover, we show the optimality of the $q$-ary Hamming code by relating coverage depth to independent sets in the dual code and exploiting log-concavity properties of matroid basis-generating polynomials. We further analyze random linear codes, derive an exact expression for their expected coverage depth, and show that, in the constant-rate regime, their additive gap from the MDS benchmark remains bounded independently of the code length.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

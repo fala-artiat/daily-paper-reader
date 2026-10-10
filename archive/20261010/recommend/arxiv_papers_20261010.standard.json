@@ -1,0 +1,56 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-10T22:37:12.869412+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.07370v1",
+      "source": "arxiv",
+      "title": "Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes",
+      "abstract": "DNA storage systems retrieve information by randomly sampling synthesized DNA strands, making the number of reads required for successful recovery a fundamental performance measure. This motivates the coverage depth problem: for given code parameters, determine a linear code that minimizes the expected number of randomly sampled columns required to span the entire information space. While MDS codes are known to be optimal whenever they exist, identifying optimal codes in parameter regimes where MDS codes do not exist remains largely open. In this work, we derive a general formula for the expectation in the coverage depth setting, and apply this result to establish the optimality of the $q$-ary simplex code for the parameters that allow its existence. Moreover, we show the optimality of the $q$-ary Hamming code by relating coverage depth to independent sets in the dual code and exploiting log-concavity properties of matroid basis-generating polynomials. We further analyze random linear codes, derive an exact expression for their expected coverage depth, and show that, in the constant-rate regime, their additive gap from the MDS benchmark remains bounded independently of the code length.",
+      "authors": [
+        "Roee Gross",
+        "Yitzchak Grunbaum",
+        "Matteo Bertuzzo",
+        "Eitan Yaakobi",
+        "Alberto Ravagnani"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT"
+      ],
+      "published": "2026-10-05T20:39:08+00:00",
+      "link": "https://arxiv.org/pdf/2610.07370v1",
+      "tags": [
+        "keyword:raid-erasure",
+        "query:raid-erasure"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "MDS and optimal linear codes for storage data recovery",
+      "llm_evidence_cn": "用于存储数据恢复的MDS与最优线性码",
+      "llm_evidence": "用于存储数据恢复的MDS与最优线性码",
+      "canonical_evidence": "用于存储数据恢复的MDS与最优线性码",
+      "llm_tldr_en": "DNA storage retrieves data by randomly sampling strands, so the number of reads for successful recovery matters. This work derives a general expectation formula for coverage depth and proves the q-ary simplex code optimal where it exists.",
+      "llm_tldr_cn": "DNA存储通过随机采样合成链来读取信息，成功恢复所需的读取次数成为核心性能指标，由此引出覆盖深度问题：在给定码参数下寻找使随机采样列张成整个信息空间所需期望列数最小的线性码。该工作推导出覆盖深度场景下期望值的一般公式，并据此证明了q元单纯形码在允许其存在的参数区间内最优。研究还刻画了MDS码在存在时最优、而在其不存在时最优码仍待探索的现状，为存储恢复编码设计提供了理论工具。",
+      "llm_tldr": "DNA存储通过随机采样合成链来读取信息，成功恢复所需的读取次数成为核心性能指标，由此引出覆盖深度问题：在给定码参数下寻找使随机采样列张成整个信息空间所需期望列数最小的线性码。该工作推导出覆盖深度场景下期望值的一般公式，并据此证明了q元单纯形码在允许其存在的参数区间内最优。研究还刻画了MDS码在存在时最优、而在其不存在时最优码仍待探索的现状，为存储恢复编码设计提供了理论工具。",
+      "llm_tags": [
+        "query:raid-erasure"
+      ],
+      "matched_query_tag": "query:raid-erasure",
+      "matched_query_text": "erasure coding techniques for data storage and recovery",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

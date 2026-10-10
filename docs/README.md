@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-09</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-10</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
     <strong class="dpr-home-dashboard-count">共 1 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-09 23:09:50 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-10 22:37:32 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今天只精读1篇、速读0篇，全部火力集中在9.0分的《IAPRepair》——纠删码存储系统的修复优化。 最值得看的方向是它把“网内聚合”与“主动修复”结合起来，试图从网络侧减少纠删码修复的数据搬运开销。 普通读者若关注分布式存储可靠性，可先记住这个思路，后续留意它在真实集群中的落地效果。</p>
+<p>今天速读 1 篇、精读 0 篇，唯一入选的是关于覆盖深度问题最优码与随机码性能的论文（6.0/10）。</p>
+<p>值得看的方向：把&quot;覆盖深度问题&quot;的最优码构造与随机码性能放在一起比较，适合关注编码理论、组合设计的读者。</p>
+<p>这篇评分中等，建议普通读者先读摘要和主要结论，确认与自己关心的问题相关后再决定是否深挖细节。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -78,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">1 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System">IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">raid-erasure <strong>1</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -91,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes">Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">raid-erasure <strong>1</strong></span></div>
 </section>
 </div>
 

@@ -1,0 +1,2422 @@
+Title: Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes
+
+URL Source: https://arxiv.org/pdf/2610.07370v1
+
+Published Time: Wed, 07 Oct 2026 00:24:03 GMT
+
+Number of Pages: 22
+
+Markdown Content:
+> 1
+
+# Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes 
+
+R. Gross ∗, Y. Grunbaum ∗, M. Bertuzzo †, E. Yaakobi ∗, A. Ravagnani †∗ Department of Computer Science, Technion—Israel Institute of Technology, Haifa 3200003, Israel {roee.g, yitzchakg, yaakobi}@cs.technion.ac.il  
+
+> †
+
+Department of Mathematics and Computer Science, Eindhoven University of Technology, the Netherlands {m.bertuzzo, a.ravagnani}@tue.nl 
+
+Abstract 
+
+DNA storage systems retrieve information by randomly sampling synthesized DNA strands, making the number of reads required for successful recovery a fundamental performance measure. This motivates the coverage depth problem: for given code parameters, determine a linear code that minimizes the expected number of randomly sampled columns required to span the entire information space. While MDS codes are known to be optimal whenever they exist, identifying optimal codes in parameter regimes where MDS codes do not exist remains largely open. In this work, we derive a general formula for the expectation in the coverage depth setting, and apply this result to establish the optimality of the 𝑞 -ary simplex code for the parameters that allow its existence. Moreover, we show the optimality of the 𝑞 -ary Hamming code by relating coverage depth to independent sets in the dual code and exploiting log-concavity properties of matroid basis-generating polynomials. We further analyze random linear codes, derive an exact expression for their expected coverage depth, and show that, in the constant-rate regime, their additive gap from the MDS benchmark remains bounded independently of the code length. 
+
+I. Introduction DNA-based storage systems represent a promising solution for addressing the unprecedented growth of digital information that needs to be stored globally [1]. Extreme compactness (orders of magnitude denser than any traditional storage medium), durability under suitable conditions, and low maintenance costs [2], [3] are distinctive characteristics that make DNA-based systems particularly attractive for long-term data storage. The DNA storage pipeline involves multiple steps: After encoding data into sequences over the DNA alphabet {𝐴, 𝐶, 𝐺,𝑇 } and dividing them into blocks, these blocks are synthesized into artificial DNA molecules known as strands . Current limitations restrict the length of the synthesized strands [4]; fur-thermore, copies of each strand are produced that may contain errors. The resulting molecules are then stored in a container in an unordered manner. The process required to retrieve the stored information is sequencing, during which the strands are translated into digital sequences, called reads , which are noisy copies of the stored strands. The reads are then decoded back into the original information. A key feature of this process is that the DNA sequences are randomly read to decode the original information. Although various works have demonstrated the potential of DNA as a storage medium [5]–[11], critical issues related to the efficiency of DNA sequencers [2], [12], [13] remain, resulting in slow throughput and high costs compared to other storage technologies. This bottleneck is closely related to the notion of coverage depth [14], defined as the ratio between the number of reads that are sequenced and the number of designed DNA strands. Thus, an opportunity to improve efficiency and reduce costs consists of reducing the coverage depth by reducing the number of reads needed for successful recovery. arXiv:2610.07370v1 [cs.IT] 5 Oct 2026 2
+
+In a recent paper [15], various problems aimed at enhancing the reliability and effectiveness of data retrieval were introduced and analyzed for the first time, with special emphasis on the random access coverage depth problem ; in this model, the user’s data is represented by 𝑘 information strands, which are encoded into 𝑛 strands through a matrix 𝐺 ∈ F𝑘 ×𝑛 𝑞 , typically referred to as a generator matrix of an error-correcting code. The goal is to compute, and possibly minimize, the expected number of columns to draw to recover a specific information strand among the 𝑘 that have been stored. A similar version is represented by the DNA coverage depth problem , where all the 𝑘 information strands must be retrieved. Both problems have been studied primarily under the assumptions of error-free synthesis and sequencing, and uniform distribution when drawing the columns of the matrix. The random access model has attracted growing interest in different directions, such as identifying the structural properties of generator matrices that are advantageous [16], providing optimal constructions for specific cases [17], [18], and extending this model at the file level [19]. Furthermore, [20], [21] improved upon these constructions, deriving bounds and computing asymptotic performances, while [22] focused on the optimization problem in an asymptotic regime in the binary case. On the other hand, the DNA coverage depth problem was addressed in [15], where the authors proved that MDS codes achieve the best result in minimizing the expected number of reads by drawing connections to the classical coupon collector’s problem [23]–[26]. Moreover, in [27], real DNA storage experimental data were used to extend the problem to noisy channels with log-normal distribution. Building on the framework presented in [15], the DNA coverage depth problem was studied in [28], [29] in regimes where MDS codes do not exist. More specifically, closed-form expressions were derived for the expected value of columns for 𝑞 -ary simplex codes, Hamming codes, first-order Reed-Muller codes, and also for ternary Golay codes. In the first part of this paper, we address an open problem presented in [29]: Our goal is to identify codes that minimize the expected number of reads required to retrieve all the information (i.e., optimal codes) for specific choices of parameters, none of which admits the existence of MDS codes. More specifically, we establish the optimality of various code families: 𝑞 -ary simplex codes, first-order 𝑞 -ary Reed-Muller codes, and 𝑞 -ary Hamming codes. Concurrently with the preparation of this manuscript, Kong et al. [30] independently established the same optimality result for the 𝑞 -ary simplex code in the coverage depth problem. The second part is inspired by a recent paper by Wang and Yaakobi [21], where random matrices were used to obtain bounds on the optimal coverage depth, showing in particular that, at constant rate, its additive gap from the MDS bound remains bounded. In this work, we study the random-code ensemble itself and derive an exact expression for its average coverage depth, which enables us to tighten the upper bound on the additive gap from the MDS coverage time by a factor of two compared to the bound established in [21]. While [21] established that the gap is linear in 𝑛 within the constant redundancy regime, we demonstrate that our approach yields the same result. The remainder of this paper is organized as follows. In Section II, we introduce the notation and definitions used throughout the paper. Section III presents a general formula for the expectation and an application of it to the first-order 𝑞 -ary Reed-Muller codes. Section IV, Section V, and Section VI establish the optimality of the 𝑞 -ary Simplex code, the first-order 𝑞 -ary Reed-Muller code, and the 𝑞 -ary Hamming code, respectively. Finally, in Section VII, we analyze the coverage depth of random linear codes. II. Preliminaries Throughout the paper, 𝑘 and 𝑛 are positive integers with 2 ≤ 𝑘 ≤ 𝑛 , 𝑞 denotes a prime power, F𝑞 denotes the finite field of order 𝑞 , and [𝑛 ] = {1, . . . , 𝑛 }. We denote the 𝑛 -th harmonic number by 𝐻 𝑛 = Í𝑛 𝑗 =1 1/ 𝑗 .For a matrix 𝐺 ∈ F𝑘 ×𝑛 𝑞 , we denote its columns by 𝑔 1, . . . , 𝑔 𝑛 . For 𝑆 ⊆ [ 𝑛 ], the matrix 𝐺 𝑆 is the submatrix of 𝐺 formed by the columns indexed by 𝑆 . We use span (𝐺 𝑆 ) for the subspace spanned by these columns and rank (𝐺 𝑆 ) for its dimension. In a DNA-based storage system, the data is stored as a vector of length 𝑘 whose entries are themselves vectors (called strands ) of length ℓ over the DNA alphabet Σ = {𝐴, 𝐶, 𝐺,𝑇 }. We embed Σℓ into a finite field 3
+
+F𝑞 and use a linear block code C ⊆ F𝑛 𝑞 of dimension 𝑘 to encode an information vector (𝑥 1, . . . , 𝑥 𝑘 ) ∈ F𝑘 𝑞 
+
+to an encoded vector (𝑦 1, . . . , 𝑦 𝑛 ) ∈ F𝑛 𝑞 .Since the 𝑘 information strands are encoded using a generator matrix 𝐺 ∈ F𝑘 ×𝑛 𝑞 , there is a one-to-one correspondence between the encoded strands and the columns of 𝐺 ; therefore, recovering the 𝑖 -th information strand is equivalent to recovering the 𝑖 -th standard basis vector, that is, it must be in the span of the already recovered columns of 𝐺 , since we can see these columns as vectors in F𝑘 𝑞 .As already mentioned, a full-rank matrix 𝐺 ∈ F𝑘 ×𝑛 𝑞 whose row space is C is called a generator matrix of C, and we write C𝐺 for the code generated by 𝐺 . The dual code of C is 
+
+C⊥ = 𝑥 ∈ F𝑛 𝑞 : ⟨𝑥, 𝑐 ⟩ = 0 for every 𝑐 ∈ C .
+
+A generator matrix of C⊥ is a parity-check matrix of C. Given a generator matrix 𝐺 , we use 𝐺 ⊥ to denote a generator matrix of C⊥ 
+
+> 𝐺
+
+; in particular, ker (𝐺 ⊥) = C𝐺 .We now define the coverage process studied in this paper. Let 𝐺 ∈ F𝑘 ×𝑛 𝑞 have rank 𝑘 , and suppose that the columns of 𝐺 are drawn uniformly at random with repetition. The coverage time of 𝐺 , denoted by 𝑇 𝐺 ,is the minimum number of columns of 𝐺 needed to span F𝑘 𝑞 , and the coverage depth of 𝐺 is its expected coverage time, namely 
+
+E[𝐺 ] = E[𝑇 𝐺 ].
+
+As an example, the coverage process of an MDS code terminates as soon as 𝑘 distinct column indices have been sampled, since every 𝑘 columns of an MDS matrix are linearly independent. The value of E[𝐺 ] is invariant under elementary row operations. It therefore depends only on the code generated by 𝐺 . This means that the quantity E[C] is well defined for a linear code C ⊆ F𝑛 𝑞 as E[𝐺 ],where 𝐺 is any generator matrix of C. We then use E[𝐺 ] and E[C] interchangeably. A primary motivation for the study of coverage depth comes from DNA-based data storage. During DNA readout, individual molecules are sampled from a pool, and direct random access to the encoded symbols is generally unavailable. As a result, recovery requires collecting samples until they jointly provide sufficient information to reconstruct the stored data. From a coding-theoretic perspective, it is therefore natural to seek codes that minimize the expected number of samples required for recovery. The main problem addressed in this paper, which has been introduced in [28], is defined below. 
+
+Problem 1 (The optimal coverage depth problem ). For given values of 𝑛 , 𝑘 and 𝑞 , compute the value 
+
+Eopt [𝑛, 𝑘 ]𝑞 ≜ min {E[C] : C ⊆ F𝑛 𝑞 is a code of dimension 𝑘 },
+
+and construct a code C attaining the minimum. 
+
+The first fundamental result about Problem 1 was obtained in [15]. 
+
+Theorem II.1 (see [15, Corollary 2]) . For any code C ⊆ F𝑛 𝑞 of dimension 𝑘 , we have 
+
+E[C] ≥ 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑖 =0
+
+𝑛 𝑛 − 𝑖 = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ).
+
+Furthermore, the lower bound is attained with equality if and only if C is an MDS code. 
+
+Remark 1. Theorem II.1 provides a lower bound on the expectation and solves Problem 1 for any choice of parameters 𝑛, 𝑘 and 𝑞 for which there exists an [𝑛, 𝑘 ]𝑞 MDS code. In particular, assuming that the MDS conjecture holds, we can write 
+
+Eopt [𝑛, 𝑘 ]𝑞 = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) when 𝑞 ≥ 𝑛 − 1.
+
+In [29], the authors studied several code families and derived closed formulas for their expected number of reads. We mention the most important results for our purposes. 4
+
+Theorem II.2 (see [29, Theorem 3.1]) . Let C ⊆ F𝑛 𝑞 be the 𝑞 -ary simplex code of dimension 𝑘 , where 
+
+𝑛 = (𝑞 𝑘 − 1)/( 𝑞 − 1). We have 
+
+E[C] = 𝑘 +
+
+> 𝑘
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑞 𝑖 −1 − 1
+
+𝑞 𝑘 − 𝑞 𝑖 −1 .
+
+Theorem II.3 (see [29, Theorem 5.1]) . Let C ⊆ F𝑛 𝑞 be the 𝑞 -ary Hamming code of redundancy 𝑟 , where 
+
+𝑛 = (𝑞 𝑟 − 1)/( 𝑞 − 1). We have 
+
+E[C] = 𝑛𝐻 𝑛 −
+
+> 𝑟
+
+∑︁ 
+
+> ℓ=1
+
+1
+
+ 𝑛 −1
+
+> 𝑛 −ℓ
+
+Îℓ−1 
+
+> 𝑖 =0
+> 𝑞 𝑟 −𝑞 𝑖
+> 𝑞 −1
+
+ℓ! .
+
+Furthermore, a conjecture on the optimality of the 𝑞 -ary simplex code has also been formulated [29, Conjecture 3.2]. In this work, we establish this conjecture and prove that the 𝑞 -ary Hamming code is optimal as well. III. A General Formula for the Expectation In this section, we give a general formula for the expected number of reads one needs to draw to recover the information that has been stored. This formula will then be applied in Section IV to show the optimality of simplex codes. From now on, let 𝑋 be a space such that dim F𝑞 (𝑋 ) = 𝑘 , and let 𝑝 be a probability distribution defined on 𝑋 . For any 𝑥 ∈ 𝑋 , let 𝑝 (𝑥 ) denote the probability associated to the element 𝑥 , and for any subspace 
+
+𝑉 ≤ 𝑋 , let 
+
+𝑝 (𝑉 ) =∑︁ 
+
+> 𝑥 ∈𝑉
+
+𝑝 (𝑥 ).
+
+In other words, this is the total probability mass of the subspace 𝑉 . Note that, for any pair of subspaces 
+
+𝑈,𝑉 ≤ 𝑋 with 𝑉 ≤ 𝑈 , we have 0 ≤ 𝑝 (𝑉 ) ≤ 𝑝 (𝑈 ) ≤ 1. Furthermore, we assume that 𝑝 (𝑉 ) < 1 for any 𝑉 ⪇ 𝑋 ,while 𝑝 (𝑋 ) = 1. These conditions are equivalent to requiring that the support of 𝑝 spans 𝑋 .The process of drawing columns to recover the standard basis vectors can be visualized as building chains of dimension-increasing subspaces of the form 0 = 𝑉 0 < 𝑉 1 < · · · < 𝑉 𝑘 −1 < 𝑉 𝑘 = 𝑋, 
+
+with dim (𝑉 𝑖 ) = 𝑖 for 0 ≤ 𝑖 ≤ 𝑘 . In particular, the step corresponding to the transition from the subspace 𝑉 𝑖 
+
+to the subspace 𝑉 𝑖 +1, for 0 ≤ 𝑖 ≤ 𝑘 − 1, coincides with drawing the (𝑖 + 1)-th linearly independent column. Moreover, let 
+
+S = {( 𝑉 0,𝑉 1, . . . ,𝑉 𝑘 ) : 0 = 𝑉 0 < 𝑉 1 < · · · < 𝑉 𝑘 = 𝑋, dim (𝑉 𝑖 ) = 𝑖 }
+
+be the set of all possible configurations. The following auxiliary lemma focuses on the probability of a single step within the chain. 
+
+Lemma III.1. Let 𝑉 ≤ 𝑋 be a subspace with dim (𝑉 ) = 𝑖 , where 0 ≤ 𝑖 ≤ 𝑘 − 1, and let 𝑈 ≥ 𝑉 be a subspace with dim (𝑈 ) = 𝑖 + 1. Suppose that the drawn columns first span the subspace 𝑉 . The probability that 𝑈 is the next span we obtain is 
+
+Pr [𝑉 𝑖 +1 = 𝑈 | 𝑉 𝑖 = 𝑉 ] = 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 ) .
+
+Proof. For 𝑟 ≥ 1, suppose that the 𝑟 -th draw allows us to get 𝑈 . This means that the previous 𝑟 − 1 draws were columns inside 𝑉 . This probability is equal to 
+
+𝑝 (𝑉 )𝑟 −1 ( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) .5
+
+To conclude, we sum over all possible values of 𝑟 , getting Pr [𝑉 𝑖 +1 = 𝑈 | 𝑉 𝑖 = 𝑉 ] =
+
+> ∞
+
+∑︁ 
+
+> 𝑟 =1
+
+𝑝 (𝑉 )𝑟 −1 ( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 
+
+= ( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 
+
+> ∞
+
+∑︁ 
+
+> 𝑟 =0
+
+𝑝 (𝑉 )𝑟 = 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 ) .
+
+□
+
+As a consequence, we can derive the probability of obtaining a specific chain. 
+
+Corollary 1. Let 𝑆 = (𝑉 0,𝑉 1, . . . ,𝑉 𝑘 ) ∈ S be a chain of dimension-increasing subspaces, where 𝑉 𝑖 ≤ 𝑋 for every 0 ≤ 𝑖 ≤ 𝑘 . We have 
+
+Pr [𝑆 ] =
+
+> 𝑘
+
+Ö
+
+> 𝑖 =1
+
+𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)
+
+1 − 𝑝 (𝑉 𝑖 −1) .
+
+On the other hand, given a chain 𝑆 ∈ S , let 𝑛 𝑖 ≥ 1 be the waiting time, after the selected columns first span the (𝑖 − 1)-dimensional space 𝑉 𝑖 −1, until they first span 𝑉 𝑖 , where 1 ≤ 𝑖 ≤ 𝑘 . In other words, 𝑛 𝑖 is the number of draws needed for the 𝑖 -th step in the chain. The probability of getting the chain 𝑆 with waiting times (𝑛 1, . . . , 𝑛 𝑘 ) is then Pr [𝑆, (𝑛 1, . . . , 𝑛 𝑘 )] =
+
+> 𝑘
+
+Ö
+
+> 𝑖 =1
+
+𝑝 (𝑉 𝑖 −1)𝑛 𝑖 −1 ( 𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)) .
+
+We now have all the ingredients for the main result of this section. 
+
+Theorem III.2. Let 𝑇 be the random variable that counts the number of draws needed to span 𝑋 . We have 
+
+E[𝑇 ] =∑︁  
+
+> 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S
+
+Pr [𝑆 ]
+
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+11 − 𝑝 (𝑉 𝑗 −1) .
+
+Proof. The expectation can be expressed by summing over all the possible configurations of S and all the possible 𝑘 -tuples of waiting times as 
+
+E[𝑇 ] =∑︁ 
+
+> 𝑆 ∈S
+
+∑︁ 𝑛 1,...,𝑛 𝑘 ≥1
+
+(𝑛 1 + · · · + 𝑛 𝑘 ) Pr [𝑆, (𝑛 1, . . . , 𝑛 𝑘 )] 
+
+=∑︁ 
+
+> 𝑆 ∈S
+
+∑︁ 𝑛 1,...,𝑛 𝑘 ≥1
+
+(𝑛 1 + · · · + 𝑛 𝑘 )
+
+> 𝑘
+
+Ö
+
+> 𝑖 =1
+
+𝑝 (𝑉 𝑖 −1)𝑛 𝑖 −1 ( 𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)) .
+
+Note that the sums involving the waiting times are independent. Moreover, the 𝑖 -th factor of the product depends only on 𝑛 𝑖 and is nonnegative, since 0 ≤ 𝑝 (𝑉 𝑖 −1) ≤ 𝑝 (𝑉 𝑖 ) ≤ 1 for every 1 ≤ 𝑖 ≤ 𝑘 . We can then exchange the order of sums and products, obtaining 
+
+E[𝑇 ] =∑︁ 
+
+> 𝑆 ∈S
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+> ∞
+
+∑︁ 
+
+> 𝑛 1=1
+
+· · · 
+
+> ∞
+
+∑︁  
+
+> 𝑛 𝑘 =1
+
+𝑛 𝑗 𝑘 Ö
+
+> 𝑖 =1
+
+𝑝 (𝑉 𝑖 −1)𝑛 𝑖 −1 ( 𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)) 
+
+=∑︁ 
+
+> 𝑆 ∈S
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+©« 𝑝 (𝑉 𝑗 ) − 𝑝 (𝑉 𝑗 −1) ∞∑︁   
+
+> 𝑛 𝑗 =1
+
+𝑛 𝑗 𝑝 (𝑉 𝑗 −1)𝑛 𝑗 −1ª®¬
+
+> 𝑘
+
+Ö 
+
+> 𝑖 =1
+> 𝑖 ≠𝑗
+
+( 𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)) 
+
+> ∞
+
+∑︁  
+
+> 𝑛 𝑖 =1
+
+𝑝 (𝑉 𝑖 −1)𝑛 𝑖 −1.
+
+Since 𝑝 (𝑉 𝑖 ) < 1 for all 0 ≤ 𝑖 ≤ 𝑘 − 1, we can apply the convergence properties of geometric series 
+
+> ∞
+
+∑︁ 
+
+> 𝑛 =1
+
+𝑥 𝑛 −1 = 11 − 𝑥 and 
+
+> ∞
+
+∑︁ 
+
+> 𝑛 =1
+
+𝑛𝑥 𝑛 −1 = 1
+
+(1 − 𝑥 )2 .6
+
+Therefore, 
+
+E[𝑇 ] =∑︁ 
+
+> 𝑆 ∈S
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑝 (𝑉 𝑗 ) − 𝑝 (𝑉 𝑗 −1)(1 − 𝑝 (𝑉 𝑗 −1)) 2
+
+> 𝑘
+
+Ö 
+
+> 𝑖 =1
+> 𝑖 ≠𝑗
+
+𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)
+
+1 − 𝑝 (𝑉 𝑖 −1)
+
+=∑︁ 
+
+> 𝑆 ∈S
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+11 − 𝑝 (𝑉 𝑗 −1)
+
+> 𝑘
+
+Ö
+
+> 𝑖 =1
+
+𝑝 (𝑉 𝑖 ) − 𝑝 (𝑉 𝑖 −1)
+
+1 − 𝑝 (𝑉 𝑖 −1)
+
+=∑︁ 
+
+> 𝑆 ∈S
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+Pr [𝑆 ]
+
+1 − 𝑝 (𝑉 𝑗 −1) =∑︁ 
+
+> 𝑆 ∈S
+
+Pr [𝑆 ]
+
+> 𝑘
+
+∑︁ 
+
+> 𝑗 =1
+
+11 − 𝑝 (𝑉 𝑗 −1) .
+
+□
+
+We now show that applying Theorem III.2 to any first-order 𝑞 -ary Reed-Muller code allows us to derive a significantly simpler formula for their expectation than the one presented in [29, Theorem 7.3]. Recall that, for an integer 𝑚 ≥ 1, the first-order 𝑞 -ary Reed-Muller code C ⊆ F𝑛 𝑞 has length 𝑛 = 𝑞 𝑚 and dimension 
+
+𝑘 = 𝑚 + 1; see [31, Definition 15]. It is convenient to introduce some auxiliary quantities that will also be used in the subsequent sections. Given a generator matrix 𝐺 ∈ F𝑘 ×𝑛 𝑞 , the drawing procedure induces a probability distribution 𝑝 𝐺 on F𝑘 𝑞 
+
+given by 
+
+𝑝 𝐺 (𝑥 ) = |{ 𝑖 ∈ [ 𝑛 ] : 𝑔 𝑖 = 𝑥 }| 
+
+𝑛 .
+
+For a subspace 𝑉 ≤ F𝑘 𝑞 , let 𝑚 𝐺 (𝑉 ) = |{ 𝑖 ∈ [ 𝑛 ] : 𝑔 𝑖 ∈ 𝑉 \ { 0}}| , and let 𝑧 𝐺 = |{ 𝑖 ∈ [ 𝑛 ] : 𝑔 𝑖 = 0}| . Then 
+
+𝑝 𝐺 (0) = 𝑧 𝐺 
+
+𝑛 and 𝑝 𝐺 (𝑉 ) = 𝑚 𝐺 (𝑉 ) + 𝑧 𝐺 
+
+𝑛 .
+
+Corollary 2. Let C ⊆ F𝑛 𝑞 be the first-order 𝑞 -ary Reed-Muller code of dimension 𝑚 + 1, where 𝑛 = 𝑞 𝑚 .
+
+E[C] = 𝑚 + 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+1
+
+𝑞 𝑗 − 1 .
+
+Proof. A natural generator matrix for C is 
+
+𝐺 =
+
+ 1 1 · · · 1
+
+𝑣 1 𝑣 2 · · · 𝑣 𝑞 𝑚 
+
+
+
+,
+
+where the 𝑣 𝑖 ∈ F𝑚 𝑞 are pairwise distinct. In other words, each vector of F𝑚 𝑞 appears exactly once. The columns of 𝐺 are all and only the points of the affine chart A = {( 1, 𝑣 ) : 𝑣 ∈ F𝑚 𝑞 }. Projectively, these are the normalized representative of the points of 𝑃𝐺 (𝑚, 𝑞 ) \ 𝑃𝐺 (𝐻 ), where 𝐻 = {( 0, 𝑣 ) : 𝑣 ∈ F𝑚 𝑞 }.Let 𝑉 ≤ 𝐹 𝑚 +1 
+
+> 𝑞
+
+be a 𝑗 -dimensional subspace. We want to count the quantity 𝑚 𝐺 (𝑉 ), which corresponds to the cardinality of 𝑉 ∩ A . We distinguish two cases based on the containment relation with 𝐻 . If 𝑉 ⊆ 𝐻 ,then 𝑚 𝐺 (𝑉 ) = 0. On the other hand, if 𝑉 ⊈ 𝐻 , consider the projection map 𝜋 0 : F𝑚 +1 
+
+> 𝑞
+
+→ F𝑞 onto the first coordinate, namely 𝜋 0 (𝑣 ) = 𝑥 0 for every vector 𝑣 = (𝑥 0, . . . , 𝑥 𝑚 ). We have ker (𝜋 0) = 𝐻 and, since 𝑉 ⊈ 𝐻 , the map restricted to 𝑉 is nonzero and, therefore, surjective. The rank-nullity theorem yields dim (ker (𝜋 0 |𝑉 )) = dim (𝑉 ) − dim (Im (𝜋 0 |𝑉 )) = 𝑗 − 1,
+
+or, equivalently, dim (𝑉 ∩ 𝐻 ) = 𝑗 − 1. Let 𝑣 ′ ∈ 𝑉 ∩ A (such a vector exists since the map 𝜋 0 |𝑉 is surjective). It is not difficult to see that 
+
+𝑉 ∩ A = 𝑣 ′ + ( 𝑉 ∩ 𝐻 ),7
+
+which means that 𝑉 ∩ A is an affine translation of 𝑉 ∩ 𝐻 . Since dim (𝑉 ∩ 𝐻 ) = 𝑗 − 1, we have that 
+
+𝑚 𝐺 (𝑉 ) = |𝑉 ∩ A| = 𝑞 𝑗 −1.
+
+Therefore, 
+
+𝑝 𝐺 (𝑉 ) =
+
+(
+
+0 if 𝑉 ⊆ 𝐻, 𝑞 𝑗 −1−𝑚 otherwise .
+
+Moreover, since every drawn column has the first coordinate equal to 1, every possible chain of S is of the form (0,𝑉 1, . . . ,𝑉 𝑚 +1), with 𝑉 𝑗 ⊈ 𝐻 for all 𝑗 ≥ 1. Thus, we have 
+
+𝑝 𝐺 (𝑉 0) = 0 and 𝑝 𝐺 (𝑉 𝑗 ) = 𝑞 𝑗 −1−𝑚 for 1 ≤ 𝑗 ≤ 𝑚 + 1. Combining all of the above yields 
+
+E[C] =∑︁ 
+
+> 𝑆 ∈S
+
+Pr [𝑆 ] ©«
+
+1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+11 − 𝑞 𝑗 −1−𝑚 
+
+ª®¬
+
+= 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑞 𝑚 +1− 𝑗 
+
+𝑞 𝑚 +1− 𝑗 − 1 = 𝑚 + 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+1
+
+𝑞 𝑗 − 1 .
+
+□
+
+IV. Optimality of the 𝑞 -ary Simplex Code This section is devoted to the optimality of the 𝑞 -ary simplex code, which was conjectured in [28]. Concurrent with the preparation of this manuscript, Kong et al. [30] independently presented a similarity proof of the optimality of the 𝑞 -ary simplex code. We first apply the formula obtained in Theorem III.2 to establish a general lower bound on the expectation; moreover, we provide the cases where equality holds. This result will then be translated into the coding theory language to prove the optimality of the 𝑞 -ary simplex code. First, we introduce an additional notation: For a space 𝑋 of dimension 𝑘 over F𝑞 , we denote the projective space obtained from 𝑋 by 𝑃𝐺 (𝑘 − 1, 𝑞 ). For an integer 𝑚 ≥ 1, let P𝑚 denote the set of one-dimensional subspaces of F𝑚 𝑞 . Every nonzero vector belongs to a unique element of P𝑚 , and 
+
+|P 𝑚 | = 𝑞 𝑚 − 1
+
+𝑞 − 1 .
+
+Theorem IV.1. Let 𝑇 be the random variable that counts the number of draws needed to span 𝑋 . We have 
+
+E[𝑇 ] ≥ 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+𝑞 𝑘 − 1
+
+𝑞 𝑘 − 𝑞 𝑗 . (1) 
+
+In particular, the bound is attained with equality if and only if the probability distribution on 𝑋 is such that 𝑝 (0) = 0 and the induced distribution on 𝑃𝐺 (𝑘 − 1, 𝑞 ) is uniform. Equivalently, 𝑝 (0) = 0 and 
+
+𝑝 (𝐿 ) = 1/ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+for every 1-dimensional subspace 𝐿 ≤ 𝑋 .
+
+To show this result, we need the following auxiliary lemma. 
+
+Lemma IV.2. Let 𝑝 be a probability distribution on 𝑋 . For every 0 ≤ 𝑗 ≤ 𝑘 − 1, we have ∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S  
+
+> 𝑉 𝑗 =𝑉
+
+𝑝 (𝑉 ) Pr [𝑆 ] ≥ 
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+.8
+
+Proof. From now on denote by 
+
+𝐴 𝑗 =∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S  
+
+> 𝑉 𝑗 =𝑉
+
+𝑝 (𝑉 ) Pr [𝑆 ].
+
+We proceed by induction on 𝑗 . For 𝑗 = 0, the only 0-dimensional space is 𝑉 = 0. Thus, 
+
+𝐴 0 =∑︁  
+
+> 𝑆 =(0,𝑉 1,...,𝑉 𝑘 )∈S
+
+𝑝 (0) Pr [𝑆 ]
+
+= 𝑝 (0)∑︁  
+
+> 𝑆 =(0,𝑉 1,...,𝑉 𝑘 )∈S
+
+Pr [𝑆 ]
+
+= 𝑝 (0) ≥ 
+
+ 01
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+.
+
+Assume now that 𝐴 𝑗 ≥  𝑗 
+
+> 1
+
+ 
+
+> 𝑞
+
+/ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+for some 0 ≤ 𝑗 ≤ 𝑘 − 2. We fix a 𝑗 -dimensional subspace 𝑉 as the 𝑗 -th subspace of a chain (𝑉 0,𝑉 1, . . . ,𝑉 𝑘 ) and compute the expected probability mass of the next subspace in the chain, conditional on 𝑉 𝑗 = 𝑉 . We have 
+
+E[ 𝑝 (𝑉 𝑗 +1) | 𝑉 𝑗 = 𝑉 ] =∑︁  
+
+> 𝑈 ≥𝑉
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 ) Pr [𝑉 𝑗 +1 = 𝑈 | 𝑉 𝑗 = 𝑉 ]
+
+=∑︁  
+
+> 𝑈 ≥𝑉
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 ) 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 )
+
+= 11 − 𝑝 (𝑉 )∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 2 + 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 )∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 
+
+= 11 − 𝑝 (𝑉 )∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 2 + 𝑝 (𝑉 )≥ 1 − 𝑝 (𝑉 )
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 𝑝 (𝑉 ),
+
+where we used Lemma III.1 in the second equality, the identity ∑︁  
+
+> 𝑈 ≥𝑉
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) = 1 − 𝑝 (𝑉 )
+
+in the second-to-last equality, and the Cauchy-Schwarz inequality 
+
+©«∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 2
+
+ª®®®¬©«∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+12
+
+ª®®®¬
+
+≥
+
+©«∑︁ 𝑈 ≥𝑉  
+
+> dim (𝑈 )=𝑗 +1
+
+( 𝑝 (𝑈 ) − 𝑝 (𝑉 )) 
+
+ª®®®¬
+
+> 2
+
+in the last step (recall that there are exactly  𝑘 − 𝑗 
+
+> 1
+
+ 
+
+> 𝑞
+
+subspaces of dimension 𝑗 + 1 containing a given 
+
+𝑗 -dimensional subspace). From now on, we focus on the inequality ∑︁  
+
+> 𝑈 ≥𝑉
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 ) 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 ) ≥ 1 − 𝑝 (𝑉 )
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 𝑝 (𝑉 ).9
+
+Multiplying both sides by Pr [𝑉 𝑗 = 𝑉 ] and then summing over all 𝑗 -dimensional spaces yields ∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+Pr [𝑉 𝑗 = 𝑉 ]∑︁  
+
+> 𝑈 ≥𝑉
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 ) 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 )≥∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+Pr [𝑉 𝑗 = 𝑉 ] 1 − 𝑝 (𝑉 )
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 𝑝 (𝑉 )
+
+!
+
+.
+
+(2) Let 𝐿 ( 𝑗 ) and 𝑅 ( 𝑗 ) denote the left hand side and the right hand side, respectively, of Equation (2). The law of total probability gives Pr [𝑉 𝑗 +1 = 𝑈 ] =∑︁  
+
+> 𝑉 ≤𝑈
+> dim (𝑉 )=𝑗
+
+Pr [𝑉 𝑗 = 𝑉 ] Pr [𝑉 𝑗 +1 = 𝑈 | 𝑉 𝑗 = 𝑉 ]
+
+=∑︁  
+
+> 𝑉 ≤𝑈
+> dim (𝑉 )=𝑗
+
+Pr [𝑉 𝑗 = 𝑉 ] 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 ) ,
+
+which can be applied to 𝐿 ( 𝑗 ) as follows: 
+
+𝐿 ( 𝑗 ) =∑︁  
+
+> 𝑈 ≤𝑋
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 )∑︁  
+
+> 𝑉 ≤𝑈
+> dim (𝑉 )=𝑗
+
+Pr [𝑉 𝑗 = 𝑉 ] 𝑝 (𝑈 ) − 𝑝 (𝑉 )
+
+1 − 𝑝 (𝑉 )
+
+=∑︁  
+
+> 𝑈 ≤𝑋
+> dim (𝑈 )=𝑗 +1
+
+𝑝 (𝑈 ) Pr [𝑉 𝑗 +1 = 𝑈 ]
+
+=∑︁  
+
+> 𝑈 ≤𝑋
+> dim (𝑈 )=𝑗 +1
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S 
+
+> 𝑉 𝑗 +1=𝑈
+
+𝑝 (𝑈 ) Pr [𝑆 ] = 𝐴 𝑗 +1.
+
+On the other hand, 
+
+𝑅 ( 𝑗 ) =
+
+1 − Í 𝑉 ≤𝑋  
+
+> dim (𝑉 )=𝑗
+
+𝑝 (𝑉 ) Pr [𝑉 𝑗 = 𝑉 ]
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+𝑝 (𝑉 ) Pr [𝑉 𝑗 = 𝑉 ]
+
+= 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 1 − 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+!∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+𝑝 (𝑉 ) Pr [𝑉 𝑗 = 𝑉 ]
+
+= 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 1 − 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+!∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S  
+
+> 𝑉 𝑗 =𝑉
+
+𝑝 (𝑉 ) Pr [𝑆 ]≥ 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++ 1 − 1
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+!  𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+=
+
+1 −  𝑗 
+
+> 1
+
+ 
+
+> 𝑞
+
+/ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
++
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+= 𝑞 𝑗 
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
++
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+=
+
+ 𝑗 +11
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+,10 
+
+where we used the induction hypothesis in the third-to-last step and the combinatorial identity 
+
+ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+−  𝑗 
+
+> 1
+
+ 
+
+> 𝑞
+
+= 𝑞 𝑗  𝑘 − 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+in the second-to-last step. Combining all of the above gives 
+
+𝐴 𝑗 +1 ≥
+
+ 𝑗 +11
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+.
+
+□
+
+Proof of Theorem IV.1. We can rewrite the formula from Theorem III.2 conditioning on the 𝑗 -th space in the chain 𝑆 = (𝑉 0, . . . ,𝑉 𝑘 ), namely 
+
+E[𝑇 ] =
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S 
+
+Pr [𝑆 ]
+
+1 − 𝑝 (𝑉 𝑗 )
+
+=
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+∑︁ 𝑉 ≤𝑋  
+
+> dim (𝑉 )=𝑗
+
+∑︁ 𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S  
+
+> 𝑉 𝑗 =𝑉
+
+Pr [𝑆 ]
+
+1 − 𝑝 (𝑉 ) .
+
+(3) Since the function 𝜑 (𝑥 ) = 1/( 1 − 𝑥 ) is convex for 0 ≤ 𝑥 < 1, Jensen’s inequality gives 
+
+E[𝑇 ] ≥ 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+11 − Í 𝑉 ≤𝑋  
+
+> dim (𝑉 )=𝑗
+
+Í𝑆 =(𝑉 0,...,𝑉 𝑘 )∈S  
+
+> 𝑉 𝑗 =𝑉
+
+𝑝 (𝑉 ) Pr [𝑆 ] . (4) Applying Lemma IV.2 to Equation (4) yields 
+
+E[𝑇 ] ≥ 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+11 −  
+
+> h𝑗
+> 1
+> i
+> 𝑞
+> h𝑘
+> 1
+> i
+> 𝑞
+
+=
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+𝑞 𝑘 − 1
+
+𝑞 𝑘 − 𝑞 𝑗 .
+
+It remains to characterize equality. From now on, for 0 ≤ 𝑗 ≤ 𝑘 − 1, let 
+
+𝐵 𝑗 =∑︁  
+
+> 𝑉 ≤𝑋
+> dim (𝑉 )=𝑗
+
+∑︁ 𝑆 ∈S  
+
+> 𝑉 𝑗 =𝑉
+
+Pr [𝑆 ]
+
+1 − 𝑝 (𝑉 ) .
+
+The preceding argument shows, term by term, that 
+
+𝐵 𝑗 ≥ 11 − 𝐴 𝑗 
+
+≥ 11 −
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+. (5) Suppose that equality holds in (1). Therefore, the inequalities in (5) must also be equalities. For 𝑗 = 0, we have 𝑉 0 = {0} with probability one and hence 
+
+𝐵 0 = 11 − 𝑝 (0) .
+
+The corresponding term in the lower bound is 1, which implies 𝑝 (0) = 0. We next consider 𝑗 = 1. Since 𝑝 (0) = 0, the first draw is nonzero with probability one. Thus, for every 
+
+𝐿 ∈ P 𝑘 , we have Pr [𝑉 1 = 𝐿 ] = 𝑝 (𝐿 ). It follows that 
+
+𝐴 1 =∑︁ 
+
+> 𝐿 ∈P 𝑘
+
+𝑝 (𝐿 )2.11 
+
+The fact that the equalities must hold in (5) implies that 𝐴 1 = 1/ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+. Therefore, ∑︁ 
+
+> 𝐿 ∈P 𝑘
+
+𝑝 (𝐿 )2 = 1
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+.
+
+On the other hand, the Cauchy-Schwarz inequality gives ∑︁ 
+
+> 𝐿 ∈P 𝑘
+
+𝑝 (𝐿 )2 ≥ 1
+
+|P 𝑘 | ∑︁ 𝐿 ∈P 𝑘 
+
+𝑝 (𝐿 )
+
+!2
+
+= 1
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+,
+
+and equality holds if and only if all the values 𝑝 (𝐿 ) are equal. Consequently, 𝑝 (𝐿 ) = 1/ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+for every 
+
+𝐿 ∈ P 𝑘 .Conversely, suppose that 𝑝 (0) = 0 and that 𝑝 (𝐿 ) = 1/ 𝑘 
+
+> 1
+
+ 
+
+> 𝑞
+
+for every one-dimensional subspace 𝐿 ≤ 𝑋 .If 𝑉 ≤ 𝑋 has dimension 𝑗 , then 𝑉 contains exactly  𝑗 
+
+> 1
+
+ 
+
+> 𝑞
+
+one-dimensional subspaces. Therefore, 
+
+𝑝 (𝑉 ) =
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+.
+
+In particular, 𝑝 (𝑉 ) depends only on dim (𝑉 ). Substituting back into (3), we obtain 
+
+E[𝑇 ] =
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+11 −
+
+ 𝑗 
+
+> 1
+
+
+
+> 𝑞
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+∑︁ 
+
+> 𝑆 ∈S
+
+Pr [𝑆 ]
+
+=
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+𝑞 𝑘 − 1
+
+𝑞 𝑘 − 𝑞 𝑗 .
+
+Thus the lower bound is attained, completing the proof. □
+
+Recall that a generator matrix 𝐺 of the 𝑘 -dimensional 𝑞 -ary simplex code is obtained by organizing all nonzero elements of F𝑘 𝑞 , up to nonzero scalar multiples, as columns of 𝐺 . Equivalently, each projective point of 𝑃𝐺 (𝑘 − 1, 𝑞 ) appears exactly once. This fact is crucial to prove their optimality. 
+
+Corollary 3. Let 𝑛 = (𝑞 𝑘 − 1)/( 𝑞 − 1), and let 𝐺 ∈ F𝑘 ×𝑛 𝑞 have rank 𝑘 . Then 
+
+E[𝐺 ] ≥ 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+𝑞 𝑘 − 1
+
+𝑞 𝑘 − 𝑞 𝑗 .
+
+In particular, equality holds if and only if 𝐺 is a generator matrix of the 𝑞 -ary simplex code. Equivalently, 
+
+Eopt 
+
+ 𝑞 𝑘 − 1
+
+𝑞 − 1 , 𝑘 
+
+
+
+> 𝑞
+
+=
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑗 =0
+
+𝑞 𝑘 − 1
+
+𝑞 𝑘 − 𝑞 𝑗 .
+
+Consequently, every optimal 
+
+h 𝑞 𝑘 −1 
+
+> 𝑞 −1
+
+, 𝑘 
+
+i 
+
+> 𝑞
+
+code is monomially equivalent to the 𝑞 -ary simplex code. 
+
+Remark 2. A proof showing that the simplex code is optimal in terms of the expectation was independently found by Zhihan Jin and Barnabas Janzer (private communication). In this paper, the optimality of the simplex code is obtained as a corollary of a more general statement (Theorem IV.1). Proof of Corollary 3. Recall that the probability distribution 𝑝 𝐺 induced by the drawing procedure is given by 
+
+𝑝 𝐺 (𝑥 ) = |{ 𝑖 ∈ [ 𝑛 ] : 𝑔 𝑖 = 𝑥 }| 
+
+𝑛 .12 
+
+By Theorem IV.1, equality holds if and only if 𝑝 𝐺 (0) = 0 and 
+
+𝑝 𝐺 (𝐿 ) = 1
+
+ 𝑘 
+
+> 1
+
+
+
+> 𝑞
+
+= 1
+
+𝑛 
+
+for every 1-dimensional subspace 𝐿 . The latter conditions imply that 𝑧 𝐺 = 0 and 𝑚 𝐺 (𝐿 ) = 1 for every projective point 𝐿 . Therefore, 𝐺 contains exactly one nonzero representative of every one-dimensional subspace of F𝑘 𝑞 , which is precisely the defining property of a 𝑞 -ary simplex matrix. To conclude, any two simplex matrices differ by a permutation of columns and by multiplication of individual columns by nonzero scalars. However, these operations produce monomially equivalent codes. Therefore, all optimal codes with these parameters are monomially equivalent to the 𝑞 -ary simplex code. 
+
+□
+
+V. Optimality of First-Order 𝑞 -ary Reed–Muller Codes In this section, we prove that the first-order 𝑞 -ary Reed–Muller code is optimal with respect to the coverage depth. The proof relies on the optimality of the 𝑞 -ary simplex code established in Section IV. The main idea is that, after the first nonzero column is sampled, the remaining coverage process can be viewed in a quotient space of dimension one less. 
+
+Theorem V.1. Let 𝑚 ≥ 1, let 𝑛 = 𝑞 𝑚 , and let 𝑅 ∈ F(𝑚 +1)× 𝑛 𝑞 be a generator matrix of the first-order 𝑞 -ary Reed–Muller code. Then, for every matrix 𝐴 ∈ F(𝑚 +1)× 𝑛 𝑞 of rank 𝑚 + 1,
+
+E[ 𝐴 ] ≥ E[𝑅 ].
+
+In particular, 
+
+Eopt [𝑞 𝑚 , 𝑚 + 1]𝑞 = 𝑚 + 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+1
+
+𝑞 𝑗 − 1 .
+
+Proof. Recall that 𝑧 𝐴 = |{ 𝑖 ∈ [ 𝑛 ] : 𝑎 𝑖 = 0}| . Let 𝜏 be the first time that a nonzero column is sampled. Since a sampled column is nonzero with probability (𝑛 − 𝑧 𝐴 )/ 𝑛 , we have 
+
+E[𝜏 ] = 𝑛 𝑛 − 𝑧 𝐴 
+
+.
+
+Suppose that the first nonzero column sampled is 𝑎 𝑗 . Consider the quotient space 
+
+𝑋 𝑗 = F𝑚 +1 
+
+> 𝑞
+
+/⟨ 𝑎 𝑗 ⟩,
+
+which has dimension 𝑚 , and let 
+
+𝜋 𝑗 : F𝑚 +1 
+
+> 𝑞
+
+−→ 𝑋 𝑗 
+
+be the natural projection. Once 𝑎 𝑗 has been sampled, spanning F𝑚 +1 
+
+> 𝑞
+
+is equivalent to having the projections of the subsequently sampled columns span 𝑋 𝑗 .Let 
+
+𝑑 𝑗 = {𝑖 ∈ [ 𝑛 ] : 𝑎 𝑖 ∈ ⟨ 𝑎 𝑗 ⟩} .
+
+A projected column is zero precisely when the sampled column belongs to ⟨𝑎 𝑗 ⟩. Hence, a nonzero projected column is obtained with probability 𝑛 − 𝑑 𝑗 
+
+𝑛 .
+
+Moreover, since all zero columns belong to ⟨𝑎 𝑗 ⟩ and 𝑎 𝑗 ≠ 0, we have 
+
+𝑑 𝑗 ≥ 𝑧 𝐴 + 1.13 
+
+Conditioned on obtaining a nonzero projection, the projected columns induce a probability distribution on 𝑋 𝑗 \ { 0}. Since 𝐴 has rank 𝑚 + 1, the support of this distribution spans 𝑋 𝑗 . Therefore, by Theorem IV.1, the expected number of nonzero projected columns needed to span 𝑋 𝑗 is at least the coverage depth of the 𝑞 -ary simplex code of dimension 𝑚 . Denote a generator matrix of this simplex code by 𝑆 𝑚 .Since a nonzero projected column is obtained with probability (𝑛 − 𝑑 𝑗 )/ 𝑛 , it follows that, conditioned on 𝑎 𝑗 being the first nonzero sampled column, the expected number of additional draws is at least 
+
+𝑛 𝑛 − 𝑑 𝑗 
+
+E[𝑆 𝑚 ].
+
+Combining this with 𝑑 𝑗 ≥ 𝑧 𝐴 + 1 yields 
+
+E[ 𝐴 ] ≥ 𝑛 𝑛 − 𝑧 𝐴 
+
++ 𝑛 𝑛 − 𝑧 𝐴 − 1E[𝑆 𝑚 ].
+
+Consequently, 
+
+E[ 𝐴 ] ≥ 1 + 𝑛 𝑛 − 1E[𝑆 𝑚 ].
+
+It remains to show that equality is attained by the first-order Reed–Muller code. A natural generator matrix for this code has columns 
+
+𝑟 𝑣 = (1, 𝑣 ), 𝑣 ∈ F𝑚 𝑞 .
+
+In particular, it has no zero columns. Fix a column 𝑟 𝑣 0 = (1, 𝑣 0). Since all columns have first coordinate equal to 1, no other column lies in ⟨𝑟 𝑣 0 ⟩, and hence 𝑑 𝑗 = 1. Furthermore, modulo ⟨𝑟 𝑣 0 ⟩, the column 𝑟 𝑣 = (1, 𝑣 ) can be represented by 
+
+𝑟 𝑣 − 𝑟 𝑣 0 = (0, 𝑣 − 𝑣 0).
+
+As 𝑣 ranges over F𝑚 𝑞 \ { 𝑣 0}, the vectors 𝑣 − 𝑣 0 range over all nonzero elements of F𝑚 𝑞 exactly once. Thus, conditioned on obtaining a nonzero projection, the induced distribution on the one-dimensional subspaces of 𝑋 𝑗 is uniform. By the equality condition in Theorem IV.1, the corresponding projected coverage process attains E[𝑆 𝑚 ].Therefore, 
+
+E[𝑅 ] = 1 + 𝑛 𝑛 − 1E[𝑆 𝑚 ].
+
+Since 𝑛 = 𝑞 𝑚 and 
+
+E[𝑆 𝑚 ] =
+
+> 𝑚 −1
+
+∑︁ 
+
+> ℓ=0
+
+𝑞 𝑚 − 1
+
+𝑞 𝑚 − 𝑞 ℓ ,
+
+we obtain 
+
+E[𝑅 ] = 1 +
+
+> 𝑚 −1
+
+∑︁ 
+
+> ℓ=0
+
+𝑞 𝑚 
+
+𝑞 𝑚 − 𝑞 ℓ
+
+= 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑞 𝑗 
+
+𝑞 𝑗 − 1 = 𝑚 + 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+1
+
+𝑞 𝑗 − 1 .
+
+Hence E[ 𝐴 ] ≥ E[𝑅 ], completing the proof. □14 
+
+VI. Optimality of the 𝑞 -ary Hamming Code In this section, we prove that the 𝑞 -ary Hamming code is optimal, i.e., it minimizes the expected coverage time among all linear codes with the same length and dimension. We begin with a formula that expresses the expected coverage time in terms of spanning subsets of the columns of a generator matrix. By passing to the dual code, these quantities become counts of linearly independent column subsets. We then represent these counts using the basis generating polynomial of a projective-geometry matroid and show, by averaging over the action of GL (𝑟, 𝑞 ), that this polynomial is maximized by the simplex matrix. 
+
+Theorem VI.1. Let 𝑟 ≥ 2, and let 𝐻 ∈ F𝑘 ×𝑛 𝑞 be a generator matrix of the 𝑞 -ary Hamming code C ⊆ F𝑛 𝑞 ,where 𝑛 = (𝑞 𝑟 − 1)/( 𝑞 − 1) and 𝑘 = 𝑛 − 𝑟 . For every matrix 𝐴 ∈ F𝑘 ×𝑛 𝑞 of rank 𝑘 , we have E[ 𝐴 ] ≥ E[𝐻 ]. In particular, 
+
+Eopt 
+
+ 𝑞 𝑟 − 1
+
+𝑞 − 1 , 𝑞 𝑟 − 1
+
+𝑞 − 1 − 𝑟 
+
+
+
+> 𝑞
+
+= E[𝐻 ].
+
+Recall, for 𝑘 ≤ 𝑠 ≤ 𝑛 , the quantities 
+
+𝛼 (𝐺, 𝑠 ) = |{ 𝑆 ⊆ [ 𝑛 ] : |𝑆 | = 𝑠, rank (𝐺 𝑆 ) = 𝑘 }| ,
+
+which counts the number of 𝑠 -subsets of columns of 𝐺 that span the space F𝑘 𝑞 .Gruica et al. [16] showed that it is possible to express the expectation in terms of the latter quantities as follows: 
+
+E[𝐺 ] = 𝑛𝐻 𝑛 −
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑠 =𝑘
+
+𝛼 (𝐺, 𝑠 )
+
+ 𝑛 −1
+
+> 𝑠
+
+ .
+
+Since all coefficients in the sum are positive, minimizing E[𝐺 ] amounts to maximizing the quantities 
+
+𝛼 (𝐺, 𝑠 ). The spanning condition in the definition of 𝛼 (𝐺, 𝑠 ) has a convenient dual interpretation. To state it, we introduce the following notation. 
+
+Definition VI.1. Let 𝐺 ∈ F𝑘 ×𝑛 𝑞 . For 0 ≤ 𝑡 ≤ 𝑛 , define 
+
+𝐼 (𝐺, 𝑡 ) = |{ 𝑇 ⊆ [ 𝑛 ] : |𝑇 | = 𝑡, rank (𝐺 𝑇 ) = 𝑡 }| .
+
+Thus, 𝐼 (𝐺, 𝑡 ) is the number of linearly independent subsets of 𝑡 columns of 𝐺 .
+
+We will use the following standard relation between spanning sets of a code and independent sets of its dual. We include the short proof for completeness. 
+
+Lemma VI.2. For every 𝑘 ≤ 𝑠 ≤ 𝑛 , 𝛼 (𝐺, 𝑠 ) = 𝐼 (𝐺 ⊥, 𝑛 − 𝑠 ).
+
+Proof. Fix 𝑆 ⊆ [ 𝑛 ], and let 𝑇 = [𝑛 ] \ 𝑆 . The matrix 𝐺 𝑆 has rank 𝑘 if and only if there is no nonzero codeword of C𝐺 whose support is contained in 𝑇 . On the other hand, the columns of 𝐺 ⊥ indexed by 𝑇 
+
+are linearly dependent if and only if there exists a nonzero vector supported on 𝑇 that belongs to ker (𝐺 ⊥) = C𝐺 .
+
+Therefore, 𝐺 𝑆 has rank 𝑘 if and only if the columns of (𝐺 ⊥)𝑇 are linearly independent. The correspondence 
+
+𝑆 ↦ → [ 𝑛 ] \ 𝑆 is a bijection between subsets of size 𝑠 and subsets of size 𝑛 − 𝑠 , which proves the claim. □
+
+Substituting 𝑡 = 𝑛 − 𝑠 into the formula for the expected coverage time gives 
+
+E[𝐺 ] = 𝑛𝐻 𝑛 −
+
+> 𝑛 −𝑘
+
+∑︁ 
+
+> 𝑡 =1
+
+𝐼 (𝐺 ⊥, 𝑡 )
+
+ 𝑛 −1
+
+> 𝑡 −1
+
+ .
+
+Hence, minimizing the expected coverage time reduces to maximizing 𝐼 (𝐺 ⊥, 𝑡 ) for each 1 ≤ 𝑡 ≤ 𝑟 . To analyze these quantities, we index the nonzero column directions by the one-dimensional subspaces of 
+
+F𝑟 𝑞 , record their multiplicities in a vector, and describe their linear-dependence structure using a matroid. 15 
+
+The linear-dependence structure of the nonzero column directions is described by a matroid on the projective space P𝑟 . We recall the matroid terminology needed below. 
+
+Definition VI.2. A matroid is a pair 𝑀 = (𝐸, I) , where 𝐸 is a finite set and I is a nonempty collection of subsets of 𝐸 satisfying the following properties: 
+
+1) If 𝑇 ∈ I and 𝑆 ⊆ 𝑇 , then 𝑆 ∈ I .
+
+2) If 𝑆,𝑇 ∈ I and |𝑆 | < |𝑇 |, then there exists 𝑖 ∈ 𝑇 \ 𝑆 such that 𝑆 ∪ { 𝑖 } ∈ I .The sets in I are called independent sets. A basis is a maximal independent set, and the rank of 𝑀 is the cardinality of any basis. 
+
+For 1 ≤ 𝑡 ≤ 𝑟 , let 𝑀 𝑟,𝑡 be the matroid on P𝑟 whose independent sets are the linearly independent subsets of size at most 𝑡 . Its bases are precisely the linearly independent subsets of P𝑟 of size 𝑡 .
+
+Definition VI.3. Let 𝑀 = (𝐸, I) be a matroid, and let B𝑀 denote its collection of bases. The basis generating polynomial of 𝑀 is 
+
+𝑔 𝑀 (z) =∑︁ 
+
+> 𝐵 ∈B 𝑀
+
+Ö
+
+> 𝑒 ∈𝐵
+
+𝑧 𝑒 .
+
+For the matroid 𝑀 𝑟,𝑡 , we write 
+
+𝑔 𝑟,𝑡 (z) =∑︁  
+
+> 𝑃 ⊆P 𝑟
+> |𝑃 |=𝑡, 𝑃 is linearly independent
+
+Ö
+
+> 𝑝 ∈𝑃
+
+𝑧 𝑝 .
+
+The polynomial 𝑔 𝑟,𝑡 is homogeneous of degree 𝑡 . Moreover, by Theorem 4.2 of Anari et al. [32], the basis generating polynomial of every matroid is completely log-concave over the positive orthant. In particular, log 𝑔 𝑟,𝑡 is concave wherever 𝑔 𝑟,𝑡 is positive. We now encode the column multiplicities of a matrix as a vector indexed by P𝑟 . Recall that, for a matrix 𝐺 ∈ F𝑟 ×𝑛 𝑞 , and for each 𝑝 ∈ P 𝑟 , 𝑚 𝐺 ( 𝑝 ) is the number of nonzero columns of 𝐺 whose span is 𝑝 .The basis generating polynomial evaluated at 𝑚 𝐺 counts the independent subsets of columns of 𝐺 .
+
+Lemma VI.3. For every 1 ≤ 𝑡 ≤ 𝑟 ,
+
+𝐼 (𝐺, 𝑡 ) = 𝑔 𝑟,𝑡 (𝑚 𝐺 ).
+
+Proof. Every linearly independent subset of 𝑡 columns of 𝐺 consists of nonzero columns with distinct and linearly independent spans. It therefore determines a linearly independent set 𝑃 ⊆ P 𝑟 of size 𝑡 .Conversely, fix a linearly independent set 𝑃 ⊆ P 𝑟 of size 𝑡 . For each 𝑝 ∈ 𝑃 , one may choose any of the 𝑚 𝐺 ( 𝑝 ) columns of 𝐺 whose span is 𝑝 . Hence, the number of independent column subsets associated with 𝑃 is Î𝑝 ∈𝑃 𝑚 𝐺 ( 𝑝 ). Summing over all linearly independent sets 𝑃 of size 𝑡 gives 
+
+𝐼 (𝐺, 𝑡 ) =∑︁  
+
+> 𝑃 ⊆P 𝑟
+> |𝑃 |=𝑡, 𝑃 is linearly independent
+
+Ö
+
+> 𝑝 ∈𝑃
+
+𝑚 𝐺 ( 𝑝 ) = 𝑔 𝑟,𝑡 (𝑚 𝐺 ).
+
+□
+
+We have now reduced the theorem to an inequality for 𝑔 𝑟,𝑡 . For a parity-check matrix 𝐵 , the value 
+
+𝑔 𝑟,𝑡 (𝑚 𝐵 ) counts the independent subsets of 𝑡 columns. For a simplex matrix 𝑆 , every projective point appears exactly once, so 𝑚 𝑆 = 1. It remains to show that 𝑔 𝑟,𝑡 is maximized at this uniform multiplicity vector. 
+
+Proof Theorem VI.1. Let 𝐴 ∈ F𝑘 ×𝑛 𝑞 have rank 𝑘 , and let 𝐵 ∈ F𝑟 ×𝑛 𝑞 be a parity-check matrix of C𝐴 . Let 𝑆 
+
+be a 𝑞 -ary simplex matrix of dimension 𝑟 . The columns of 𝑆 contain exactly one nonzero representative of each element of P𝑟 . Therefore, 𝑚 𝑆 = 1, and it is sufficient to prove that 
+
+𝑔 𝑟,𝑡 (𝑚 𝐵 ) ≤ 𝑔 𝑟,𝑡 (1)16 
+
+for every 1 ≤ 𝑡 ≤ 𝑟 .The group GL (𝑟, 𝑞 ) acts transitively on P𝑟 . For 𝜎 ∈ GL (𝑟, 𝑞 ) and 𝑥 ∈ RP𝑟 , define 
+
+(𝜎𝑥 )( 𝑝 ) = 𝑥 (𝜎 −1 𝑝 ).
+
+Since every 𝜎 ∈ GL (𝑟, 𝑞 ) preserves linear independence, it permutes the bases of 𝑀 𝑟,𝑡 . Consequently, 
+
+𝑔 𝑟,𝑡 (𝜎𝑥 ) = 𝑔 𝑟,𝑡 (𝑥 ).
+
+Define the orbit average 
+
+𝑚 𝐵 = 1
+
+|GL (𝑟, 𝑞 )| ∑︁ 𝜎 ∈GL (𝑟,𝑞 )
+
+𝜎𝑚 𝐵 .
+
+If 𝑔 𝑟,𝑡 (𝑚 𝐵 ) = 0, then the desired inequality is immediate. Assume therefore that 𝑔 𝑟,𝑡 (𝑚 𝐵 ) > 0. For every 𝜀 > 0, the vector 𝑚 𝐵 + 𝜀 1 lies in the positive orthant. Since 1 is fixed by the action of GL (𝑟, 𝑞 ),the invariance of 𝑔 𝑟,𝑡 and Jensen’s inequality imply log 𝑔 𝑟,𝑡 (𝑚 𝐵 + 𝜀 1) ≤ log 𝑔 𝑟,𝑡 (𝑚 𝐵 + 𝜀 1).
+
+The logarithm is monotonically increasing, and therefore 
+
+𝑔 𝑟,𝑡 (𝑚 𝐵 + 𝜀 1) ≤ 𝑔 𝑟,𝑡 (𝑚 𝐵 + 𝜀 1).
+
+Letting 𝜀 → 0 and using the continuity of 𝑔 𝑟,𝑡 , we obtain 
+
+𝑔 𝑟,𝑡 (𝑚 𝐵 ) ≤ 𝑔 𝑟,𝑡 (𝑚 𝐵 ).
+
+The transitivity of the action of GL (𝑟, 𝑞 ) on P𝑟 implies that all coordinates of 𝑚 𝐵 are equal. Hence, 
+
+𝑚 𝐵 = 𝑐 1
+
+for some 𝑐 ≥ 0. The action of GL (𝑟, 𝑞 ) only permutes the coordinates of 𝑚 𝐵 , so ∑︁ 
+
+> 𝑝 ∈P 𝑟
+
+𝑚 𝐵 ( 𝑝 ) =∑︁ 
+
+> 𝑝 ∈P 𝑟
+
+𝑚 𝐵 ( 𝑝 ) = |{ 𝑖 ∈ [ 𝑛 ] : 𝑏 𝑖 ≠ 0}| .
+
+Since |P 𝑟 | = 𝑛 , it follows that 
+
+𝑐 = |{ 𝑖 ∈ [ 𝑛 ] : 𝑏 𝑖 ≠ 0}| 
+
+𝑛 ≤ 1.
+
+In particular, 𝑐 = 1 if 𝐵 has no zero columns, while 𝑐 < 1 otherwise. Since 𝑔 𝑟,𝑡 is homogeneous of degree 𝑡 ,
+
+𝑔 𝑟,𝑡 (𝑚 𝐵 ) = 𝑔 𝑟,𝑡 (𝑐 1) = 𝑐 𝑡 𝑔 𝑟,𝑡 (1) ≤ 𝑔 𝑟,𝑡 (1) = 𝑔 𝑟,𝑡 (𝑚 𝑆 ).
+
+Combining the two inequalities gives 
+
+𝐼 (𝐵, 𝑡 ) = 𝑔 𝑟,𝑡 (𝑚 𝐵 ) ≤ 𝑔 𝑟,𝑡 (𝑚 𝑆 ) = 𝐼 (𝑆, 𝑡 )
+
+for every 1 ≤ 𝑡 ≤ 𝑟 .Finally, the dual expression for the expected coverage time yields 
+
+E[ 𝐴 ] = 𝑛𝐻 𝑛 −
+
+> 𝑟
+
+∑︁ 
+
+> 𝑡 =1
+
+𝐼 (𝐵, 𝑡 )
+
+ 𝑛 −1
+
+> 𝑡 −1
+
+ ≥ 𝑛𝐻 𝑛 −
+
+> 𝑟
+
+∑︁ 
+
+> 𝑡 =1
+
+𝐼 (𝑆, 𝑡 )
+
+ 𝑛 −1
+
+> 𝑡 −1
+
+ = E[𝐻 ],
+
+which is the desired result. □17 
+
+VII. Uniformly Random Codes We now study the expected coverage depth of a random linear code. Random matrices were previously used by Wang and Yaakobi [21] as a probabilistic construction to derive upper bounds on the minimum achievable coverage depth. Here, rather than using randomness only as an existence argument, our objective is to characterize the random-code ensemble itself. We sample uniformly from the set of all full-rank 𝑘 × 𝑛 
+
+matrices and determine its average coverage depth exactly. Let 
+
+M𝑘,𝑛 (𝑞 ) = 𝐴 ∈ F𝑘 ×𝑛 𝑞 : rank ( 𝐴 ) = 𝑘 ,
+
+and let 𝐴 be sampled uniformly from M𝑘,𝑛 (𝑞 ).Conditioned on 𝐴 , let 𝑇 𝐴 be its coverage time as defined in the preliminaries. Unless stated otherwise, all expectations in this section are taken jointly over the random choice of 𝐴 and the column-sampling process. For brevity, we write 𝑇 = 𝑇 𝐴 . We first derive an exact expression for this expectation. 
+
+Lemma VII.1. Let 𝐴 be sampled uniformly from M𝑘,𝑛 (𝑞 ). Then 
+
+E[𝑇 ] = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 )+ 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 1 − 𝑞 𝑘 (𝑛 −𝑡 )
+
+> 𝑘 −1
+
+Ö
+
+> 𝑖 =0
+
+𝑞 𝑡 − 𝑞 𝑖 
+
+𝑞 𝑛 − 𝑞 𝑖 
+
+!
+
+. (6) 
+
+Equivalently, 
+
+E[𝑇 ] = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) + 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 1 −
+
+> 𝑘 −1
+
+Ö
+
+> 𝑖 =0
+
+
+
+1 − 𝑞 𝑖 −𝑡 − 𝑞 𝑖 −𝑛 
+
+1 − 𝑞 𝑖 −𝑛 
+
+!
+
+. (7) 
+
+Proof. Let 𝐷 denote the number of distinct column indices sampled by the time the sampled columns first attain rank 𝑘 . Conditioned on 𝐷 = 𝑑 , the number of samples required is the waiting time to observe 𝑑 
+
+distinct elements in the classical coupon-collector process. Hence, by the partial coupon-collector formula [26, p. 216], 
+
+E[𝑇 | 𝐷 = 𝑑 ] = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑑 ) .
+
+By the law of total expectation, 
+
+E[𝑇 ] =
+
+> 𝑛
+
+∑︁ 
+
+> 𝑑 =0
+
+𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑑 ) Pr (𝐷 = 𝑑 ).
+
+Since 
+
+𝐻 𝑛 − 𝐻 𝑛 −𝑑 =
+
+> 𝑛
+
+∑︁ 
+
+> 𝑗 =𝑛 −𝑑 +1
+
+1
+
+𝑗 ,
+
+we obtain 
+
+E[𝑇 ] =
+
+> 𝑛
+
+∑︁ 
+
+> 𝑑 =0
+
+𝑛 ©«
+
+> 𝑛
+
+∑︁ 
+
+> 𝑗 =𝑛 −𝑑 +1
+
+1
+
+𝑗 
+
+ª®¬
+
+Pr (𝐷 = 𝑑 ).
+
+Interchanging the order of summation gives 
+
+E[𝑇 ] = 𝑛 
+
+> 𝑛
+
+∑︁ 
+
+> 𝑗 =1
+
+1
+
+𝑗 Pr (𝐷 ≥ 𝑛 − 𝑗 + 1).
+
+Setting 𝑡 = 𝑛 − 𝑗 , we obtain 
+
+E[𝑇 ] = 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =0
+
+1
+
+𝑛 − 𝑡 Pr (𝐷 > 𝑡 ).18 
+
+Since at least 𝑘 distinct columns are required to attain rank 𝑘 ,Pr (𝐷 > 𝑡 ) = 1, 0 ≤ 𝑡 ≤ 𝑘 − 1.
+
+Consequently, 
+
+E[𝑇 ] = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) + 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 Pr (𝐷 > 𝑡 ). (8) It remains to compute Pr (𝐷 > 𝑡 ). The first 𝑡 distinct sampled indices form a uniformly random ordered 𝑡 -tuple of distinct indices. Moreover, the distribution of 𝐴 is invariant under column permutations. Therefore, if 𝐴 [𝑡 ] denotes the submatrix formed by the first 𝑡 columns of 𝐴 , then Pr (𝐷 > 𝑡 ) = Pr  rank ( 𝐴 [𝑡 ] ) < 𝑘  .
+
+Hence, Pr (𝐷 > 𝑡 ) = 1 − Pr  rank ( 𝐴 [𝑡 ] ) = 𝑘  .
+
+The number of full-rank matrices in F𝑘 ×𝑛 𝑞 is 
+
+M𝑘,𝑛 (𝑞 ) =
+
+> 𝑘 −1
+
+Ö
+
+> 𝑖 =0
+
+(𝑞 𝑛 − 𝑞 𝑖 ).
+
+Indeed, after choosing 𝑖 linearly independent rows, their span has cardinality 𝑞 𝑖 , and the next row can be chosen in 𝑞 𝑛 − 𝑞 𝑖 ways. To count the full-rank matrices whose first 𝑡 columns already have rank 𝑘 , write 
+
+𝐴 = [ 𝐵 | 𝐶 ],
+
+where 
+
+𝐵 ∈ F𝑘 ×𝑡 𝑞 , 𝐶 ∈ F𝑘 ×( 𝑛 −𝑡 ) 
+
+> 𝑞
+
+.
+
+The matrix 𝐵 must have rank 𝑘 , whereas 𝐶 may be arbitrary. Hence, the number of such matrices is 
+
+𝑞 𝑘 (𝑛 −𝑡 )
+
+> 𝑘 −1
+
+Ö
+
+> 𝑖 =0
+
+(𝑞 𝑡 − 𝑞 𝑖 ).
+
+It follows that Pr  rank ( 𝐴 [𝑡 ] ) = 𝑘  = 𝑞 𝑘 (𝑛 −𝑡 )
+
+> 𝑘 −1
+
+Ö
+
+> 𝑖 =0
+
+𝑞 𝑡 − 𝑞 𝑖 
+
+𝑞 𝑛 − 𝑞 𝑖 .
+
+Substituting this into (8) proves (6). Finally, 
+
+𝑞 𝑛 −𝑡 𝑞 𝑡 − 𝑞 𝑖 
+
+𝑞 𝑛 − 𝑞 𝑖 = 1 − 𝑞 𝑖 −𝑡 
+
+1 − 𝑞 𝑖 −𝑛 = 1 − 𝑞 𝑖 −𝑡 − 𝑞 𝑖 −𝑛 
+
+1 − 𝑞 𝑖 −𝑛 .
+
+Distributing 𝑞 𝑘 (𝑛 −𝑡 ) over the 𝑘 factors in the product gives (7). □
+
+The first term in (6) is the coverage depth of an MDS code. Indeed, every 𝑘 distinct columns of an MDS generator matrix are linearly independent, and therefore 
+
+E[𝑇 MDS ] = 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) .
+
+We define the additive gap from the MDS benchmark. 
+
+Definition VII.1. 
+
+Δ𝑛,𝑘,𝑞 ≜ E [𝑇 ] − 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) .19 
+
+Next, we derive an upper bound on this gap. The analysis uses the following auxiliary sequence. 
+
+Definition VII.2. For 𝑚 ≥ 1, define 
+
+𝑆 𝑚 (𝑞 ) =
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑚 𝑗 𝑞 𝑗 −𝑚 .
+
+Claim 1. 
+
+𝑆 𝑚 +1 (𝑞 ) = 1 + 𝑚 + 1
+
+𝑞𝑚 𝑆 𝑚 (𝑞 ). (9) 
+
+Moreover, the sequence {𝑆 𝑚 (𝑞 )} 𝑚 ≥1 is bounded and 
+
+lim  
+
+> 𝑚 →∞
+
+𝑆 𝑚 (𝑞 ) = 𝑞 𝑞 − 1 .
+
+Proof. We have 
+
+𝑆 𝑚 +1 (𝑞 ) =
+
+> 𝑚 +1
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑚 + 1
+
+𝑗 𝑞 𝑗 −𝑚 −1 = 1 +
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑚 + 1
+
+𝑗 𝑞 𝑗 −𝑚 −1
+
+= 1 + 𝑚 + 1
+
+𝑞𝑚 
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑚 𝑗 𝑞 𝑗 −𝑚 = 1 + 𝑚 + 1
+
+𝑞𝑚 𝑆 𝑚 (𝑞 ),
+
+which proves (9). We next show that 𝑆 𝑚 (𝑞 ) is bounded. Setting 𝑟 = 𝑚 − 𝑗 , we obtain 
+
+𝑆 𝑚 (𝑞 ) =
+
+> 𝑚 −1
+
+∑︁ 
+
+> 𝑟 =0
+
+𝑚 𝑚 − 𝑟 𝑞 −𝑟 .
+
+Note that, for 0 ≤ 𝑟 ≤ 𝑚 − 1, 𝑚 𝑚 − 𝑟 ≤ 1 + 𝑟. 
+
+Equivalently, 
+
+𝑚 ≤ ( 1 + 𝑟 )( 𝑚 − 𝑟 ) = 𝑚 + 𝑟 (𝑚 − 𝑟 − 1).
+
+It follows that 
+
+𝑆 𝑚 (𝑞 ) ≤ 
+
+> 𝑚 −1
+
+∑︁ 
+
+> 𝑟 =0
+
+(1 + 𝑟 )𝑞 −𝑟 ≤
+
+> ∞
+
+∑︁ 
+
+> 𝑟 =0
+
+(1 + 𝑟 )𝑞 −𝑟 < ∞.
+
+Thus, the sequence is bounded. Let 
+
+𝑆 = lim sup 
+
+> 𝑚 →∞
+
+𝑆 𝑚 (𝑞 ), 𝑆 = lim inf  
+
+> 𝑚 →∞
+
+𝑆 𝑚 (𝑞 ).
+
+Since shifting a sequence does not change its limit superior and 𝑚 +1 
+
+> 𝑞𝑚
+
+−→ 1 
+
+> 𝑞
+
+, Equation (9) gives 𝑆 = 1 + 1 
+
+> 𝑞
+
+𝑆. 
+
+Therefore, 𝑆 = 𝑞 𝑞 −1 . Similarly, 𝑆 = 1 + 1 
+
+> 𝑞
+
+𝑆, and hence 𝑆 = 𝑞 𝑞 −1 . Thus, 𝑆 = 𝑆 = 𝑞 𝑞 −1 , which proves that 
+
+𝑆 𝑚 (𝑞 ) −→ 𝑞 𝑞 −1 . □
+
+The following lemma relates 𝑆 𝑚 (𝑞 ) to the gap from the MDS benchmark. 
+
+Lemma VII.2. Let 𝑚 = 𝑛 − 𝑘 . Then 
+
+Δ𝑛,𝑘,𝑞 ≤ 11 − 𝑞 −𝑚 · 𝑆 𝑚 (𝑞 )
+
+𝑞 − 1 · 𝑛 𝑚 . (10) 20 
+
+Proof. For 𝑘 ≤ 𝑡 ≤ 𝑛 − 1 and 0 ≤ 𝑖 < 𝑘 , define 
+
+𝑎 𝑖 = 𝑞 𝑖 −𝑡 − 𝑞 𝑖 −𝑛 
+
+1 − 𝑞 𝑖 −𝑛 .
+
+Since 𝑘 ≤ 𝑡 < 𝑛 and 𝑖 < 𝑘 , we have 0 < 𝑎 𝑖 < 1. Using Weierstrass Product Inequality, equation (7) gives 
+
+Δ𝑛,𝑘,𝑞 ≤ 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑖 =0
+
+𝑞 𝑖 −𝑡 − 𝑞 𝑖 −𝑛 
+
+1 − 𝑞 𝑖 −𝑛 ≤ 𝑛 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑖 =0
+
+𝑞 𝑖 −𝑡 
+
+1 − 𝑞 𝑖 −𝑛 .
+
+Since 𝑖 ≤ 𝑘 − 1, 11 − 𝑞 𝑖 −𝑛 ≤ 11 − 𝑞 𝑘 −𝑛 .
+
+Therefore, 
+
+Δ𝑛,𝑘,𝑞 ≤ 𝑛 
+
+1 − 𝑞 𝑘 −𝑛 𝑛 −1∑︁ 
+
+> 𝑡 =𝑘
+
+1
+
+𝑛 − 𝑡 
+
+> 𝑘 −1
+
+∑︁ 
+
+> 𝑖 =0
+
+𝑞 𝑖 −𝑡 .
+
+Furthermore, 𝑘 −1∑︁ 
+
+> 𝑖 =0
+
+𝑞 𝑖 −𝑡 = 𝑞 −𝑡 𝑞 𝑘 − 1
+
+𝑞 − 1 ≤ 𝑞 𝑘 −𝑡 
+
+𝑞 − 1 .
+
+Thus, 
+
+Δ𝑛,𝑘,𝑞 ≤ 𝑛 
+
+1 − 𝑞 𝑘 −𝑛 · 1
+
+𝑞 − 1
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+𝑞 𝑘 −𝑡 
+
+𝑛 − 𝑡 .
+
+Set 𝑚 = 𝑛 − 𝑘 and change variables according to 𝑗 = 𝑛 − 𝑡 . Then 
+
+> 𝑛 −1
+
+∑︁ 
+
+> 𝑡 =𝑘
+
+𝑞 𝑘 −𝑡 
+
+𝑛 − 𝑡 =
+
+> 𝑚
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑞 𝑗 −𝑚 
+
+𝑗 = 𝑆 𝑚 (𝑞 )
+
+𝑚 .
+
+Since 𝑞 𝑘 −𝑛 = 𝑞 −𝑚 , we obtain 
+
+Δ𝑛,𝑘,𝑞 ≤ 11 − 𝑞 −𝑚 · 𝑆 𝑚 (𝑞 )
+
+𝑞 − 1 · 𝑛 𝑚 .
+
+□
+
+We can now derive the asymptotic behavior in the two main regimes. 
+
+Theorem VII.3 (Constant-rate regime) . Let 𝑞 and 𝑅 ∈ ( 0, 1) be fixed, and suppose that 
+
+𝑘 𝑛 = 𝑅. 
+
+Then, as 𝑛 → ∞ ,
+
+E[𝑇 ] ≤ 𝑛 (𝐻 𝑛 − 𝐻 𝑛 −𝑘 ) + 𝑞 
+
+(𝑞 − 1)2 · 11 − 𝑅 + 𝑜 (1).
+
+Equivalently, using 𝑛 = 𝑘 /𝑅 and the asymptotic expansion of the harmonic numbers, 
+
+E[𝑇 ] ≤ 𝑛 log 
+
+ 11 − 𝑅 
+
+
+
++ 11 − 𝑅 
+
+ 𝑞 
+
+(𝑞 − 1)2 − 𝑅 
+
+2
+
+
+
++ 𝑜 (1).
+
+In particular, the additive gap between the expected coverage depth of a random code and the MDS benchmark is bounded independently of 𝑛 .21 
+
+For comparison, Wang and Yaakobi [21, Corollary 6] showed that the optimal coverage depth in the same constant-rate regime is within a constant additive gap of the MDS benchmark, with the explicit upper bound 
+
+Δ𝑛,𝑘,𝑞 ≤ 2 · 𝑞 
+
+(𝑞 − 1)2 · 11 − 𝑅 + 𝑜 (1).
+
+Our result concerns the ensemble-average performance rather than the existence of a favorable code: it shows that the average over all full-rank matrices satisfies 
+
+Δ𝑛,𝑘,𝑞 ≤ 𝑞 
+
+(𝑞 − 1)2 · 11 − 𝑅 + 𝑜 (1).
+
+Thus, the entire full-rank ensemble achieves a bounded average additive gap, with an explicit constant that is a factor of two smaller than the one stated in [21, Corollary 6]. 
+
+Proof. Let 𝑚 = 𝑛 − 𝑘 . Since 𝑘 /𝑛 = 𝑅 , we have 𝑚 = 𝑛 (1− 𝑅 ). Hence, 𝑚 → ∞ as 𝑛 → ∞ , and 𝑛 𝑚 = 11−𝑅 . More-over, since 𝑚 → ∞ , Lemma 1 gives 𝑆 𝑚 (𝑞 ) = 𝑞 𝑞 −1 + 𝑜 (1), while 11−𝑞 −𝑚 = 1 + 𝑜 (1). Applying Lemma VII.2, we obtain 
+
+Δ𝑛,𝑘,𝑞 ≤ 𝑞 
+
+(𝑞 − 1)2 · 11 − 𝑅 + 𝑜 (1),
+
+which proves the result. □
+
+Theorem VII.4 (Constant-redundancy regime) . Let 𝑞 and 𝑐 ≥ 1 be fixed, and suppose that 
+
+𝑛 − 𝑘 = 𝑐. 
+
+Then, as 𝑛 → ∞ ,
+
+E[𝑇 ] ≤ 𝑛 (𝐻 𝑛 − 𝐻 𝑐 ) + 11 − 𝑞 −𝑐 · 𝑆 𝑐 (𝑞 )
+
+𝑞 − 1 · 𝑛 𝑐 = 𝑛 (𝐻 𝑛 − 𝐻 𝑐 ) + 𝑂 𝑞,𝑐 (𝑛 ).
+
+Proof. Set 𝑚 = 𝑛 − 𝑘 = 𝑐 in Lemma VII.2. We obtain 
+
+Δ𝑛,𝑘,𝑞 ≤ 11 − 𝑞 −𝑐 · 𝑆 𝑐 (𝑞 )
+
+𝑞 − 1 · 𝑛 𝑐 ,
+
+which is exactly the claimed bound. □
+
+VIII. Summary and Open Problems In this work, we studied the coverage depth of several important families of linear codes. While MDS codes are known to be optimal with respect to coverage depth whenever they exist, we showed that the 
+
+𝑞 -ary Simplex and Hamming codes are also optimal for their respective parameters. We also analyzed the coverage depth of random linear codes and showed that, in the constant-rate regime, their coverage depth approaches the MDS bound. Nevertheless, determining the coverage depth, and in particular establishing optimality, for many other important families of codes remains open. A natural direction for future work is therefore to characterize the coverage depth of additional structured code families and to identify further parameter regimes in which optimal codes can be determined. More generally, it would be interesting to obtain structural conditions that characterize, or even restrict, the class of codes that are optimal with respect to coverage depth. IX. Acknowledgment The authors would like to thank Ronny Roth and Roni Con for helpful discussions related to the analysis of random linear codes. The research was funded by the European Union (ERC, 101045114 and EIC, DiDAX 101115134). Views and opinions expressed are, however, those of the authors only and do not necessarily reflect those of the European Union or the European Research Council Executive Agency. Neither the European Union nor the granting authority can be held responsible for them. 22 
+
+References 
+
+[1] J. Rydning, “Worldwide idc global datasphere forecast, 2022–2026: Enterprise organizations driving most of the data growth,” Technical Report, Tech. Rep., 2022. [2] DNA Data Storage Alliance, “Preserving our digital legacy: an introduction to DNA data storage,” 2021. [3] D. Markowitz, “Biology is all you need,” The International Conference for High Performance Computing, Networking, Storage, and Analysis , 2023. [4] E. M. LeProust, B. J. Peck, K. Spirin, H. B. McCuen, B. Moore, E. Namsaraev, and M. H. Caruthers, “Synthesis of high-quality libraries of long (150mer) oligonucleotides by a novel depurination controlled process,” Nucleic Acids Research , vol. 38, no. 8, pp. 2522–2540, 05 2010. [Online]. Available: https://doi.org/10.1093/nar/gkq163 [5] S. Tabatabaei Yazdi, Y. Yuan, J. Ma, H. Zhao, and O. Milenkovic, “A rewritable, random-access DNA-based storage system,” Scientific reports , vol. 5, no. 1, pp. 1–10, 2015. [6] M. Blawat, K. Gaedke, I. Huetter, X.-M. Chen, B. Turczyk, S. Inverso, B. W. Pruitt, and G. M. Church, “Forward error correction for DNA data storage,” Procedia Computer Science , vol. 80, pp. 1011–1022, 2016. [7] J. Bornholt, R. Lopez, D. M. Carmean, L. Ceze, G. Seelig, and K. Strauss, “A DNA-based archival storage system,” in Proceedings of the Twenty-First International Conference on Architectural Support for Programming Languages and Operating Systems , 2016, pp. 637–649. [8] S. H. T. Yazdi, R. Gabrys, and O. Milenkovic, “Portable and error-free DNA-based data storage,” Scientific reports , vol. 7, no. 1, p. 5011, 2017. [9] L. Organick, S. D. Ang, Y.-J. Chen, R. Lopez, S. Yekhanin, K. Makarychev, M. Z. Racz, G. Kamath, P. Gopalan, B. Nguyen et al. ,“Random access in large-scale DNA data storage,” Nature biotechnology , vol. 36, no. 3, pp. 242–248, 2018. [10] L. Anavy, I. Vaknin, O. Atar, R. Amit, and Z. Yakhini, “Data storage in DNA with fewer synthesis cycles using composite DNA letters,” Nature biotechnology , vol. 37, no. 10, pp. 1229–1236, 2019. [11] D. Bar-Lev, I. Orr, O. Sabary, T. Etzion, and E. Yaakobi, “Deep DNA storage: Scalable and robust DNA storage via coding theory and deep learning,” arXiv preprint arXiv:2109.00031 , 2021. [12] S. H. T. Yazdi, H. M. Kiah, E. Garcia-Ruiz, J. Ma, H. Zhao, and O. Milenkovic, “DNA-based storage: Trends and methods,” IEEE Transactions on Molecular, Biological and Multi-Scale Communications , vol. 1, no. 3, pp. 230–248, 2015. [13] I. Shomorony, R. Heckel et al. , “Information-theoretic foundations of DNA data storage,” Foundations and Trends ® in Communications and Information Theory , vol. 19, no. 1, pp. 1–106, 2022. [14] R. Heckel, G. Mikutis, and R. N. Grass, “A characterization of the DNA data storage channel,” Scientific reports , vol. 9, no. 1, p. 9663, 2019. [15] D. Bar-Lev, O. Sabary, R. Gabrys, and E. Yaakobi, “Cover your bases: How to minimize the sequencing coverage in dna storage systems,” IEEE Transactions on Information Theory , vol. 71, no. 1, pp. 192–218, 2025. [16] A. Gruica, D. Bar-Lev, A. Ravagnani, and E. Yaakobi, “A combinatorial perspective on random access efficiency for dna storage,” 
+
+IEEE Transactions on Information Theory , 2025. [17] A. Gruica, M. Montanucci, and F. Zullo, “The geometry of codes for random access in dna storage,” Designs, Codes and Cryptography ,vol. 94, no. 5, 2026. [18] A. Boruchovsky, O. Elishco, R. Gabrys, A. Gruica, I. Tamo, and E. Yaakobi, “Making it to first: The random access problem in dna storage,” 2025. [Online]. Available: https://arxiv.org/abs/2501.12274 [19] H. Abraham, R. Gabrys, and E. Yaakobi, “Covering all bases: The next inning in dna sequencing efficiency,” in 2024 IEEE International Symposium on Information Theory (ISIT) . IEEE, 2024, pp. 464–469. [20] Ş. Bodur, S. Lia, H. H. López, R. Ludhani, A. Ravagnani, and L. Seccia, “The random variables of the dna coverage depth problem,” 
+
+IEEE Transactions on Information Theory , pp. 1–1, 2026. [21] C. Wang and E. Yaakobi, “Random access in dna storage: Algorithms, constructions, and bounds,” 2026. [Online]. Available: https://arxiv.org/abs/2601.07053 [22] C. Hofmeister, R. Bitar, and E. Yaakobi, “Random access expectation in dna storage and fountain codes,” 2026. [Online]. Available: https://arxiv.org/abs/2605.10919 [23] W. Feller, An introduction to probability theory and its applications. Wiley & Sons, 1957. [24] D. J. Newman, “The double dixie cup problem,” The American Mathematical Monthly , vol. 67, no. 1, pp. 58–61, 1960. [25] P. Erdős and A. Rényi, “On a classical problem of probability theory,” Magyar Tud. Akad. Mat. Kutató Int. Közl , vol. 6, no. 1, pp. 215–220, 1961. [26] P. Flajolet, D. Gardy, and L. Thimonier, “Birthday paradox, coupon collectors, caching algorithms and self-organizing search,” Discrete Applied Mathematics , vol. 39, no. 3, pp. 207–229, 1992. [27] R. Cao and X. Chen, “Optimizing sequencing coverage depth in dna storage: Insights from dna storage data,” in 2025 IEEE International Symposium on Information Theory (ISIT) , 2025, pp. 1–6. [28] M. Bertuzzo, A. Ravagnani, and E. Yaakobi, “The coverage depth problem in dna storage over small alphabets,” in 2025 IEEE International Symposium on Information Theory (ISIT) . IEEE, 2025, pp. 1–6. [29] ——, “The dna coverage depth problem: Duality, weight distributions, and applications,” 2026. [Online]. Available: https://arxiv.org/abs/2603.06489 [30] X. Kong, O. Elishco, C. Wang, and T. M. Duman, “The coverage depth problem in distributed dna data storage,” 2026. [Online]. Available: https://arxiv.org/abs/2610.02931 [31] R. P. M. J. Jurrius, “Weight enumeration of codes from finite spaces,” Designs, Codes and Cryptography , vol. 63, no. 3, pp. 321–330, 2012. [32] N. Anari, S. O. Gharan, and C. Vinzant, “Log-concave polynomials, entropy, and a deterministic approximation algorithm for counting bases of matroids,” in 2018 IEEE 59th Annual Symposium on Foundations of Computer Science (FOCS) . IEEE, 2018, pp. 35–46.

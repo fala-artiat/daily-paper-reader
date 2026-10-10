@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-10-10 <!--dpr-date:20261010-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/10/2610.07370v1-optimal-codes-for-the-coverage-depth-problem-and-the-performance-of-random-codes" data-sidebar-item="{&quot;title&quot;: &quot;Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.07370v1-optimal-codes-for-the-coverage-depth-problem-and-the-performance-of-random-codes&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;用于存储数据恢复的MDS与最优线性码&quot;}">Optimal Codes for the Coverage Depth Problem and the Performance of Random Codes</a>
   * 2026-10-09 <!--dpr-date:20261009-->
     * 精读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/09/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system" data-sidebar-item="{&quot;title&quot;: &quot;IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2610.11114v1-iaprepair-in-network-aggregation-enhanced-proactive-repair-for-erasure-coded-storage-system&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;raid-erasure&quot;}], &quot;evidence&quot;: &quot;纠删码存储的主动修复与数据重建&quot;}">IAPRepair: In-Network Aggregation Enhanced Proactive Repair for Erasure-Coded Storage System</a>
